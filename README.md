@@ -1,6 +1,6 @@
 # Zartex2
 Zartex2 is a mod from the tool Zartex by Fireboyd78 (https://github.com/Fireboyd78/driver-tools),
-The main idea of this mod is to bring more features to Zartex such as adding new nodes, actors, wires, etc.
+The main idea of this mod is to bring more features to Zartex such as adding new nodes, actors, wires, etc.     
 Powered by MoonSharp Lua Interpreter (https://github.com/moonsharp-devs/moonsharp)
 # Requirements
 You'll need an IDE that supports C# 6.0 and atleast .NET Framework 4.0, unless otherwise specified. Most of the code here was written in Visual Studio 2015 Community.
