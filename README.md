@@ -1,6 +1,7 @@
 # Zartex 2.0
 Zartex 2.0 (Zartex2) is a mod from the tool Zartex by Fireboyd78 (https://github.com/Fireboyd78/driver-tools),
-The main idea of this mod is to bring more features to Zartex such as adding new nodes, actors, wires, etc.     
+The main idea of this mod is to bring more features to Zartex such as adding new nodes, actors, wires, etc.  
+And also support Driver: Parallel Lines mission package files.
 Powered by MoonSharp Lua Interpreter (https://github.com/moonsharp-devs/moonsharp)
 # Lua
 Zartex 2.0 uses MoonSharp as Lua interpreter to import Lua scripts and turn them into actual .mpc files for Driv3r.
