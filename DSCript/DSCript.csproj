@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <!-- Project settings -->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{09C8AA4A-AFB8-4BDB-866B-B8C88D48D9EB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>DSCript</RootNamespace>
+    <AssemblyName>libDSC</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <!-- C# 6.0 -->
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <!-- Global configuration settings -->
+  <PropertyGroup>
+    <FileAlignment>4096</FileAlignment>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <WarningLevel>4</WarningLevel>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <!-- Driver Tools properties -->
+  <PropertyGroup>
+    <DToolsRoot>$(ProjectDir)..\</DToolsRoot>
+    <IncludeDSCLibrary>false</IncludeDSCLibrary>
+    <UsesFreeImage>true</UsesFreeImage>
+  </PropertyGroup>
+  <Import Project="$(DToolsRoot)DriverTools.Common.props" Condition="Exists('$(DToolsRoot)DriverTools.Common.props')" />
+  <ItemGroup>
+    <Reference Include="FreeImageNET">
+      <HintPath>$(FreeImageNETDir)FreeImageNET.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Configuration\DSCConfiguration.cs" />
+    <Compile Include="Extensions\FileDialogExtensions.cs" />
+    <Compile Include="Extensions\FreeImageAPI\FIBITMAPExtensions.cs" />
+    <Compile Include="Extensions\SpoolableResourceExtensions.cs" />
+    <Compile Include="Extensions\SpoolerExtensions.cs" />
+    <Compile Include="Extensions\System\IO\FileStreamExtensions.cs" />
+    <Compile Include="Extensions\System\TypeExtensions.cs" />
+    <Compile Include="Extensions\System\Windows\PointExtensions.cs" />
+    <Compile Include="Helpers\BitmapHelper.cs" />
+    <Compile Include="Helpers\BitmapSourceHelper.cs" />
+    <Compile Include="Helpers\DriverPL.cs" />
+    <Compile Include="DSC.cs" />
+    <Compile Include="Configuration\IniConfiguration.cs" />
+    <Compile Include="Configuration\IniFile.cs" />
+    <Compile Include="Helpers\StringHelper.cs" />
+    <Compile Include="Helpers\DDSUtils.cs" />
+    <Compile Include="IO\LocaleReader.cs" />
+    <Compile Include="IO\MECFile.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="Chunks\Chunk.cs" />
+    <Compile Include="Chunks\ChunkTypes.cs" />
+    <Compile Include="Chunks\MagicConverter.cs" />
+    <Compile Include="Extensions\System\NativeMethods.cs" />
+    <Compile Include="Extensions\System\StringExtensions.cs" />
+    <Compile Include="Extensions\System\Drawing\BitmapExtensions.cs" />
+    <Compile Include="Extensions\System\IO\BinaryReaderExtensions.cs" />
+    <Compile Include="Extensions\System\IO\BinaryReaderEx.cs" />
+    <Compile Include="Extensions\System\IO\StreamExtensions.cs" />
+    <Compile Include="Extensions\System\Text\StringBuilderExtensions.cs" />
+    <Compile Include="Extensions\System\Windows\Forms\MessageBoxEx.cs" />
+    <Compile Include="Extensions\System\XML\XMLExtensions.cs" />
+    <Compile Include="Helpers\Driv3r.cs" />
+    <Compile Include="Helpers\Memory.cs" />
+    <Compile Include="Models\Formats\Driv3rVehiclesFile.cs" />
+    <Compile Include="Models\Formats\Driv3rModelFile.cs" />
+    <Compile Include="IO\ObjFile.cs" />
+    <Compile Include="Matrix.cs" />
+    <Compile Include="Models\Hierarchies\HierarchyData.cs" />
+    <Compile Include="Models\Hierarchies\VehicleHierarchyData.cs" />
+    <Compile Include="Models\Hierarchies\BulletHolder.cs" />
+    <Compile Include="Models\Hierarchies\VehiclePart.cs" />
+    <Compile Include="Models\Hierarchies\VehiclePartTypes.cs" />
+    <Compile Include="Models\Materials\MaterialData.cs" />
+    <Compile Include="Models\Materials\SubstanceData.cs" />
+    <Compile Include="Models\Materials\TextureData.cs" />
+    <Compile Include="Models\Materials\TextureFlags.cs" />
+    <Compile Include="Models\ModelPackages\ModelPackageDSF.cs" />
+    <Compile Include="Models\ModelPackages\ModelPackagePC.cs" />
+    <Compile Include="Configuration\RegistryConfiguration.cs" />
+    <Compile Include="Models\Formats\StandaloneTextureData.cs" />
+    <Compile Include="Models\Formats\StandaloneTextureFile.cs" />
+    <Compile Include="Models\VertexBuffer.cs" />
+    <Compile Include="Spooling\ChunkSchema.cs" />
+    <Compile Include="Spooling\Templates.cs" />
+    <Compile Include="Spooling\FileChunker.cs" />
+    <Compile Include="Spooling\ISpoolableResource.cs" />
+    <Compile Include="Spooling\SpoolableBuffer.cs" />
+    <Compile Include="Spooling\SpoolablePackage.cs" />
+    <Compile Include="Spooling\SpoolableResource.cs" />
+    <Compile Include="Spooling\SpoolableResourceFactory.cs" />
+    <Compile Include="Spooling\Spooler.cs" />
+    <Compile Include="Spooling\SpoolerCollection.cs" />
+    <Compile Include="TempFile.cs" />
+    <Compile Include="VectorTypes.cs" />
+    <None Include="Models\ModelPackages\ModelPackagePC_X.cs" />
+    <Compile Include="Models\ModelPackages\ModelPackagePS2.cs" />
+    <Compile Include="Models\PrimitiveType.cs" />
+    <Compile Include="Models\IndexData.cs" />
+    <Compile Include="Models\SubModel.cs" />
+    <Compile Include="Models\PackageTypes.cs" />
+    <Compile Include="Models\LodInstance.cs" />
+    <Compile Include="Models\ModelPackages\ModelPackageResource.cs" />
+    <Compile Include="Models\Lod.cs" />
+    <Compile Include="Models\Model.cs" />
+    <Compile Include="Models\Vertex.cs" />
+    <Compile Include="Models\VertexData.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
