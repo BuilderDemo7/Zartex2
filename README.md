@@ -2,6 +2,10 @@
 Zartex 2.0 (Zartex2) is a mod from the tool Zartex by Fireboyd78 (https://github.com/Fireboyd78/driver-tools),
 The main idea of this mod is to bring more features to Zartex such as adding new nodes, actors, wires, etc.     
 Powered by MoonSharp Lua Interpreter (https://github.com/moonsharp-devs/moonsharp)
+# Lua
+Zartex 2.0 uses MoonSharp as Lua interpreter to import Lua scripts and turn them into actual .mpc files for Driv3r.
+This feature is still work in progress as not all functions are fully coded.
+You should check the Wiki of all Lua function [here](https://github.com/BuilderDemo7/Zartex2/wiki).
 # Requirements
 You'll need an IDE that supports C# 6.0 and atleast .NET Framework 4.0, unless otherwise specified. Most of the code here was written in Visual Studio 2015 Community.
 # Licensing / Warranty
