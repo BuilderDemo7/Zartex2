@@ -5,7 +5,7 @@ Powered by MoonSharp Lua Interpreter (https://github.com/moonsharp-devs/moonshar
 # Lua
 Zartex 2.0 uses MoonSharp as Lua interpreter to import Lua scripts and turn them into actual .mpc files for Driv3r.
 This feature is still work in progress as not all functions are fully coded.
-You should check the Wiki of all Lua function [here](https://github.com/BuilderDemo7/Zartex2/wiki).
+You should check the Wiki of all Lua functions [here](https://github.com/BuilderDemo7/Zartex2/wiki).
 # Requirements
 You'll need an IDE that supports C# 6.0 and atleast .NET Framework 4.0, unless otherwise specified. Most of the code here was written in Visual Studio 2015 Community.
 # Licensing / Warranty
