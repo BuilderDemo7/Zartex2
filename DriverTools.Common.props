@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Global configuration settings -->
+  <PropertyGroup>
+    <DebugSymbols>true</DebugSymbols>
+    <NoWarn>0164,1573,1591</NoWarn>
+    <OutputPath>$(ProjectDir)bin\</OutputPath>
+    <IntermediateOutputPath>$(ProjectDir)obj\</IntermediateOutputPath>
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  
+  <!-- Platform-specific settings (will not override existing settings) -->
+  <PropertyGroup Condition="'$(PlatformTarget)' == ''">
+    <!-- Default to x86 -->
+    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget Condition="'$(Platform)' == 'x86'">x86</PlatformTarget>
+    <PlatformTarget Condition="'$(Platform)' == 'x64'">x64</PlatformTarget>
+  </PropertyGroup>
+  
+  <!-- Debug configuration settings -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugType>full</DebugType>
+    <DefineConstants>TRACE;DEBUG;LOG</DefineConstants>
+    <Optimize>false</Optimize>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  
+  <!-- Release configuration settings -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  
+  <!-- Global properties -->
+  <PropertyGroup>
+    <SrcDir>$(ProjectDir)Source\</SrcDir>
+    
+    <DToolsRoot>$(MSBuildThisFileDirectory)</DToolsRoot>
+    
+    <DToolsSharedDir>$(DToolsRoot)Shared\</DToolsSharedDir>
+    <DToolsSharedSrcDir>$(DToolsSharedDir)Source\</DToolsSharedSrcDir>
+    <DToolsSharedLibsDir>$(DToolsSharedDir)Libraries\</DToolsSharedLibsDir>
+    
+    <FreeImageDir>$(DToolsSharedLibsDir)FreeImage\</FreeImageDir>
+    <FreeImageNETDir>$(DToolsSharedLibsDir)FreeImage.NET\</FreeImageNETDir>
+    <FreeImageNETDir Condition="!Exists('$(FreeImageNETDir)')">$(DToolsSharedLibsDir)FreeImageNET\</FreeImageNETDir>
+    <HelixToolkitDir>$(DToolsSharedLibsDir)HelixToolkit\</HelixToolkitDir>
+    
+    <libDSCName>DSCript</libDSCName>
+    <libDSCGuid>{09c8aa4a-afb8-4bdb-866b-b8c88d48d9eb}</libDSCGuid>
+    <libDSCDir>$(DToolsRoot)$(libDSCName)\</libDSCDir>
+    <libDSCProjectFile>$(libDSCDir)$(libDSCName).csproj</libDSCProjectFile>
+    
+    <IncludeDSCLibrary Condition="'$(IncludeDSCLibrary)' == ''">false</IncludeDSCLibrary>
+    
+    <UsesFreeImage Condition="'$(UsesFreeImage)' == '' and $(IncludeDSCLibrary)">true</UsesFreeImage>
+    <UsesFreeImage Condition="'$(UsesFreeImage)' == ''">false</UsesFreeImage>
+  </PropertyGroup>
+  
+  <ItemGroup Condition="$(IncludeDSCLibrary)">
+    <ProjectReference Include="$(libDSCProjectFile)">
+      <Name>$(libDSCName)</Name>
+      <Project>$(libDSCGuid)</Project>
+    </ProjectReference>
+  </ItemGroup>
+  
+  <Target Name="CopyFIDependencies" AfterTargets="Build" Condition="$(UsesFreeImage)">
+    <ItemGroup>
+      <FreeImageFiles Include="$(FreeImageDir)*.*"/>
+    </ItemGroup>
+    <Error Text="Couldn't find FreeImage dependencies!" Condition="'@(FreeImageFiles)' == ''" />
+    <Message Text="Copying FreeImage DLL:" Importance="High" />
+    <Copy SourceFiles="@(FreeImageFiles)" DestinationFolder="$(OutputPath)">
+      <Output ItemName="Dependency" TaskParameter="CopiedFiles" />
+    </Copy>
+    <Message Text="  - %(Dependency.Identity)" Importance="High" />
+  </Target>
+</Project>
