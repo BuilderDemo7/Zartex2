@@ -837,7 +837,7 @@ namespace Zartex
 
                         Width = 400,
 
-                        SelectedText = MissionPackage.MissionData.LogicData.Nodes.Definitions[0].Properties[0].Value.ToString() //"0"
+                        SelectedText = "0"
                     };
 
                     Button confirmation = new Button()
@@ -3143,6 +3143,17 @@ namespace Zartex
             script.Globals["PERSONALITY_NORMAL"] = 1;
             script.Globals["PERSONALITY_PATHANDVEHICLE"] = 2;
             script.Globals["PERSONALITY_PATHFACE"] = 9;
+
+            script.Globals["PROPERTYTYPE_FLOAT"] = typeof(FloatProperty);
+            script.Globals["PROPERTYTYPE_STRING"] = typeof(StringProperty);
+            script.Globals["PROPERTYTYPE_INT"] = typeof(IntegerProperty);
+            script.Globals["PROPERTYTYPE_TEXTFILE"] = typeof(TextFileItemProperty);
+            script.Globals["PROPERTYTYPE_MATRIX"] = typeof(MatrixProperty);
+            script.Globals["PROPERTYTYPE_UID"] = typeof(UIDProperty);
+            script.Globals["PROPERTYTYPE_AUDIO"] = typeof(AudioProperty);
+            script.Globals["PROPERTYTYPE_OBJTYPE"] = typeof(ObjectTypeProperty);
+            script.Globals["PROPERTYTYPE_ANIMTYPE"] = typeof(AnimationTypeProperty);
+            script.Globals["PROPERTYTYPE_TINT"] = typeof(VehicleTintProperty);
 
             //script.DoString("local logicStart = MISSION.logicStart()"); // logic start global variable
 

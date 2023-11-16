@@ -642,7 +642,7 @@ namespace Zartex
             return FadeScreen(duration, 0, duration, R, G, B, A, note, r,g,b);
         }
 
-        public Node FadeIn(float duration = 0.3f, byte R = 0, byte G = 0, byte B = 0, byte A = 0, string note = "FadeOut()", int r = 255, int g = 200, int b = 128)
+        public Node FadeIn(float duration = 0.3f, byte R = 0, byte G = 0, byte B = 0, byte A = 0, string note = "FadeIn()", int r = 255, int g = 200, int b = 128)
         {
             return FadeScreen(duration, duration, 0, R, G, B, A, note, r, g, b);
         }

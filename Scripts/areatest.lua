@@ -1,4 +1,5 @@
-local X,Y,Z,W = -1894.6520, 1.0625, -453.1732, -0.0006 -- Player position as a global variable just in case.
+local X,Y,Z,W = -1894.6520, 1.0625, -453.1732, 0 
+local PX,PY,PZ,PW = -1890.66, 1.0625, -458.3958, 53.42831 -- Player position as a global variable just in case.
 
 local X2,Y2,Z2 = X+20,Y-0.3,Z
 
@@ -9,7 +10,7 @@ MISSION.missionSummary.X = X; MISSION.missionSummary.Y = Y
 MISSION.missionSummary.MoodId = 33 -- sky_trapped.d3s (Miami at Day - Dry)
 
 -- Creates the player
-local Player = MISSION.CreateCharacter(X,Y,Z,0, 1, "Player", -1, -1, 1.0, 0.0, 0, 1.0)
+local Player = MISSION.CreateCharacter(PX,PY,PZ,PW, 1, "Player", -1, -1, 1.0, 0.0, 0, 1.0)
 -- Creates a row, Idk just for testing
 for i=1,5 do
    local role = i+1
@@ -40,22 +41,31 @@ local point = MISSION.ActorHasReachedPoint(Player,X2,Y2,Z2,range)
 point.wireCollection.Add(MISSION.MissionComplete())
 local obj = MISSION.CreateObjectiveIcon(X2,Y2,Z2,1,0,0,false)
 -- felony set to max test
+local playAudio = MISSION.PlayAudio(0,3)
 local point2 = MISSION.ActorHasReachedPoint(Player,X2+5,Y2,Z2,range)
+point2.wireCollection.Add(playAudio,2)
+point2.wireCollection.Add(playAudio)
 point2.wireCollection.Add(MISSION.SetCharacterFelonyTo(Player,1))
+point2.wireCollection.Add(MISSION.SetCharacterFelonyTo(Player,1),2) -- on success disable
+point2.wireCollection.Add(point2,3)
 local obj2 = MISSION.CreateObjectiveIcon(X2+5,Y2,Z2,1,0,0,false)
 -- felony set to zero test
 local point3 = MISSION.ActorHasReachedPoint(Player,X2+10,Y2,Z2,range)
+point3.wireCollection.Add(playAudio,2)
+point3.wireCollection.Add(playAudio)
 point3.wireCollection.Add(MISSION.SetCharacterFelonyTo(Player,0))
+point3.wireCollection.Add(MISSION.SetCharacterFelonyTo(Player,0),2) -- on success disable
+point3.wireCollection.Add(point3,3)
 local obj3 = MISSION.CreateObjectiveIcon(X2+10,Y2,Z2,1,0,0,false)
 
 objTimer.wireCollection.Add(MISSION.ActorCreation(obj))
 objTimer.wireCollection.Add(point)
 objTimer.wireCollection.Add(MISSION.ActorCreation(obj2))
 objTimer.wireCollection.Add(point2)
-point2.wireCollection.Add(point2) -- this makes a chain loop
+--point2.wireCollection.Add(point2) -- this makes a chain loop
 objTimer.wireCollection.Add(MISSION.ActorCreation(obj3))
 objTimer.wireCollection.Add(point3)
-point3.wireCollection.Add(point3) -- this makes a chain loop
+--point3.wireCollection.Add(point3) -- this makes a chain loop
 
 -- CAMERA TEST
 local camera1 = MISSION.CreateCamera(X+2,Y,Z+2,0,0,0)

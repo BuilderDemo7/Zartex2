@@ -179,9 +179,10 @@ namespace Zartex
             { 142, "ItemControl" },
             { 143, "ProfileQuery" },
             { 144, "AmbientSoundControl" },
-            
+
 
             // DPL
+            { 34, "ShowRetry" },
             { 36, "Group" },
             { 37, "CreationGroup" },
 
@@ -216,10 +217,11 @@ namespace Zartex
             { 184, "ActorControl" },
             { 186, "MarkerControl" },
 
-            { 189, "CharacterAbstractCheck" },
+            { 189, "CharacterTeleportation" },
             { 190, "TrainControl" },
             { 191, "VehicleControl" },
             { 194, "PathControl" },
+            { 193, "TankControl" },
             { 197, "CharacterMoveControl" },
 
             { 206, "PlayAnimationForCharacter" },
@@ -229,6 +231,7 @@ namespace Zartex
             { 210, "CircuitRaceControl" },
             { 212, "AttackerControl" },
             { 215, "KeepAreaClean" },
+            { 217, "GiveWeaponToPlayer" },
             { 218, "GlobalControl" }
         };
 
