@@ -13,3 +13,4 @@ You'll need an IDE that supports C# 6.0 and atleast .NET Framework 4.0, unless o
 Everything is provided "as-is" and without any warranty of any kind. You may use and/or redistribute this code freely*. No credit is necessary, but would be very much appreciated.
 # Releases
 You can get all the releases [here](https://github.com/BuilderDemo7/Zartex2/releases).
+But the latest release is [this](https://github.com/BuilderDemo7/Zartex2/releases/latest).
