@@ -112,10 +112,8 @@ namespace Zartex
                     {
                         if (_mid == MissionIndex)
                         {
-                            Debug.WriteLine("MSD SETTING");
                             MissionSummary = sender.AsResource<MissionSummaryData>(true);
                             MissionSummary.DPL = isDriverPLMission;
-                            Debug.WriteLine("MSD OK");
                             //MissionSummary = sender as SpoolableBuffer;
 
                             if (MissionSummary.MissionLocaleId > -1)

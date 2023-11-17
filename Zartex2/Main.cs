@@ -24,6 +24,8 @@ using Zartex.Settings;
 
 using MemoryEdit;
 
+using System.Windows.Forms.Integration; // WPF hack
+
 // HACK: Fix discrepencies between "Form.DialogResult" and "System.Windows.Forms.DialogResult"
 using DialogResult = System.Windows.Forms.DialogResult;
 
@@ -65,7 +67,7 @@ namespace Zartex
         {
             InitializeComponent();
             PopulateMainMenu();
-            
+
             title = this.Text;
             
             foreach (Control control in Controls.Find("LeftMenu", true)[0].Controls)
@@ -789,22 +791,49 @@ namespace Zartex
                     var tag = node.Tag;
                     bool duplicated = false;
 
-                    if (tag is NodeDefinition)
+                    if (tag is WireNode)
                     {
-                        var nodedef = tag as NodeDefinition;
+                        var wiren = tag as WireNode;
 
-                        MissionPackage.MissionData.LogicData.Nodes.Definitions.Add(nodedef);
-                        duplicated = true;
-                        GenerateLogicNodes();
+                        foreach(var wire in MissionPackage.MissionData.LogicData.WireCollection.WireCollections)
+                        {
+                            if (duplicated)
+                                break; // breaks loop if already duplicated (task done)
+                            foreach (WireNode wnode in wire.Wires)
+                            {
+                                // duplicates if this is the source
+                                if (wnode.Equals(wiren)) {
+                                    wire.Wires.Add(wiren);
+                                    duplicated = true;
+
+                                    var clone = (TreeNode)node.Clone();
+                                    node.Parent.Nodes.Add(clone);
+                                    inspector.Nodes.SelectedNode = clone;
+                                    break;
+                                } 
+                            }
+                        }
                     }
                     if (tag is ActorDefinition)
                     {
                         var nodedef = tag as ActorDefinition;
 
                         MissionPackage.MissionData.LogicData.Actors.Definitions.Add(nodedef);
-                        MissionPackage.MissionData.LogicData.Nodes.Definitions.RemoveAt(MissionPackage.MissionData.LogicData.Nodes.Definitions.Count-1); // hack
+                        //MissionPackage.MissionData.LogicData.Nodes.Definitions.RemoveAt(MissionPackage.MissionData.LogicData.Nodes.Definitions.Count - 1); // hack
+                        var clone = (TreeNode)node.Clone();
+                        inspector.Nodes.Nodes.Add(clone);
+                        inspector.Nodes.SelectedNode = clone;
                         duplicated = true;
-                        GenerateActors();
+                        return; // prevent the other one to be enabled
+                    }
+                    if (tag is NodeDefinition)
+                    {
+                        var nodedef = tag as NodeDefinition;
+                        MissionPackage.MissionData.LogicData.Nodes.Definitions.Add(nodedef);
+                        var clone = (TreeNode)node.Clone();
+                        inspector.Nodes.Nodes.Add(clone);
+                        inspector.Nodes.SelectedNode = clone;
+                        duplicated = true;
                     }
                     //if (duplicated)
                         //MessageBox.Show("Definition duplicated with success!", "Duplicated", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -899,29 +928,51 @@ namespace Zartex
 
                         if (tag is WireNode)
                         {
-                            var wnode = tag as WireNode;
+                            var wiren = tag as WireNode;
+                            bool del = false;
 
-                            foreach (var wire in MissionPackage.MissionData.LogicData.WireCollection.WireCollections) {
-                                try {
-                                   wire.Wires.Remove(wnode);
+                            foreach (var wire in MissionPackage.MissionData.LogicData.WireCollection.WireCollections)
+                            {
+                                if (del)
+                                    break; // breaks loop if already duplicated (task done)
+                                foreach (WireNode wnode in wire.Wires)
+                                {
+                                    // duplicates if this is the source
+                                    if (wnode.Equals(wiren))
+                                    {
+                                        wire.Wires.Remove(wiren);
+                                        del = true;
+
+                                        node.Parent.Nodes.Remove(node); // removes it in real time
+                                        break;
+                                    }
                                 }
-                                catch { } 
                             }
-                            useFlowgraph = false;
-                            GenerateWireCollection();
+                        }
+                        if (tag is ActorDefinition)
+                        {
+                            var def = tag as ActorDefinition;
+                            MissionPackage.MissionData.LogicData.Actors.Definitions.Remove(def);
+                            GenerateActors();
+                            return;
                         }
                         if (tag is NodeDefinition)
                         {
                             var def = tag as NodeDefinition;
-                            var id = MissionPackage.MissionData.LogicData.Nodes.Definitions.IndexOf(def);
+                            var id = node.Index; //MissionPackage.MissionData.LogicData.Nodes.Definitions.IndexOf(def);
 
+                            bool del = false;
                             // prevent errors, logic node un-existent? remove it from the wire collection!
                             foreach (var wire in MissionPackage.MissionData.LogicData.WireCollection.WireCollections)
                             {
                                 foreach (var wiredef in wire.Wires)
                                 {
+                                    if (del)
+                                        break; // break look as task is done
                                     if (wiredef.NodeId == id) {
                                         wire.Wires.Remove(wiredef);
+                                        del = true;
+                                        break;
                                     }
                                 }
                             }
@@ -929,12 +980,7 @@ namespace Zartex
 
                             useFlowgraph = false;
                             GenerateLogicNodes();
-                        }
-                        if (tag is ActorDefinition)
-                        {
-                            var def = tag as ActorDefinition;
-                            MissionPackage.MissionData.LogicData.Actors.Definitions.Remove(def);
-                            GenerateActors();
+                            return;
                         }
                     }
                 }

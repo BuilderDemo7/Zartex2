@@ -102,6 +102,9 @@
             this.wireNodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.appendBankTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
+            this.enlightenNodesBTN = new System.Windows.Forms.ToolStripMenuItem();
+            this.useFlowgraphBTN = new System.Windows.Forms.ToolStripMenuItem();
             this.gameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getPlayerPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Content = new System.Windows.Forms.Panel();
@@ -118,9 +121,6 @@
             this.btnLESC = new System.Windows.Forms.Button();
             this.btnEMPR = new System.Windows.Forms.Button();
             this.btnEMOB = new System.Windows.Forms.Button();
-            this.enlightenNodesBTN = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
-            this.useFlowgraphBTN = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuPanel.SuspendLayout();
             this.MenuBar.SuspendLayout();
             this.LeftMenu.SuspendLayout();
@@ -700,6 +700,25 @@
             this.appendBankTableToolStripMenuItem.Text = "Append Sound Bank";
             this.appendBankTableToolStripMenuItem.Click += new System.EventHandler(this.appendBankTableToolStripMenuItem_Click);
             // 
+            // toolStripSeparator13
+            // 
+            this.toolStripSeparator13.Name = "toolStripSeparator13";
+            this.toolStripSeparator13.Size = new System.Drawing.Size(196, 6);
+            // 
+            // enlightenNodesBTN
+            // 
+            this.enlightenNodesBTN.CheckOnClick = true;
+            this.enlightenNodesBTN.Name = "enlightenNodesBTN";
+            this.enlightenNodesBTN.Size = new System.Drawing.Size(199, 22);
+            this.enlightenNodesBTN.Text = "Enlighten Definitions";
+            // 
+            // useFlowgraphBTN
+            // 
+            this.useFlowgraphBTN.CheckOnClick = true;
+            this.useFlowgraphBTN.Name = "useFlowgraphBTN";
+            this.useFlowgraphBTN.Size = new System.Drawing.Size(199, 22);
+            this.useFlowgraphBTN.Text = "Flowgraph Logic Nodes";
+            // 
             // gameToolStripMenuItem
             // 
             this.gameToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -902,25 +921,6 @@
             this.btnEMOB.TabIndex = 1;
             this.btnEMOB.Text = "Objects";
             this.btnEMOB.UseVisualStyleBackColor = true;
-            // 
-            // enlightenNodesBTN
-            // 
-            this.enlightenNodesBTN.CheckOnClick = true;
-            this.enlightenNodesBTN.Name = "enlightenNodesBTN";
-            this.enlightenNodesBTN.Size = new System.Drawing.Size(199, 22);
-            this.enlightenNodesBTN.Text = "Enlighten Definitions";
-            // 
-            // toolStripSeparator13
-            // 
-            this.toolStripSeparator13.Name = "toolStripSeparator13";
-            this.toolStripSeparator13.Size = new System.Drawing.Size(196, 6);
-            // 
-            // useFlowgraphBTN
-            // 
-            this.useFlowgraphBTN.CheckOnClick = true;
-            this.useFlowgraphBTN.Name = "useFlowgraphBTN";
-            this.useFlowgraphBTN.Size = new System.Drawing.Size(199, 22);
-            this.useFlowgraphBTN.Text = "Flowgraph Logic Nodes";
             // 
             // Main
             // 
