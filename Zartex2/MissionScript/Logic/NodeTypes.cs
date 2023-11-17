@@ -188,6 +188,7 @@ namespace Zartex
 
             { 137, "Send" },
             { 140, "StringFormat" },
+            { 145, "CharacterAimTarget" },
             { 146, "CharacterShootTarget" },
 
             { 147, "MissionWatch" },
@@ -210,7 +211,8 @@ namespace Zartex
             { 169, "CharacterLookAt" },
             { 171, "CheckObject" },
             { 173, "CheckCharacter" },
-            { 177, "CharacterTargetCheck" },
+            { 174, "CharacterWeaponDrawn" },
+            { 176, "CharacterTargetWatch" },
             { 178, "CharacterInVehicle" },
             { 181, "OverlayText" },
             { 183, "SetCharacterActivity" },

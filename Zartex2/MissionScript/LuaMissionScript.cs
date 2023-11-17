@@ -32,6 +32,20 @@ namespace Zartex
         {
             TheActor.Properties[id].Value = new Vector3(x,y,z);
         }
+        public void SetPropertyValue(int id, float x, float y, float z, float w)
+        {
+            TheActor.Properties[id].Value = new Vector4(x, y, z, w);
+        }
+        public void SetPropertyValue(int id, short index, short value)
+        {
+            var prop = (TextFileItemProperty)TheActor.Properties[id];
+            prop.Index = index;
+            prop.Value = value;
+        }
+        public void SetPropertyValue(int id, Actor actor)
+        {
+            TheActor.Properties[id].Value = (int)actor.index;
+        }
     }
     [MoonSharpUserData]
     public class Node
@@ -57,11 +71,26 @@ namespace Zartex
         {
             TheNode.Properties[id].Value = new Vector3(x, y, z);
         }
+        public void SetPropertyValue(int id, float x, float y, float z, float w)
+        {
+            TheNode.Properties[id].Value = new Vector4(x, y, z, w);
+        }
+        public void SetPropertyValue(int id, short index, short value)
+        {
+            var prop = (TextFileItemProperty)TheNode.Properties[id];
+            prop.Index = index;
+            prop.Value = value;
+        }
+        public void SetPropertyValue(int id, Actor actor)
+        {
+            TheNode.Properties[id].Value = (int)actor.index;
+        }
     }
     [MoonSharpUserData]
     public class CollectionOfWires : WireCollection
     {
         //public List<WireNode> Wires = new List<WireNode>();
+        public int index; // extremely important
 
         public void Add(Node node, byte type = 1)
         {
@@ -74,7 +103,10 @@ namespace Zartex
         }
         public CollectionOfWires(int nWires) : base(nWires)
         {
-
+        }
+        public CollectionOfWires(int nWires,int idx) : base(nWires)
+        {
+            index = idx;
         }
     }
     [MoonSharpUserData]
@@ -232,7 +264,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -258,7 +290,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -287,7 +319,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -323,7 +355,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -392,7 +424,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -427,7 +459,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -460,7 +492,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -503,7 +535,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -571,7 +603,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -606,7 +638,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -654,7 +686,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -708,7 +740,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -822,7 +854,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -912,7 +944,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             int testVolumeidx = missionData.LogicData.Actors.Definitions.Count;
@@ -973,7 +1005,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -1006,7 +1038,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -1039,7 +1071,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -1077,7 +1109,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -1112,7 +1144,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             // ai target
@@ -1172,7 +1204,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -1223,7 +1255,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -1262,7 +1294,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -1295,7 +1327,7 @@ namespace Zartex
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
             int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0);
+            CollectionOfWires cow = new CollectionOfWires(0,pWireCollection);
             wireCollection.Add(cow);
 
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
@@ -1504,6 +1536,27 @@ namespace Zartex
 
         public Actor CreateCharacter(float x, float y, float z, float angle, int role, string personality, int personalityId, int personalityIndex, float health, float felony, int weapon, float vulnerability, string note="", int flags = 131073, byte r = 0,byte g = 155,int b = 200)
         {
+            // argument checking
+            if (x == null)
+                throw new ScriptRuntimeException("Bad argument #1 - Invalid float number (x)");
+            if (y == null)
+                throw new ScriptRuntimeException("Bad argument #2 - Invalid float number (y)");
+            if (z == null)
+                throw new ScriptRuntimeException("Bad argument #3 - Invalid float number (z)");
+            if (angle == null)
+                throw new ScriptRuntimeException("Bad argument #4 - Invalid float number (angle)");
+            if (personality == null)
+                throw new ScriptRuntimeException("Bad argument #5 - Invalid string (personality)");
+            if (personalityId == null)
+                throw new ScriptRuntimeException("Bad argument #6 - Invalid integer number (personalityId)");
+            if (health == null)
+                throw new ScriptRuntimeException("Bad argument #7 - Invalid float number (health)");
+            if (felony == null)
+                throw new ScriptRuntimeException("Bad argument #8 - Invalid float number (felony)");
+            if (weapon == null)
+                throw new ScriptRuntimeException("Bad argument #9 - Invalid integer number (weapon)");
+            if (vulnerability == null)
+                throw new ScriptRuntimeException("Bad argument #10 - Invalid float number (vulnerability)");
             var a = (Math.PI / 180) * angle; // convert degrees to radians
             Vector3 fwd = new Vector3(
                 (float)(Math.Cos(0) * Math.Cos(a)), // x
