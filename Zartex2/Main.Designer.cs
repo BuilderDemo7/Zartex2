@@ -44,6 +44,8 @@
             this.mnFile_Save = new System.Windows.Forms.ToolStripMenuItem();
             this.mnFile_SaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.importLuaScript = new System.Windows.Forms.ToolStripMenuItem();
+            this.driv3rLuaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.driverPLLuaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnSep1 = new System.Windows.Forms.ToolStripSeparator();
             this.mnFile_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -168,14 +170,14 @@
             // mnFile_New
             // 
             this.mnFile_New.Name = "mnFile_New";
-            this.mnFile_New.Size = new System.Drawing.Size(165, 22);
+            this.mnFile_New.Size = new System.Drawing.Size(180, 22);
             this.mnFile_New.Text = "New";
             this.mnFile_New.Click += new System.EventHandler(this.mnFile_New_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(162, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
             // 
             // mnFile_Open
             // 
@@ -188,7 +190,7 @@
             this.toolStripSeparator12,
             this.driverParallelLinesToolStripMenuItem});
             this.mnFile_Open.Name = "mnFile_Open";
-            this.mnFile_Open.Size = new System.Drawing.Size(165, 22);
+            this.mnFile_Open.Size = new System.Drawing.Size(180, 22);
             this.mnFile_Open.Text = "Open";
             // 
             // mnLoadFile
@@ -237,7 +239,7 @@
             // 
             this.mnFile_Save.Enabled = false;
             this.mnFile_Save.Name = "mnFile_Save";
-            this.mnFile_Save.Size = new System.Drawing.Size(165, 22);
+            this.mnFile_Save.Size = new System.Drawing.Size(180, 22);
             this.mnFile_Save.Text = "Save";
             this.mnFile_Save.Click += new System.EventHandler(this.MenuSaveFile);
             // 
@@ -245,27 +247,43 @@
             // 
             this.mnFile_SaveAs.Enabled = false;
             this.mnFile_SaveAs.Name = "mnFile_SaveAs";
-            this.mnFile_SaveAs.Size = new System.Drawing.Size(165, 22);
+            this.mnFile_SaveAs.Size = new System.Drawing.Size(180, 22);
             this.mnFile_SaveAs.Text = "Save As";
             this.mnFile_SaveAs.Click += new System.EventHandler(this.MenuSaveFileAs);
             // 
             // importLuaScript
             // 
+            this.importLuaScript.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.driv3rLuaToolStripMenuItem,
+            this.driverPLLuaToolStripMenuItem});
             this.importLuaScript.Enabled = false;
             this.importLuaScript.Name = "importLuaScript";
-            this.importLuaScript.Size = new System.Drawing.Size(165, 22);
+            this.importLuaScript.Size = new System.Drawing.Size(180, 22);
             this.importLuaScript.Text = "Import Lua Script";
-            this.importLuaScript.Click += new System.EventHandler(this.importLuaScript_Click);
+            // 
+            // driv3rLuaToolStripMenuItem
+            // 
+            this.driv3rLuaToolStripMenuItem.Name = "driv3rLuaToolStripMenuItem";
+            this.driv3rLuaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.driv3rLuaToolStripMenuItem.Text = "Driv3r Lua";
+            this.driv3rLuaToolStripMenuItem.Click += new System.EventHandler(this.importLuaScript_Click);
+            // 
+            // driverPLLuaToolStripMenuItem
+            // 
+            this.driverPLLuaToolStripMenuItem.Name = "driverPLLuaToolStripMenuItem";
+            this.driverPLLuaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.driverPLLuaToolStripMenuItem.Text = "Driver: PL Lua";
+            this.driverPLLuaToolStripMenuItem.Click += new System.EventHandler(this.importLuaScriptDPL_Click);
             // 
             // mnSep1
             // 
             this.mnSep1.Name = "mnSep1";
-            this.mnSep1.Size = new System.Drawing.Size(162, 6);
+            this.mnSep1.Size = new System.Drawing.Size(177, 6);
             // 
             // mnFile_Exit
             // 
             this.mnFile_Exit.Name = "mnFile_Exit";
-            this.mnFile_Exit.Size = new System.Drawing.Size(165, 22);
+            this.mnFile_Exit.Size = new System.Drawing.Size(180, 22);
             this.mnFile_Exit.Text = "Exit";
             // 
             // editToolStripMenuItem
@@ -1042,6 +1060,8 @@
         public System.Windows.Forms.ToolStripMenuItem enlightenNodesBTN;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
         public System.Windows.Forms.ToolStripMenuItem useFlowgraphBTN;
+        private System.Windows.Forms.ToolStripMenuItem driv3rLuaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem driverPLLuaToolStripMenuItem;
     }
 }
 

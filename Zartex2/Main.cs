@@ -3190,16 +3190,22 @@ namespace Zartex
             script.Globals["PERSONALITY_PATHANDVEHICLE"] = 2;
             script.Globals["PERSONALITY_PATHFACE"] = 9;
 
-            script.Globals["PROPERTYTYPE_FLOAT"] = typeof(FloatProperty);
-            script.Globals["PROPERTYTYPE_STRING"] = typeof(StringProperty);
-            script.Globals["PROPERTYTYPE_INT"] = typeof(IntegerProperty);
-            script.Globals["PROPERTYTYPE_TEXTFILE"] = typeof(TextFileItemProperty);
-            script.Globals["PROPERTYTYPE_MATRIX"] = typeof(MatrixProperty);
-            script.Globals["PROPERTYTYPE_UID"] = typeof(UIDProperty);
-            script.Globals["PROPERTYTYPE_AUDIO"] = typeof(AudioProperty);
-            script.Globals["PROPERTYTYPE_OBJTYPE"] = typeof(ObjectTypeProperty);
-            script.Globals["PROPERTYTYPE_ANIMTYPE"] = typeof(AnimationTypeProperty);
-            script.Globals["PROPERTYTYPE_TINT"] = typeof(VehicleTintProperty);
+            //script.DoString("local logicStart = MISSION.logicStart()"); // logic start global variable
+
+            DynValue res = script.DoFile(filepath);
+
+            //script.DoString("LogicStart()"); // calls the logic start
+            return LMS;
+        }
+
+        // LUA
+        public LuaMissionScriptDPL importLuaFromFileDPL(string filepath)
+        {
+            Script script = new Script();
+            UserData.RegisterAssembly();
+
+            LuaMissionScriptDPL LMS = new LuaMissionScriptDPL();
+            script.Globals["MISSION"] = LMS;
 
             //script.DoString("local logicStart = MISSION.logicStart()"); // logic start global variable
 
@@ -3213,7 +3219,7 @@ namespace Zartex
         {
             OpenFileDialog luaFileDialog = new OpenFileDialog
             {
-                Title = "Open Lua File",
+                Title = "Open Lua File for Driv3r Lua",
                 Filter = "Lua file|*.lua"
             };
 
@@ -3227,7 +3233,7 @@ namespace Zartex
                 catch (ScriptRuntimeException ex)
                 {
                     Console.WriteLine(ex.DecoratedMessage);
-                    MessageBox.Show(ex.DecoratedMessage+"\nCall stack:\n\n"+ex.CallStack.ToString(), "Import Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.DecoratedMessage, "Import Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -3242,11 +3248,54 @@ namespace Zartex
 
                 MissionPackage.MissionData.LogicData.SoundBankTable.Table = luaMission.missionData.LogicData.SoundBankTable.Table;
 
+                if (MissionPackage.MissionSummary == null)
+                    MissionPackage.MissionSummary = new MissionSummaryData();
                 MissionPackage.MissionSummary.StartPosition = luaMission.missionSummary.StartPosition;
                 MissionPackage.MissionSummary.CityType = luaMission.missionSummary.GetCityTypeByName(luaMission.missionSummary.Level);
                 MissionPackage.MissionSummary.MissionId = luaMission.missionSummary.MoodId;
 
-                MessageBox.Show("Success loading lua mission script file!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Success loading Lua mission script file!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void importLuaScriptDPL_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog luaFileDialog = new OpenFileDialog
+            {
+                Title = "Open Lua File for Driver: Parallel Lines Lua",
+                Filter = "Lua file|*.lua"
+            };
+
+            if (luaFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                LuaMissionScriptDPL luaMission;
+                //try
+                //{
+                    luaMission = importLuaFromFileDPL(luaFileDialog.FileName);
+                //}
+                //catch (ScriptRuntimeException ex)
+                //{
+                //    Console.WriteLine(ex.DecoratedMessage);
+                //    MessageBox.Show(ex.DecoratedMessage+"\n / \n"+ex.Message, "Import Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //    return;
+                //}
+
+                // copy data from lua mission to current mission
+                MissionPackage.MissionData.LogicData.Actors.Definitions = luaMission.missionData.LogicData.Actors.Definitions;
+                MissionPackage.MissionData.LogicData.Nodes.Definitions = luaMission.missionData.LogicData.Nodes.Definitions;
+                MissionPackage.MissionData.LogicData.WireCollection.WireCollections = luaMission.wireCollection;
+
+                MissionPackage.MissionData.Objects.Objects = luaMission.missionData.Objects.Objects;
+
+                MissionPackage.MissionData.LogicData.StringCollection.Strings = luaMission.missionData.LogicData.StringCollection.Strings;
+
+                MissionPackage.MissionData.LogicData.SoundBankTable.Table = luaMission.missionData.LogicData.SoundBankTable.Table;
+
+                //MissionPackage.MissionSummary.StartPosition = luaMission.missionSummary.StartPosition;
+                //MissionPackage.MissionSummary.CityType = luaMission.missionSummary.GetCityTypeByName(luaMission.missionSummary.Level);
+                //MissionPackage.MissionSummary.MissionId = luaMission.missionSummary.MoodId;
+
+                MessageBox.Show("Success loading Lua mission script file!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 

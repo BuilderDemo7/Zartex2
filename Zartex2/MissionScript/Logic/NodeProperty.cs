@@ -463,10 +463,13 @@ namespace Zartex
             stream.Write(Value);
         }
 
-        protected MatrixProperty() { }
-        protected MatrixProperty(Vector4 value)
+        public MatrixProperty() { }
+        public MatrixProperty(Vector4 position, Vector4 left, Vector4 up, Vector4 forward)
         {
-            Value = value;
+            Value = position;
+            Left = left;
+            Up = up;
+            Forward = forward;
         }
     }
 

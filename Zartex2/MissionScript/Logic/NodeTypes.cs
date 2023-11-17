@@ -234,7 +234,8 @@ namespace Zartex
             { 212, "AttackerControl" },
             { 215, "KeepAreaClean" },
             { 217, "GiveWeaponToPlayer" },
-            { 218, "GlobalControl" }
+            { 218, "GlobalControl" },
+            { 219, "DifficultyControl" },
         };
 
         public static IDictionary<int, string> ActorNodeTypes = new Dictionary<int, string>() {
@@ -258,6 +259,7 @@ namespace Zartex
             { 111, "Data" },
             { 112, "PropGadget" },
             { 115, "Empty" },
+            { 116, "Train" },
             { 118, "Cop" } // from DPL
         };
 
