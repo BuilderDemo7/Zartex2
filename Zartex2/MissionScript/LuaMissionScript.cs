@@ -1807,6 +1807,88 @@ namespace Zartex
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
+        public Node Timer(float interval, int flags = 1,string note = "", int r = 0, int g = 200, int b = 122)
+        {
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 1,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new FloatProperty(interval) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Interval")
+                        },
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }
+                    }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
+        public Node FadeControl(int direction,float duration,int flags = 0, byte R = 0, byte G = 0, byte B = 0, byte A = 0, string note = "", int r = 0, int g = 200, int b = 122)
+        {
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 112,
+                StringId = stringId,
+                Flags = 0x1862,
+                Reserved = -21713,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new EnumProperty(direction) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Direction")
+                        },
+                        new FloatProperty(duration) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Duration")
+                        },
+                        new Float3Property(new Vector4(R,G,B,A)) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Colour")
+                        },
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }
+                    }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
+        public Node FadeOut(float duration = 0.5f, int flags = 0, byte R = 0, byte G = 0, byte B = 0, byte A = 0, string note = "FadeOut()", int r = 0, int g = 200, int b = 122)
+        {
+            return FadeControl(1, duration, flags, R, G, B, A, note, r, g, b);
+        }
+
+        public Node FadeIn(float duration = 0.5f, int flags = 0, byte R = 0, byte G = 0, byte B = 0, byte A = 0, string note = "FadeOut()", int r = 0, int g = 200, int b = 122)
+        {
+            return FadeControl(2, duration, flags, R, G, B, A, note, r, g, b);
+        }
+
         // NOTE: use flags 65537 to make this the player
         public Actor CreateCharacter(float x, float y, float z, float angle, int skin, float health, float felony, Actor vehicle=null, int vehicleSeat=0, int weapon = 0, bool player = false, int flags = 1, string note = "", byte r = 0, byte g = 155, int b = 200)
         {
@@ -1814,9 +1896,9 @@ namespace Zartex
             if (player)
                 flags = 65537;
             var rad = (float)(Math.PI / 180);
-            var a = rad  * angle; // convert degrees to radians
-            var a2 = rad * (angle-90); // convert degrees to radians
-            var a3 = rad * -90; // convert degrees to radians
+            var a = rad  * angle; // convert degrees to radians (yaw)
+            var a2 = rad * (angle-90); // convert degrees to radians (yaw - 90 deg.)
+            var a3 = rad * -90; // convert degrees to radians (pitch)
             // forward
             Vector3 fwd = new Vector3(
                 (float)(Math.Cos(0) * Math.Cos(a)), // x
@@ -1853,7 +1935,8 @@ namespace Zartex
                 TypeId = 2,
                 StringId = stringId,
                 ObjectId = -1,
-                Flags = 0x2FD7,
+                Flags = 0x14B9,
+                Reserved = 2974,
                 Properties = new List<NodeProperty>()
                 {
                         new MatrixProperty(new Vector4(x,y,z,1),l,up,fwd) {

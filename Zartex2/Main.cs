@@ -3291,6 +3291,11 @@ namespace Zartex
 
                 MissionPackage.MissionData.LogicData.SoundBankTable.Table = luaMission.missionData.LogicData.SoundBankTable.Table;
 
+                // hack hacked succesfully
+                var off = MissionPackage.MissionSummary.DPLBuffer.Length - 1;
+                MissionPackage.MissionSummary.DPLBuffer[off] = 0;
+                MissionPackage.MissionSummary.DPLBuffer[off-1] = 0;
+
                 //MissionPackage.MissionSummary.StartPosition = luaMission.missionSummary.StartPosition;
                 //MissionPackage.MissionSummary.CityType = luaMission.missionSummary.GetCityTypeByName(luaMission.missionSummary.Level);
                 //MissionPackage.MissionSummary.MissionId = luaMission.missionSummary.MoodId;
