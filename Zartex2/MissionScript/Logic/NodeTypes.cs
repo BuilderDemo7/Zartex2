@@ -154,6 +154,8 @@ namespace Zartex
             { 117, "ChaseModeControl" },
             { 118, "MusicControl" },
 
+            { 119, "VariableWatch" },
+
             { 120, "ClockWatch" },
             { 121, "AmbientSounds" },
             { 122, "BombCarWatch" },
@@ -223,6 +225,7 @@ namespace Zartex
             { 190, "TrainControl" },
             { 191, "VehicleControl" },
             { 194, "PathControl" },
+            { 195, "RacetrackOpponentControl" },
             { 193, "TankControl" },
             { 197, "CharacterMoveControl" },
 

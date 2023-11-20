@@ -104,9 +104,12 @@
             this.wireNodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.appendBankTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
+            this.driToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.logicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.playerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.giveWeaponToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
-            this.enlightenNodesBTN = new System.Windows.Forms.ToolStripMenuItem();
-            this.useFlowgraphBTN = new System.Windows.Forms.ToolStripMenuItem();
             this.gameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getPlayerPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Content = new System.Windows.Forms.Panel();
@@ -123,6 +126,16 @@
             this.btnLESC = new System.Windows.Forms.Button();
             this.btnEMPR = new System.Windows.Forms.Button();
             this.btnEMOB = new System.Windows.Forms.Button();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enlightenNodesBTN = new System.Windows.Forms.ToolStripMenuItem();
+            this.useFlowgraphBTN = new System.Windows.Forms.ToolStripMenuItem();
+            this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.actorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.generalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.characterToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
             this.MenuPanel.SuspendLayout();
             this.MenuBar.SuspendLayout();
             this.LeftMenu.SuspendLayout();
@@ -145,6 +158,7 @@
             this.MenuBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnFile,
             this.editToolStripMenuItem,
+            this.viewToolStripMenuItem,
             this.gameToolStripMenuItem});
             this.MenuBar.Location = new System.Drawing.Point(0, 0);
             this.MenuBar.Name = "MenuBar";
@@ -160,6 +174,7 @@
             this.mnFile_Open,
             this.mnFile_Save,
             this.mnFile_SaveAs,
+            this.toolStripSeparator15,
             this.importLuaScript,
             this.mnSep1,
             this.mnFile_Exit});
@@ -170,14 +185,14 @@
             // mnFile_New
             // 
             this.mnFile_New.Name = "mnFile_New";
-            this.mnFile_New.Size = new System.Drawing.Size(180, 22);
+            this.mnFile_New.Size = new System.Drawing.Size(165, 22);
             this.mnFile_New.Text = "New";
             this.mnFile_New.Click += new System.EventHandler(this.mnFile_New_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(162, 6);
             // 
             // mnFile_Open
             // 
@@ -190,7 +205,7 @@
             this.toolStripSeparator12,
             this.driverParallelLinesToolStripMenuItem});
             this.mnFile_Open.Name = "mnFile_Open";
-            this.mnFile_Open.Size = new System.Drawing.Size(180, 22);
+            this.mnFile_Open.Size = new System.Drawing.Size(165, 22);
             this.mnFile_Open.Text = "Open";
             // 
             // mnLoadFile
@@ -239,7 +254,7 @@
             // 
             this.mnFile_Save.Enabled = false;
             this.mnFile_Save.Name = "mnFile_Save";
-            this.mnFile_Save.Size = new System.Drawing.Size(180, 22);
+            this.mnFile_Save.Size = new System.Drawing.Size(165, 22);
             this.mnFile_Save.Text = "Save";
             this.mnFile_Save.Click += new System.EventHandler(this.MenuSaveFile);
             // 
@@ -247,7 +262,7 @@
             // 
             this.mnFile_SaveAs.Enabled = false;
             this.mnFile_SaveAs.Name = "mnFile_SaveAs";
-            this.mnFile_SaveAs.Size = new System.Drawing.Size(180, 22);
+            this.mnFile_SaveAs.Size = new System.Drawing.Size(165, 22);
             this.mnFile_SaveAs.Text = "Save As";
             this.mnFile_SaveAs.Click += new System.EventHandler(this.MenuSaveFileAs);
             // 
@@ -258,32 +273,32 @@
             this.driverPLLuaToolStripMenuItem});
             this.importLuaScript.Enabled = false;
             this.importLuaScript.Name = "importLuaScript";
-            this.importLuaScript.Size = new System.Drawing.Size(180, 22);
+            this.importLuaScript.Size = new System.Drawing.Size(165, 22);
             this.importLuaScript.Text = "Import Lua Script";
             // 
             // driv3rLuaToolStripMenuItem
             // 
             this.driv3rLuaToolStripMenuItem.Name = "driv3rLuaToolStripMenuItem";
-            this.driv3rLuaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.driv3rLuaToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.driv3rLuaToolStripMenuItem.Text = "Driv3r Lua";
             this.driv3rLuaToolStripMenuItem.Click += new System.EventHandler(this.importLuaScript_Click);
             // 
             // driverPLLuaToolStripMenuItem
             // 
             this.driverPLLuaToolStripMenuItem.Name = "driverPLLuaToolStripMenuItem";
-            this.driverPLLuaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.driverPLLuaToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.driverPLLuaToolStripMenuItem.Text = "Driver: PL Lua";
             this.driverPLLuaToolStripMenuItem.Click += new System.EventHandler(this.importLuaScriptDPL_Click);
             // 
             // mnSep1
             // 
             this.mnSep1.Name = "mnSep1";
-            this.mnSep1.Size = new System.Drawing.Size(177, 6);
+            this.mnSep1.Size = new System.Drawing.Size(162, 6);
             // 
             // mnFile_Exit
             // 
             this.mnFile_Exit.Name = "mnFile_Exit";
-            this.mnFile_Exit.Size = new System.Drawing.Size(180, 22);
+            this.mnFile_Exit.Size = new System.Drawing.Size(165, 22);
             this.mnFile_Exit.Text = "Exit";
             // 
             // editToolStripMenuItem
@@ -291,8 +306,7 @@
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addToolStripMenuItem,
             this.toolStripSeparator13,
-            this.enlightenNodesBTN,
-            this.useFlowgraphBTN});
+            this.findToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 19);
             this.editToolStripMenuItem.Text = "Edit";
@@ -306,9 +320,11 @@
             this.logicNodeToolStripMenuItem,
             this.wireNodeToolStripMenuItem,
             this.toolStripSeparator9,
-            this.appendBankTableToolStripMenuItem});
+            this.appendBankTableToolStripMenuItem,
+            this.toolStripSeparator14,
+            this.driToolStripMenuItem});
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addToolStripMenuItem.Text = "Add";
             // 
             // stringToolStripMenuItem
@@ -718,24 +734,47 @@
             this.appendBankTableToolStripMenuItem.Text = "Append Sound Bank";
             this.appendBankTableToolStripMenuItem.Click += new System.EventHandler(this.appendBankTableToolStripMenuItem_Click);
             // 
+            // toolStripSeparator14
+            // 
+            this.toolStripSeparator14.Name = "toolStripSeparator14";
+            this.toolStripSeparator14.Size = new System.Drawing.Size(179, 6);
+            // 
+            // driToolStripMenuItem
+            // 
+            this.driToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.logicToolStripMenuItem,
+            this.actorToolStripMenuItem});
+            this.driToolStripMenuItem.Name = "driToolStripMenuItem";
+            this.driToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.driToolStripMenuItem.Text = "Driver: Parallel Lines";
+            // 
+            // logicToolStripMenuItem
+            // 
+            this.logicToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.playerToolStripMenuItem});
+            this.logicToolStripMenuItem.Name = "logicToolStripMenuItem";
+            this.logicToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.logicToolStripMenuItem.Text = "Logic";
+            // 
+            // playerToolStripMenuItem
+            // 
+            this.playerToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.giveWeaponToolStripMenuItem});
+            this.playerToolStripMenuItem.Name = "playerToolStripMenuItem";
+            this.playerToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
+            this.playerToolStripMenuItem.Text = "Player";
+            // 
+            // giveWeaponToolStripMenuItem
+            // 
+            this.giveWeaponToolStripMenuItem.Name = "giveWeaponToolStripMenuItem";
+            this.giveWeaponToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.giveWeaponToolStripMenuItem.Text = "Give Weapon";
+            this.giveWeaponToolStripMenuItem.Click += new System.EventHandler(this.giveWeaponToolStripMenuItem_Click);
+            // 
             // toolStripSeparator13
             // 
             this.toolStripSeparator13.Name = "toolStripSeparator13";
-            this.toolStripSeparator13.Size = new System.Drawing.Size(196, 6);
-            // 
-            // enlightenNodesBTN
-            // 
-            this.enlightenNodesBTN.CheckOnClick = true;
-            this.enlightenNodesBTN.Name = "enlightenNodesBTN";
-            this.enlightenNodesBTN.Size = new System.Drawing.Size(199, 22);
-            this.enlightenNodesBTN.Text = "Enlighten Definitions";
-            // 
-            // useFlowgraphBTN
-            // 
-            this.useFlowgraphBTN.CheckOnClick = true;
-            this.useFlowgraphBTN.Name = "useFlowgraphBTN";
-            this.useFlowgraphBTN.Size = new System.Drawing.Size(199, 22);
-            this.useFlowgraphBTN.Text = "Flowgraph Logic Nodes";
+            this.toolStripSeparator13.Size = new System.Drawing.Size(177, 6);
             // 
             // gameToolStripMenuItem
             // 
@@ -940,6 +979,80 @@
             this.btnEMOB.Text = "Objects";
             this.btnEMOB.UseVisualStyleBackColor = true;
             // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enlightenNodesBTN,
+            this.useFlowgraphBTN});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 19);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // enlightenNodesBTN
+            // 
+            this.enlightenNodesBTN.CheckOnClick = true;
+            this.enlightenNodesBTN.Name = "enlightenNodesBTN";
+            this.enlightenNodesBTN.Size = new System.Drawing.Size(199, 22);
+            this.enlightenNodesBTN.Text = "Enlighten Definitions";
+            // 
+            // useFlowgraphBTN
+            // 
+            this.useFlowgraphBTN.CheckOnClick = true;
+            this.useFlowgraphBTN.Name = "useFlowgraphBTN";
+            this.useFlowgraphBTN.Size = new System.Drawing.Size(199, 22);
+            this.useFlowgraphBTN.Text = "Flowgraph Logic Nodes";
+            // 
+            // findToolStripMenuItem
+            // 
+            this.findToolStripMenuItem.Name = "findToolStripMenuItem";
+            this.findToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.findToolStripMenuItem.Text = "Find";
+            this.findToolStripMenuItem.Click += new System.EventHandler(this.findToolStripMenuItem_Click);
+            // 
+            // actorToolStripMenuItem
+            // 
+            this.actorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.generalToolStripMenuItem,
+            this.lawToolStripMenuItem});
+            this.actorToolStripMenuItem.Name = "actorToolStripMenuItem";
+            this.actorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.actorToolStripMenuItem.Text = "Actor";
+            // 
+            // lawToolStripMenuItem
+            // 
+            this.lawToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copToolStripMenuItem});
+            this.lawToolStripMenuItem.Name = "lawToolStripMenuItem";
+            this.lawToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.lawToolStripMenuItem.Text = "Law";
+            // 
+            // copToolStripMenuItem
+            // 
+            this.copToolStripMenuItem.Name = "copToolStripMenuItem";
+            this.copToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.copToolStripMenuItem.Text = "Cop";
+            this.copToolStripMenuItem.Click += new System.EventHandler(this.copToolStripMenuItem_Click);
+            // 
+            // generalToolStripMenuItem
+            // 
+            this.generalToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.characterToolStripMenuItem1});
+            this.generalToolStripMenuItem.Name = "generalToolStripMenuItem";
+            this.generalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.generalToolStripMenuItem.Text = "General";
+            // 
+            // characterToolStripMenuItem1
+            // 
+            this.characterToolStripMenuItem1.Name = "characterToolStripMenuItem1";
+            this.characterToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.characterToolStripMenuItem1.Text = "Character";
+            this.characterToolStripMenuItem1.Click += new System.EventHandler(this.characterToolStripMenuItem1_Click);
+            // 
+            // toolStripSeparator15
+            // 
+            this.toolStripSeparator15.Name = "toolStripSeparator15";
+            this.toolStripSeparator15.Size = new System.Drawing.Size(177, 6);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1057,11 +1170,24 @@
         private System.Windows.Forms.ToolStripMenuItem getPlayerPositionToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
         private System.Windows.Forms.ToolStripMenuItem driverParallelLinesToolStripMenuItem;
-        public System.Windows.Forms.ToolStripMenuItem enlightenNodesBTN;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
-        public System.Windows.Forms.ToolStripMenuItem useFlowgraphBTN;
         private System.Windows.Forms.ToolStripMenuItem driv3rLuaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem driverPLLuaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator14;
+        private System.Windows.Forms.ToolStripMenuItem driToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem logicToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem playerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem giveWeaponToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem findToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem enlightenNodesBTN;
+        public System.Windows.Forms.ToolStripMenuItem useFlowgraphBTN;
+        private System.Windows.Forms.ToolStripMenuItem actorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem generalToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem characterToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem lawToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator15;
     }
 }
 

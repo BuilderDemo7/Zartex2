@@ -100,13 +100,6 @@ namespace Zartex
         {
             switch ((ChunkType)sender.Context)
             {
-            case ChunkType.LogicExportActorSetTable:
-            {
-                        if (_mid == MissionIndex)
-                        {
-                            MissionData = sender.AsResource<ExportedMission>(true);
-                        } break;
-            }
             case ChunkType.ExportedMissionChunk:
                     {
                         if (_mid == MissionIndex) {

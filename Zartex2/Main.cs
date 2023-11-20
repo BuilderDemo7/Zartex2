@@ -33,6 +33,8 @@ namespace Zartex
 {
     public partial class Main : Form
     {
+        public InspectorWidget Widget;
+
         public Process gameProcess;
         public Vector3 lastPosition = new Vector3(0,0,0);
         public bool isDriverPLMission = false; 
@@ -132,8 +134,11 @@ namespace Zartex
             if (result == DialogResult.OK)
             {
                 // close the old file
+
+                // but before get some stuff
                 var isDPL = MissionPackage.isDriverPLMission;
                 var mIdx = MissionPackage.MissionIndex;
+
                 if (MissionPackage != null)
                 {
                     MissionPackage.Dispose();
@@ -575,7 +580,7 @@ namespace Zartex
         private void GenerateWireCollection()
         {
             // Get widget ready
-            InspectorWidget Widget = new InspectorWidget();
+            Widget = new InspectorWidget();
             TreeView Nodes = Widget.Nodes;
 
             Cursor = Cursors.WaitCursor;
@@ -753,6 +758,7 @@ namespace Zartex
         {
             // Get widget ready
             var inspector = new InspectorWidget();
+            Widget = inspector;
             var nodes = inspector.Nodes;
             if (selected != -1)
                 inspector.Nodes.SelectedNode = inspector.Nodes.Nodes[selected];
@@ -1235,7 +1241,7 @@ namespace Zartex
 
         public void CreateLogicNodesFlowgraph(IList<NodeDefinition> definition)
         {
-            InspectorWidget Widget = new InspectorWidget();
+            Widget = new InspectorWidget();
 
             SplitterPanel Panel1 = Widget.SplitPanel.Panel1;
             Panel1.Controls.Clear();
@@ -1442,7 +1448,7 @@ namespace Zartex
         
         private void button2_Click(object sender, EventArgs e)
         {
-            InspectorWidget Widget = new InspectorWidget();
+            Widget = new InspectorWidget();
 
             SplitterPanel Panel1 = Widget.SplitPanel.Panel1;
             Panel1.AutoScroll = true;
@@ -3427,6 +3433,255 @@ namespace Zartex
                     LoadScriptFile(openFileDialog.FileName, isDriverPLMission);
                 }
             }
+        }
+
+        private void giveWeaponToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MissionPackage == null)
+            {
+                MessageBox.Show("No mission loaded!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            // booly heck
+            bool hasUID = MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValue("UID") != -1;
+
+            MissionPackage.MissionData.LogicData.WireCollection.WireCollections.Add(new WireCollection(0));
+            int idx = MissionPackage.MissionData.LogicData.Nodes.Definitions.Count;
+            MissionPackage.MissionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(70, 42, 247, 255),
+                TypeId = 217,
+                StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"),
+                Properties = new List<NodeProperty>()
+            });
+            // hack
+            if (hasUID)
+                MissionPackage.MissionData.LogicData.Nodes.Definitions[idx].Properties.Add(new UIDProperty((ulong)(idx * 0x0FFFFFFF0))
+                {
+                    StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("UID")
+                });
+            MissionPackage.MissionData.LogicData.Nodes.Definitions[idx].Properties.AddRange(
+                new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(MissionPackage.MissionData.LogicData.WireCollection.WireCollections.Count-1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new EnumProperty(0) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Weapon")
+                        }
+                    });
+            
+            logicAddToWireCollectionByUser(idx);
+            GenerateLogicNodes();
+        }
+
+        private void findToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MissionPackage == null)
+            {
+                MessageBox.Show("No mission loaded!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            if (Widget == null)
+            {
+                MessageBox.Show("Nothing to find", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            Form prompt = new Form()
+            {
+                Width = 500,
+                Height = 150,
+
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                StartPosition = FormStartPosition.CenterScreen,
+
+                Text = "Find"
+            };
+
+            Label textLabel = new Label()
+            {
+                Left = 50,
+                Top = 20,
+
+                Text = "Enter something:"
+            };
+
+            TextBox textBox = new TextBox()
+            {
+                Left = 50,
+                Top = 50,
+
+                Width = 400,
+
+                SelectedText = "LogicStart"
+            };
+
+            Button find = new Button()
+            {
+                Left = 250,
+                Top = 70,
+
+                Width = 100,
+
+                Text = "Find"
+            };
+
+            Button next = new Button()
+            {
+                Left = 350,
+                Top = 70,
+
+                Width = 100,
+
+                Text = "Find next"
+            };
+
+            //confirmation.Click += delegate { prompt.Close(); };
+
+            prompt.Controls.Add(textBox);
+            prompt.Controls.Add(find);
+            prompt.Controls.Add(next);
+            prompt.Controls.Add(textLabel);
+            //prompt.AcceptButton = find;
+
+            TreeNode oldNode = new TreeNode();
+            find.Click += delegate
+            {
+                if (textBox.Text == "")
+                {
+                    MessageBox.Show("Inputed text is empty", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                foreach (TreeNode node in Widget.Nodes.Nodes)
+                {
+                    if (node.Text.Contains(textBox.Text))
+                    {
+                        
+                        Widget.Nodes.SelectedNode = node;
+                        if (oldNode==node)
+                            MessageBox.Show($"You have already found a node as previously", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        oldNode = node;
+                        return;
+                    }
+                }
+                MessageBox.Show($"Couldn't find a node from your criteria: '{textBox.Text}'", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            };
+            next.Click += delegate
+            {
+                if (textBox.Text == "")
+                {
+                    MessageBox.Show("Inputed text is empty", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                for (int id = Widget.Nodes.SelectedNode.Index+1; id<Widget.Nodes.Nodes.Count; id++)
+                {
+                    TreeNode node = Widget.Nodes.Nodes[id];
+                    if (node.Text.Contains(textBox.Text))
+                    {
+                        Widget.Nodes.SelectedNode = node; return;
+                    }
+                }
+                MessageBox.Show($"Couldn't find any other node from your criteria: '{textBox.Text}'", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            };
+            prompt.Show(this);
+        }
+
+        // crap crap crap
+        private void characterToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (MissionPackage == null)
+            {
+                MessageBox.Show("No mission loaded!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            // booly heck
+            bool hasUID = false; //MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValue("UID") != -1;
+
+            int idx = MissionPackage.MissionData.LogicData.Actors.Definitions.Count;
+            MissionPackage.MissionData.LogicData.Actors.Definitions.Add(new ActorDefinition()
+            {
+                Color = new NodeColor(170, 42, 247, 255),
+                TypeId = 2,
+                StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"),
+                Properties = new List<NodeProperty>()
+            });
+            // hack
+            if (hasUID)
+                MissionPackage.MissionData.LogicData.Nodes.Definitions[idx].Properties.Add(new UIDProperty((ulong)(idx * 0x0FFFFFFF0))
+                {
+                    StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("UID")
+                });
+            MissionPackage.MissionData.LogicData.Actors.Definitions[idx].Properties.AddRange(
+                new List<NodeProperty>
+                    {
+                        new MatrixProperty(new Vector4(0,0,0,1),new Vector3(-1,0,0),new Vector3(0,1,0),new Vector3(0,0,1)) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Matrix")
+                        },
+                        new ObjectTypeProperty(29) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Character Skin Type")
+                        },
+                        new FloatProperty(1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Initial Health")
+                        },
+                        new FloatProperty(0) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Initial Felony")
+                        },
+                        new EnumProperty(0) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Weapon")
+                        },
+                        new ActorProperty(-1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Initial Vehicle")
+                        },
+                        new EnumProperty(0) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Initial Vehicle Seat")
+                        },
+                        new FlagsProperty((int)1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }           // pFlags
+                    });
+
+            GenerateActors();
+        }
+
+        private void copToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MissionPackage == null)
+            {
+                MessageBox.Show("No mission loaded!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            // booly heck
+            bool hasUID = false; //MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValue("UID") != -1;
+
+            int idx = MissionPackage.MissionData.LogicData.Actors.Definitions.Count;
+            MissionPackage.MissionData.LogicData.Actors.Definitions.Add(new ActorDefinition()
+            {
+                Color = new NodeColor(170, 42, 247, 255),
+                TypeId = 118,
+                StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"),
+                Properties = new List<NodeProperty>()
+            });
+            // hack
+            if (hasUID)
+                MissionPackage.MissionData.LogicData.Nodes.Definitions[idx].Properties.Add(new UIDProperty((ulong)(idx * 0x0FFFFFFF0))
+                {
+                    StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("UID")
+                });
+            MissionPackage.MissionData.LogicData.Actors.Definitions[idx].Properties.AddRange(
+                new List<NodeProperty>
+                    {
+                        new MatrixProperty(new Vector4(0,0,0,1),new Vector3(-1,0,0),new Vector3(0,1,0),new Vector3(0,0,1)) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Matrix")
+                        },
+                        new EnumProperty(2) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Cop Type")
+                        },
+                        new FlagsProperty(1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }           // pFlags
+                    });
+
+            GenerateActors();
         }
     }
 }
