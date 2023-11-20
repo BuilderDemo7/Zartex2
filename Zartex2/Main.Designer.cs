@@ -136,6 +136,7 @@
             this.generalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.characterToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
+            this.vehicleToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuPanel.SuspendLayout();
             this.MenuBar.SuspendLayout();
             this.LeftMenu.SuspendLayout();
@@ -1036,7 +1037,8 @@
             // generalToolStripMenuItem
             // 
             this.generalToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.characterToolStripMenuItem1});
+            this.characterToolStripMenuItem1,
+            this.vehicleToolStripMenuItem1});
             this.generalToolStripMenuItem.Name = "generalToolStripMenuItem";
             this.generalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.generalToolStripMenuItem.Text = "General";
@@ -1052,6 +1054,13 @@
             // 
             this.toolStripSeparator15.Name = "toolStripSeparator15";
             this.toolStripSeparator15.Size = new System.Drawing.Size(177, 6);
+            // 
+            // vehicleToolStripMenuItem1
+            // 
+            this.vehicleToolStripMenuItem1.Name = "vehicleToolStripMenuItem1";
+            this.vehicleToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.vehicleToolStripMenuItem1.Text = "Vehicle";
+            this.vehicleToolStripMenuItem1.Click += new System.EventHandler(this.vehicleToolStripMenuItem1_Click);
             // 
             // Main
             // 
@@ -1188,6 +1197,7 @@
         private System.Windows.Forms.ToolStripMenuItem lawToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator15;
+        private System.Windows.Forms.ToolStripMenuItem vehicleToolStripMenuItem1;
     }
 }
 

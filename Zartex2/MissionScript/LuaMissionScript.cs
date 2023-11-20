@@ -1855,7 +1855,7 @@ namespace Zartex
                 TypeId = 112,
                 StringId = stringId,
                 Flags = 0x1862,
-                Reserved = -21713,
+                Reserved = 0,
                 Properties = new List<NodeProperty>
                     {
                         new WireCollectionProperty(pWireCollection) {
@@ -1900,28 +1900,28 @@ namespace Zartex
             var a2 = rad * (angle-90); // convert degrees to radians (yaw - 90 deg.)
             var a3 = rad * -90; // convert degrees to radians (pitch)
             // forward
-            Vector3 fwd = new Vector3(
+            Vector4 fwd = new Vector4(
                 (float)(Math.Cos(0) * Math.Cos(a)), // x
 
                 0, //(float)-Math.Sin(angle), // altitude
 
-                (float)(Math.Cos(0) * Math.Sin(a)) // z
+                (float)(Math.Cos(0) * Math.Sin(a)), 0 // z
             );
             // left
-            Vector3 l = new Vector3(
+            Vector4 l = new Vector4(
                 (float)(Math.Cos(0) * Math.Cos(a2)), // x
 
                 0, //(float)-Math.Sin(angle), // altitude
 
-                (float)(Math.Cos(0) * Math.Sin(a2)) // z
+                (float)(Math.Cos(0) * Math.Sin(a2)), 0 // z
             );
             // up
-            Vector3 up = new Vector3(
+            Vector4 up = new Vector4(
                 (float)(Math.Cos(a3) * Math.Cos(a)), // x
 
                 (float)-Math.Sin(a3), // altitude
 
-                (float)(Math.Cos(a3) * Math.Sin(a)) // z
+                (float)(Math.Cos(a3) * Math.Sin(a)), 0 // z
             );
             // automatic: if it's player then set start position to this
             if (player)
@@ -1936,7 +1936,7 @@ namespace Zartex
                 StringId = stringId,
                 ObjectId = -1,
                 Flags = 0x14B9,
-                Reserved = 2974,
+                Reserved = 0,
                 Properties = new List<NodeProperty>()
                 {
                         new MatrixProperty(new Vector4(x,y,z,1),l,up,fwd) {

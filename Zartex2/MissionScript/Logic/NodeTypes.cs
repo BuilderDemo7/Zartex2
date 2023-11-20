@@ -263,7 +263,8 @@ namespace Zartex
             { 112, "PropGadget" },
             { 115, "Empty" },
             { 116, "Train" },
-            { 118, "Cop" } // from DPL
+            { 118, "Cop" }, // from DPL
+            { 121, "Marker" }
         };
 
         public static string GetNodeType(int type)

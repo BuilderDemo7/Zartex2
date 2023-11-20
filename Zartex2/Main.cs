@@ -3313,19 +3313,35 @@ namespace Zartex
         private void getPlayerPositionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process[] d3p = Process.GetProcessesByName("Driv3r");
-            if (d3p.Length==0 & gameProcess == null)
+            Process[] dplp = Process.GetProcessesByName("DriverParallelLines");
+            if ((d3p.Length==0 & dplp.Length==0) & gameProcess == null)
             {
-                MessageBox.Show("Game not found in process list","Error",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                MessageBox.Show("Game not found in process list (Driv3r or DriverParallelLines)", "Error",MessageBoxButtons.OK,MessageBoxIcon.Warning);
                 return;
             }
             MemoryEdit.Memory mem = new MemoryEdit.Memory();
-            if (mem.Attach(d3p[0], 0x001F0FFF))
+
+            bool isDPL = dplp.Length!=0;
+
+            uint addr1 = 0x008B85D8;
+            uint addr2 = 0x10;
+            uint addr3 = 0x3B0;
+            // dpl
+            uint addr4 = 0x006E8E28;
+            uint addr5 = 0x58;
+            uint addr6 = 0x40;
+
+            if (mem.Attach(isDPL ? dplp[0] : d3p[0], 0x001F0FFF))
             {
-                gameProcess = d3p[0];
+                gameProcess = isDPL ? dplp[0] : d3p[0];
                 gameProcess.Exited += delegate { gameProcess = null; };
 
-                uint addr = (uint)(mem.Read(0x008B85D8) + 0x10);
-                addr = (uint)(mem.Read(addr) + 0x3B0);
+                uint playerAddr = isDPL ? addr4 : addr1;
+                uint address1 = isDPL ? addr5 : addr2;
+                uint address2 = isDPL ? addr6 : addr3;
+
+                uint addr = (uint)(mem.Read(playerAddr) + address1);
+                addr = (uint)(mem.Read(addr) + address2);
                 float x = mem.ReadFloat(addr);
                 float y = mem.ReadFloat(addr+4);
                 float z = mem.ReadFloat(addr+8);
@@ -3601,6 +3617,7 @@ namespace Zartex
             MissionPackage.MissionData.LogicData.Actors.Definitions.Add(new ActorDefinition()
             {
                 Color = new NodeColor(170, 42, 247, 255),
+                ObjectId = -1,
                 TypeId = 2,
                 StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"),
                 Properties = new List<NodeProperty>()
@@ -3657,6 +3674,7 @@ namespace Zartex
             MissionPackage.MissionData.LogicData.Actors.Definitions.Add(new ActorDefinition()
             {
                 Color = new NodeColor(170, 42, 247, 255),
+                ObjectId = -1,
                 TypeId = 118,
                 StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"),
                 Properties = new List<NodeProperty>()
@@ -3677,6 +3695,75 @@ namespace Zartex
                             StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Cop Type")
                         },
                         new FlagsProperty(1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }           // pFlags
+                    });
+
+            GenerateActors();
+        }
+
+        private void vehicleToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (MissionPackage == null)
+            {
+                MessageBox.Show("No mission loaded!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            // booly heck
+            bool hasUID = false; //MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValue("UID") != -1;
+
+            int idx = MissionPackage.MissionData.LogicData.Actors.Definitions.Count;
+            MissionPackage.MissionData.LogicData.Actors.Definitions.Add(new ActorDefinition()
+            {
+                Color = new NodeColor(170, 42, 247, 255),
+                ObjectId = -1,
+                TypeId = 118,
+                StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"),
+                Properties = new List<NodeProperty>()
+            });
+            // hack
+            if (hasUID)
+                MissionPackage.MissionData.LogicData.Nodes.Definitions[idx].Properties.Add(new UIDProperty((ulong)(idx * 0x0FFFFFFF0))
+                {
+                    StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("UID")
+                });
+            MissionPackage.MissionData.LogicData.Actors.Definitions[idx].Properties.AddRange(
+                new List<NodeProperty>
+                    {
+                        new MatrixProperty(new Vector4(0,0,0,1),new Vector3(-1,0,0),new Vector3(0,1,0),new Vector3(0,0,1)) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Matrix")
+                        },
+                        new ObjectTypeProperty(47) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Vehicle Type")
+                        },
+                        new FloatProperty(0) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Initial Speed")
+                        },
+                        new FloatProperty(0) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Initial Felony")
+                        },
+                        new FloatProperty(1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Impact Softness")
+                        },
+                        new FloatProperty(1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Explosion Softness")
+                        },
+                        new FloatProperty(1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Bullet Softness")
+                        },
+                        new FloatProperty(1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Impact Fragility")
+                        },
+                        new VehicleTintProperty(0) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Vehicle Tint")
+                        },
+                        new IntegerProperty(0) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Tint Value")
+                        },
+                        new ActorProperty(-1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Attached Vehicle")
+                        },
+                        new FlagsProperty((int)1) {
                             StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
                         }           // pFlags
                     });

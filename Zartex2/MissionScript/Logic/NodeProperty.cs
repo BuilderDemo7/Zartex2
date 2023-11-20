@@ -419,13 +419,34 @@ namespace Zartex
             }
             set
             {
-                var a = (Math.PI / 180) * value; // convert degrees to radians
+                var rad = (float)(Math.PI / 180);
+                var a = rad * value; // convert degrees to radians (yaw)
+                var a2 = rad * (value - 90); // convert degrees to radians (yaw - 90 deg.)
+                var a3 = rad * -90; // convert degrees to radians (pitch)
+                                    // forward
                 Forward = new Vector4(
-                (float)(Math.Cos(0) * Math.Cos(a)),
-                0,
-                (float)(Math.Cos(0) * Math.Sin(a)),
-                0
-               );
+                    (float)(Math.Cos(0) * Math.Cos(a)), // x
+
+                    0, //(float)-Math.Sin(angle), // altitude
+
+                    (float)(Math.Cos(0) * Math.Sin(a)), 0 // z
+                );
+                // left
+                Left = new Vector4(
+                    (float)(Math.Cos(0) * Math.Cos(a2)), // x
+
+                    0, //(float)-Math.Sin(angle), // altitude
+
+                    (float)(Math.Cos(0) * Math.Sin(a2)), 0 // z
+                );
+                // up
+                Up = new Vector4(
+                    (float)(Math.Cos(a3) * Math.Cos(a)), // x
+
+                    (float)-Math.Sin(a3), // altitude
+
+                    (float)(Math.Cos(a3) * Math.Sin(a)), 0 // z
+                );
             }
         }
 
