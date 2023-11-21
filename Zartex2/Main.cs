@@ -37,7 +37,25 @@ namespace Zartex
 
         public Process gameProcess;
         public Vector3 lastPosition = new Vector3(0,0,0);
-        public bool isDriverPLMission = false; 
+        public bool isDriverPLMission = false;
+
+        public static byte[] ReadResource(string resourceName)
+        {
+            using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+            {
+                byte[] buffer = new byte[1024];
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    while (true)
+                    {
+                        int read = s.Read(buffer, 0, buffer.Length);
+                        if (read <= 0)
+                            return ms.ToArray();
+                        ms.Write(buffer, 0, read);
+                    }
+                }
+            }
+        }
         static Main()
         {
             DSC.VerifyGameDirectory("Driv3r", "Zartex");
@@ -146,7 +164,11 @@ namespace Zartex
 
             mnFile_Save.Enabled = MissionPackage.IsLoaded;
             mnFile_SaveAs.Enabled = MissionPackage.IsLoaded;
+
+            importMPCBTN.Enabled = true;
             importLuaScript.Enabled = true;
+
+            exportAsBTN.Enabled = true;
         }
 
         private void LoadScriptFile(int missionId)
@@ -3768,7 +3790,7 @@ namespace Zartex
             {
                 Color = new NodeColor(170, 42, 247, 255),
                 ObjectId = -1,
-                TypeId = 118,
+                TypeId = 3,
                 StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"),
                 Properties = new List<NodeProperty>()
             });
@@ -3933,6 +3955,222 @@ namespace Zartex
         private void darkThemeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             toggleDarkTheme();
+        }
+
+        private void pursuitControlToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MissionPackage == null)
+            {
+                MessageBox.Show("No mission loaded!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            // booly heck
+            bool hasUID = MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValue("UID") != -1;
+
+            MissionPackage.MissionData.LogicData.WireCollection.WireCollections.Add(new WireCollection(0));
+            int idx = MissionPackage.MissionData.LogicData.Nodes.Definitions.Count;
+            MissionPackage.MissionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(190, 70, 147, 255),
+                TypeId = 164,
+                StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"),
+                Properties = new List<NodeProperty>()
+            });
+            // hack
+            if (hasUID)
+                MissionPackage.MissionData.LogicData.Nodes.Definitions[idx].Properties.Add(new UIDProperty((ulong)(idx * 0x0FFFFFFF0))
+                {
+                    StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("UID")
+                });
+            MissionPackage.MissionData.LogicData.Nodes.Definitions[idx].Properties.AddRange(
+                new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(MissionPackage.MissionData.LogicData.WireCollection.WireCollections.Count-1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new ActorProperty(0) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Chaser")
+                        },
+                        new ActorProperty(1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Chase Target")
+                        },
+                        new FloatProperty(22.352f) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Speed")
+                        },
+                        new FloatProperty(1.0f) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Acceleration")
+                        },
+                        new FloatProperty(1.0f) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Traction")
+                        },
+                        new FloatProperty(1.0f) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Hand Of Tom")
+                        },
+                        new EnumProperty(1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Pursuit Mode")
+                        },
+                        new FlagsProperty(25165824) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }           // pFlags
+                    });
+
+            logicAddToWireCollectionByUser(idx);
+            GenerateLogicNodes();
+        }
+
+        private void wandererToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MissionPackage == null)
+            {
+                MessageBox.Show("No mission loaded!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            // booly heck
+            bool hasUID = MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValue("UID") != -1;
+
+            MissionPackage.MissionData.LogicData.WireCollection.WireCollections.Add(new WireCollection(0));
+            int idx = MissionPackage.MissionData.LogicData.Nodes.Definitions.Count;
+            MissionPackage.MissionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(190, 70, 147, 255),
+                TypeId = 166,
+                StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"),
+                Properties = new List<NodeProperty>()
+            });
+            // hack
+            if (hasUID)
+                MissionPackage.MissionData.LogicData.Nodes.Definitions[idx].Properties.Add(new UIDProperty((ulong)(idx * 0x0FFFFFFF0))
+                {
+                    StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("UID")
+                });
+            MissionPackage.MissionData.LogicData.Nodes.Definitions[idx].Properties.AddRange(
+                new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(MissionPackage.MissionData.LogicData.WireCollection.WireCollections.Count-1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new ActorProperty(0) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Wanderer")
+                        },
+                        new FloatProperty(22.352f) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Speed")
+                        },
+                        new FloatProperty(1.0f) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Acceleration")
+                        },
+                        new FloatProperty(1.0f) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Traction")
+                        },
+                        new FloatProperty(1.0f) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Hand Of Tom")
+                        },
+                        new FlagsProperty(25165824) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }           // pFlags
+                    });
+
+            logicAddToWireCollectionByUser(idx);
+            GenerateLogicNodes();
+        }
+
+        private void importMPCBTN_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                Title = "Import external .mpc file to current mission",
+                Filter = "Mission Script|*.mpc;*.mxb;*.mps"
+            };
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                MissionScriptFile externalMissionPackage = new MissionScriptFile(openFileDialog.FileName,MissionPackage.isDriverPLMission);
+
+                // import the data but don't change the spooler
+
+                // wire collections
+                MissionPackage.MissionData.LogicData.WireCollection.WireCollections =
+                    externalMissionPackage.MissionData.LogicData.WireCollection.WireCollections;
+
+                // logical definitions
+                MissionPackage.MissionData.LogicData.Actors.Definitions =
+                    externalMissionPackage.MissionData.LogicData.Actors.Definitions;
+                MissionPackage.MissionData.LogicData.Nodes.Definitions =
+                    externalMissionPackage.MissionData.LogicData.Nodes.Definitions;
+
+                // strings
+                MissionPackage.MissionData.LogicData.StringCollection.Strings =
+                    externalMissionPackage.MissionData.LogicData.StringCollection.Strings;
+
+                // sound bank table
+                MissionPackage.MissionData.LogicData.SoundBankTable.Table =
+                    externalMissionPackage.MissionData.LogicData.SoundBankTable.Table;
+
+                externalMissionPackage.Dispose();
+                useFlowgraph = false;
+                GenerateLogicNodes();
+            }
+        }
+
+        private void exportAsBTN_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog()
+            {
+                Title = "Export as external .mpc file from current mission",
+                Filter = "Mission Script|*.mpc;*.mxb;*.mps"
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (!File.Exists(saveFileDialog.FileName))
+                {
+                    FileStream newFile = new FileStream(saveFileDialog.FileName, FileMode.Create, FileAccess.Write);
+                    //byte[] template = ReadResource("templateExportMission");
+                    newFile.Write(Properties.Resources.templateExportMission);
+
+                    newFile.Close();
+                    newFile.Dispose();
+                }
+                else
+                {
+                    FileStream overPoseFile = new FileStream(saveFileDialog.FileName, FileMode.Open, FileAccess.Write);
+                    //byte[] template = ReadResource("templateExportMission");
+                    overPoseFile.Write(Properties.Resources.templateExportMission);
+
+                    overPoseFile.Close();
+                    overPoseFile.Dispose();
+                }
+
+                MissionScriptFile externalMissionPackage = new MissionScriptFile(saveFileDialog.FileName, MissionPackage.isDriverPLMission);
+
+                // import the data but don't change the spooler
+
+                // wire collections
+                externalMissionPackage.MissionData.LogicData.WireCollection.WireCollections = MissionPackage.MissionData.LogicData.WireCollection.WireCollections;
+
+                // logical definitions
+                externalMissionPackage.MissionData.LogicData.Actors.Definitions = MissionPackage.MissionData.LogicData.Actors.Definitions;
+                externalMissionPackage.MissionData.LogicData.Nodes.Definitions = MissionPackage.MissionData.LogicData.Nodes.Definitions;
+
+                // objects
+                externalMissionPackage.MissionData.Objects.Objects = MissionPackage.MissionData.Objects.Objects;
+
+                // strings
+                externalMissionPackage.MissionData.LogicData.StringCollection.Strings = MissionPackage.MissionData.LogicData.StringCollection.Strings;
+
+                // sound bank table
+                externalMissionPackage.MissionData.LogicData.SoundBankTable.Table = MissionPackage.MissionData.LogicData.SoundBankTable.Table;
+
+                externalMissionPackage.MissionSummary = MissionPackage.MissionSummary;
+
+                bool suc = false;
+                //if (externalMissionPackage.Spooler != null)
+                    suc = externalMissionPackage.Save();
+
+                if (suc)
+                    MessageBox.Show($"Successfully exported mission to '{saveFileDialog.FileName}'!","Success",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                else
+                    MessageBox.Show("Something went wrong :(","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
         }
     }
 }

@@ -63,7 +63,7 @@ namespace LuaC.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Byte[].
         /// </summary>
-        internal static byte[] templateMissionFile {
+        public static byte[] templateMissionFile {
             get {
                 object obj = ResourceManager.GetObject("templateMissionFile", resourceCulture);
                 return ((byte[])(obj));

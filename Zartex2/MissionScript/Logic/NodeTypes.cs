@@ -150,7 +150,7 @@ namespace Zartex
             { 113, "TimeControl" },
             { 114, "TimeWatch" },
             { 115, "PassengerJumpControl" },
-            { 116, "RangeTargetsControl" },
+            { 116, "IndexedVariableControl" },
             { 117, "ChaseModeControl" },
             { 118, "MusicControl" },
 
@@ -171,7 +171,7 @@ namespace Zartex
             { 133, "InterestActorControl" },
             { 134, "CheatControl" },
             { 135, "OverlayClockControl" },
-            { 136, "DensityControl" },
+            { 136, "TrafficDensityControl" },
             
             { 138, "FollowPath" },
             { 139, "Convoy" },
@@ -204,8 +204,10 @@ namespace Zartex
             { 159, "IsCharacterValidOrUsable" },
 
             { 160, "CharacterShootTarget(2)" },
+            { 161, "CharacterTargetControl" },
             { 162, "CharacterEnterVehicle" },
             { 164, "PursuitControl" },
+            { 166, "Wanderer" },
             { 168, "CharacterShootTarget(3)" },
 
             { 163, "VehicleAI" },
@@ -229,6 +231,8 @@ namespace Zartex
             { 193, "TankControl" },
             { 197, "CharacterMoveControl" },
 
+            { 204, "PedestrianDensityControl" },
+            { 205, "AnimateVehicleDoors" },
             { 206, "PlayAnimationForCharacter" },
             { 207, "VolumeCheck" },
             { 208, "ClearTraffic" },

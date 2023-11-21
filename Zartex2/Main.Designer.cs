@@ -50,7 +50,6 @@
             this.mnFile_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.driToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -90,7 +89,6 @@
             this.driv3rToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.appendBankTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
-            this.wireNodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logicNodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.missionFailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -141,14 +139,19 @@
             this.switchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.objectiveIconToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
-            this.stringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator18 = new System.Windows.Forms.ToolStripSeparator();
             this.minimapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.markerControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pursuitControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.wandererToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.stringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importMPCBTN = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportAsBTN = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuPanel.SuspendLayout();
             this.MenuBar.SuspendLayout();
             this.LeftMenu.SuspendLayout();
@@ -189,6 +192,8 @@
             this.mnFile_SaveAs,
             this.toolStripSeparator15,
             this.importLuaScript,
+            this.importMPCBTN,
+            this.exportAsBTN,
             this.mnSep1,
             this.mnFile_Exit});
             this.mnFile.Name = "mnFile";
@@ -292,14 +297,14 @@
             // driv3rLuaToolStripMenuItem
             // 
             this.driv3rLuaToolStripMenuItem.Name = "driv3rLuaToolStripMenuItem";
-            this.driv3rLuaToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.driv3rLuaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.driv3rLuaToolStripMenuItem.Text = "Driv3r Lua";
             this.driv3rLuaToolStripMenuItem.Click += new System.EventHandler(this.importLuaScript_Click);
             // 
             // driverPLLuaToolStripMenuItem
             // 
             this.driverPLLuaToolStripMenuItem.Name = "driverPLLuaToolStripMenuItem";
-            this.driverPLLuaToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.driverPLLuaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.driverPLLuaToolStripMenuItem.Text = "Driver: PL Lua";
             this.driverPLLuaToolStripMenuItem.Click += new System.EventHandler(this.importLuaScriptDPL_Click);
             // 
@@ -327,6 +332,8 @@
             // addToolStripMenuItem
             // 
             this.addToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem2,
+            this.stringToolStripMenuItem,
             this.toolStripSeparator5,
             this.driToolStripMenuItem,
             this.driv3rToolStripMenuItem});
@@ -334,19 +341,12 @@
             this.addToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addToolStripMenuItem.Text = "Add";
             // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(179, 6);
-            // 
             // driToolStripMenuItem
             // 
             this.driToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1,
             this.actorToolStripMenuItem,
             this.toolStripSeparator17,
             this.logicToolStripMenuItem,
-            this.toolStripMenuItem2,
             this.toolStripSeparator18,
             this.toolStripMenuItem3});
             this.driToolStripMenuItem.Name = "driToolStripMenuItem";
@@ -358,7 +358,8 @@
             this.logicToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.generalToolStripMenuItem1,
             this.playerToolStripMenuItem,
-            this.minimapToolStripMenuItem});
+            this.minimapToolStripMenuItem,
+            this.aIToolStripMenuItem});
             this.logicToolStripMenuItem.Name = "logicToolStripMenuItem";
             this.logicToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.logicToolStripMenuItem.Text = "Logic";
@@ -624,7 +625,7 @@
             this.generalToolStripMenuItem,
             this.lawToolStripMenuItem});
             this.actorToolStripMenuItem.Name = "actorToolStripMenuItem";
-            this.actorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.actorToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.actorToolStripMenuItem.Text = "Actor";
             // 
             // lawToolStripMenuItem
@@ -702,11 +703,9 @@
             // driv3rToolStripMenuItem
             // 
             this.driv3rToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.stringToolStripMenuItem,
             this.objectToolStripMenuItem,
             this.toolStripSeparator9,
             this.logicNodeToolStripMenuItem,
-            this.wireNodeToolStripMenuItem,
             this.toolStripSeparator14,
             this.appendBankTableToolStripMenuItem});
             this.driv3rToolStripMenuItem.Name = "driv3rToolStripMenuItem";
@@ -723,12 +722,6 @@
             // 
             this.toolStripSeparator14.Name = "toolStripSeparator14";
             this.toolStripSeparator14.Size = new System.Drawing.Size(179, 6);
-            // 
-            // wireNodeToolStripMenuItem
-            // 
-            this.wireNodeToolStripMenuItem.Name = "wireNodeToolStripMenuItem";
-            this.wireNodeToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.wireNodeToolStripMenuItem.Text = "Wire Node";
             // 
             // logicNodeToolStripMenuItem
             // 
@@ -1080,28 +1073,10 @@
             this.toolStripSeparator9.Name = "toolStripSeparator9";
             this.toolStripSeparator9.Size = new System.Drawing.Size(179, 6);
             // 
-            // stringToolStripMenuItem
-            // 
-            this.stringToolStripMenuItem.Name = "stringToolStripMenuItem";
-            this.stringToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.stringToolStripMenuItem.Text = "String";
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(182, 22);
-            this.toolStripMenuItem1.Text = "String";
-            // 
             // toolStripSeparator17
             // 
             this.toolStripSeparator17.Name = "toolStripSeparator17";
             this.toolStripSeparator17.Size = new System.Drawing.Size(179, 6);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(182, 22);
-            this.toolStripMenuItem2.Text = "Wire Node";
             // 
             // toolStripMenuItem3
             // 
@@ -1127,6 +1102,65 @@
             this.markerControlToolStripMenuItem.Name = "markerControlToolStripMenuItem";
             this.markerControlToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.markerControlToolStripMenuItem.Text = "Marker Control";
+            this.markerControlToolStripMenuItem.Click += new System.EventHandler(this.markerControlToolStripMenuItem_Click);
+            // 
+            // aIToolStripMenuItem
+            // 
+            this.aIToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.pursuitControlToolStripMenuItem,
+            this.wandererToolStripMenuItem});
+            this.aIToolStripMenuItem.Name = "aIToolStripMenuItem";
+            this.aIToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aIToolStripMenuItem.Text = "AI";
+            // 
+            // pursuitControlToolStripMenuItem
+            // 
+            this.pursuitControlToolStripMenuItem.Name = "pursuitControlToolStripMenuItem";
+            this.pursuitControlToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pursuitControlToolStripMenuItem.Text = "Pursuit Control";
+            this.pursuitControlToolStripMenuItem.Click += new System.EventHandler(this.pursuitControlToolStripMenuItem_Click);
+            // 
+            // wandererToolStripMenuItem
+            // 
+            this.wandererToolStripMenuItem.Name = "wandererToolStripMenuItem";
+            this.wandererToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.wandererToolStripMenuItem.Text = "Wanderer";
+            this.wandererToolStripMenuItem.Click += new System.EventHandler(this.wandererToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem2.Text = "Wire Node";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.wireNodeToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
+            // 
+            // stringToolStripMenuItem
+            // 
+            this.stringToolStripMenuItem.Name = "stringToolStripMenuItem";
+            this.stringToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.stringToolStripMenuItem.Text = "String";
+            this.stringToolStripMenuItem.Click += new System.EventHandler(this.stringToolStripMenuItem_Click);
+            // 
+            // importMPCBTN
+            // 
+            this.importMPCBTN.Enabled = false;
+            this.importMPCBTN.Name = "importMPCBTN";
+            this.importMPCBTN.Size = new System.Drawing.Size(180, 22);
+            this.importMPCBTN.Text = "Import MPC File";
+            this.importMPCBTN.Click += new System.EventHandler(this.importMPCBTN_Click);
+            // 
+            // exportAsBTN
+            // 
+            this.exportAsBTN.Enabled = false;
+            this.exportAsBTN.Name = "exportAsBTN";
+            this.exportAsBTN.Size = new System.Drawing.Size(180, 22);
+            this.exportAsBTN.Text = "Export as MPC file";
+            this.exportAsBTN.Click += new System.EventHandler(this.exportAsBTN_Click);
             // 
             // Main
             // 
@@ -1186,7 +1220,6 @@
         private System.Windows.Forms.ToolStripMenuItem mnFile_New;
         public System.Windows.Forms.ToolStripMenuItem mnFile_SaveAs;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem importLuaScript;
         private System.Windows.Forms.ToolStripMenuItem gameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem getPlayerPositionToolStripMenuItem;
@@ -1214,15 +1247,12 @@
         private System.Windows.Forms.ToolStripMenuItem actorCreationToolStripMenuItem1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator16;
         private System.Windows.Forms.ToolStripMenuItem darkThemeBTN;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator17;
         private System.Windows.Forms.ToolStripMenuItem minimapToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem markerControlToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator18;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem driv3rToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem stringToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem objectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aITargetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aITargetToolStripMenuItem1;
@@ -1273,9 +1303,16 @@
         private System.Windows.Forms.ToolStripMenuItem trafficToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copControlToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem civilianTrafficControlToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem wireNodeToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator14;
         private System.Windows.Forms.ToolStripMenuItem appendBankTableToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pursuitControlToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem wandererToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem stringToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem importMPCBTN;
+        private System.Windows.Forms.ToolStripMenuItem exportAsBTN;
     }
 }
 

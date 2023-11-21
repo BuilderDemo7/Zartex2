@@ -43,14 +43,29 @@ namespace LuaC
                 outputFile.Dispose();
             }
             */
+            /*
             if (!File.Exists(programDir+"/template.mpc"))
             {
-                Console.WriteLine(fatalErr+"template.mpc was not found in the directory of the tool!");
+                Console.WriteLine(fatalErr+"template.mpc was not found in the directory of the tool or in a local directory!");
                 Console.WriteLine(" Solutions:");
                 Console.WriteLine($"     Copy a .mpc file as {output}");
                 Console.WriteLine($"OR   Copy a .mpc file in {Path.GetDirectoryName(output)}/{Path.GetFileName(output)}");
                 return false;
             }
+            else
+            {
+                if (!File.Exists(output))
+                   File.Copy(programDir + "/template.mpc", output);
+            }*/
+                if (!File.Exists(output))
+                {
+                    FileStream newFile = new FileStream(output, FileMode.Create, FileAccess.Write);
+                    //byte[] template = ReadResource("templateExportMission");
+                    newFile.Write(Properties.Resources.templateMissionFile);
+
+                    newFile.Close();
+                    newFile.Dispose();
+                }
 
                 if (File.Exists(output))
                 {
