@@ -1704,110 +1704,14 @@ namespace Zartex
     }
     // Now this is the Lua mission script class for Driver: PL
     [MoonSharpUserData]
-    public class LuaMissionScriptDPL
+    public class LuaMissionScriptDPL : LuaMissionScript
     {
-        public ExportedMission missionData = new ExportedMission();
-        public MissionSummary missionSummary = new MissionSummary();
-
-        public List<WireCollection> wireCollection = new List<WireCollection>();
-        //public Table wireCollection;
-
-
-
-        public LuaMissionScriptDPL()
+        public LuaMissionScriptDPL() : base()
         {
-            // create the logic data
-            missionData.LogicData = new LogicExportData();
-
-            missionData.LogicData.Actors = new LogicDataCollection<ActorDefinition>();
-            missionData.LogicData.Actors.Definitions = new List<ActorDefinition>();
-
-            // string stuff
-            missionData.LogicData.StringCollection = new StringCollectionData();
-            missionData.LogicData.StringCollection.Strings = new List<string>();
-
-            // default strings
-            missionData.LogicData.StringCollection.AppendString("");
-            missionData.LogicData.StringCollection.AppendString("Unknown");
-
-            // logic stuff
-            missionData.LogicData.Nodes = new LogicDataCollection<NodeDefinition>();
-            missionData.LogicData.Nodes.Definitions = new List<NodeDefinition>();
-
-            missionData.LogicData.WireCollection = new WireCollectionData();
-            missionData.LogicData.WireCollection.WireCollections = new List<WireCollection>();
-
-            // objects
-            missionData.Objects = new ExportedMissionObjects();
-            missionData.Objects.Objects = new List<MissionObject>();
-
-            // sound bank table
-            missionData.LogicData.SoundBankTable = new SoundBankTableData();
-            missionData.LogicData.SoundBankTable.Table = new List<int>();
-
-            /*
-            // logic start
-            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
-            {
-                Color = new NodeColor(255, 255, 0, 255),
-                TypeId = 1,
-                StringId = 1,
-                Properties = new List<NodeProperty>()
-                {
-                    new WireCollectionProperty(0) {
-                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
-                        },         // pWireCollection
-                }
-            });
-            wireCollection.Add(new CollectionOfWires(0)); // add the logic start wire collection
-            */
         }
 
         // LUA functions: MISSION.functionName(args)
-        public CollectionOfWires CreateWireCollection(int nWires = 0)
-        {
-            CollectionOfWires cow = new CollectionOfWires(nWires);
-            wireCollection.Add(cow);
-            return cow;
-        }
-
-        // Lua starts from 1 and C# starts indexing from 0
-        public Actor GetActorById(int id)
-        {
-            if ((id - 1) > missionData.LogicData.Actors.Definitions.Count - 1)
-                throw new ScriptRuntimeException("Bad argument #1 - Index ID can't be bigger than the size of the array");
-            if ((id - 1) < 0)
-                throw new ScriptRuntimeException("Bad argument #1 - Index ID can't be negative");
-            return new Actor(missionData.LogicData.Actors.Definitions[(id - 1)], (id - 1));
-        }
-
-        public Node LogicStart(string note = "", int r = 0, int g = 200, int b = 122)
-        {
-            short stringId = 0;
-            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
-            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
-
-            int pWireCollection = wireCollection.Count;
-            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
-            wireCollection.Add(cow);
-
-            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
-            {
-                Color = new NodeColor(r, g, b, 255),
-                TypeId = 1,
-                StringId = stringId,
-                Properties = new List<NodeProperty>
-                    {
-                        new WireCollectionProperty(pWireCollection) {
-                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
-                        }
-                    }
-            });
-            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
-            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
-        }
-
-        public Node Timer(float interval, int flags = 1,string note = "", int r = 0, int g = 200, int b = 122)
+        public new Node Timer(float interval, int flags = 1,string note = "", int r = 0, int g = 200, int b = 122)
         {
             short stringId = 0;
             if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
@@ -1896,9 +1800,9 @@ namespace Zartex
             if (player)
                 flags = 65537;
             var rad = (float)(Math.PI / 180);
-            var a = rad  * angle; // convert degrees to radians (yaw)
-            var a2 = rad * (angle-90); // convert degrees to radians (yaw - 90 deg.)
-            var a3 = rad * -90; // convert degrees to radians (pitch)
+            var a = rad  * angle; // convert degrees to radians (yaw for forward)
+            var a2 = rad * (angle-90); // convert degrees to radians (yaw - 90 deg. for left)
+            var a3 = rad * -90; // convert degrees to radians (pitch for up)
             // forward
             Vector4 fwd = new Vector4(
                 (float)(Math.Cos(0) * Math.Cos(a)), // x

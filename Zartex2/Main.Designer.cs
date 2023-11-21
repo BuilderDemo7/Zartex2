@@ -50,23 +50,47 @@
             this.mnFile_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.stringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.objectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aITargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aITargetToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.followActorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.chaseObjectBaddieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.cameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
-            this.characterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.characterdrivingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.vehicleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.switchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.objectiveIconToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.driToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.logicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.playerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.giveWeaponToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
+            this.gameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.getPlayerPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Content = new System.Windows.Forms.Panel();
+            this.LeftMenu = new System.Windows.Forms.Panel();
+            this.lbl__EM = new System.Windows.Forms.Label();
+            this.lblLELD = new System.Windows.Forms.Label();
+            this.btnLECO = new System.Windows.Forms.Button();
+            this.btnLEWC = new System.Windows.Forms.Button();
+            this.btnLEAS = new System.Windows.Forms.Button();
+            this.btnLENC = new System.Windows.Forms.Button();
+            this.btnLEAC = new System.Windows.Forms.Button();
+            this.btnLESB = new System.Windows.Forms.Button();
+            this.btnEMMS = new System.Windows.Forms.Button();
+            this.btnLESC = new System.Windows.Forms.Button();
+            this.btnEMPR = new System.Windows.Forms.Button();
+            this.btnEMOB = new System.Windows.Forms.Button();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enlightenNodesBTN = new System.Windows.Forms.ToolStripMenuItem();
+            this.useFlowgraphBTN = new System.Windows.Forms.ToolStripMenuItem();
+            this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.actorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.generalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.characterToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
+            this.vehicleToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.generalToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.actorCreationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.darkThemeBTN = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
+            this.driv3rToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.appendBankTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
+            this.wireNodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logicNodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.missionFailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -101,42 +125,30 @@
             this.trafficToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.civilianTrafficControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.wireNodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.objectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aITargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aITargetToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.followActorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chaseObjectBaddieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.cameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
+            this.characterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.characterdrivingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.vehicleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.switchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.objectiveIconToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
-            this.appendBankTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
-            this.driToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.logicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.playerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.giveWeaponToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
-            this.gameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.getPlayerPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Content = new System.Windows.Forms.Panel();
-            this.LeftMenu = new System.Windows.Forms.Panel();
-            this.lbl__EM = new System.Windows.Forms.Label();
-            this.lblLELD = new System.Windows.Forms.Label();
-            this.btnLECO = new System.Windows.Forms.Button();
-            this.btnLEWC = new System.Windows.Forms.Button();
-            this.btnLEAS = new System.Windows.Forms.Button();
-            this.btnLENC = new System.Windows.Forms.Button();
-            this.btnLEAC = new System.Windows.Forms.Button();
-            this.btnLESB = new System.Windows.Forms.Button();
-            this.btnEMMS = new System.Windows.Forms.Button();
-            this.btnLESC = new System.Windows.Forms.Button();
-            this.btnEMPR = new System.Windows.Forms.Button();
-            this.btnEMOB = new System.Windows.Forms.Button();
-            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.enlightenNodesBTN = new System.Windows.Forms.ToolStripMenuItem();
-            this.useFlowgraphBTN = new System.Windows.Forms.ToolStripMenuItem();
-            this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.actorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.lawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.generalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.characterToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
-            this.vehicleToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.stringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator18 = new System.Windows.Forms.ToolStripSeparator();
+            this.minimapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.markerControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuPanel.SuspendLayout();
             this.MenuBar.SuspendLayout();
             this.LeftMenu.SuspendLayout();
@@ -186,14 +198,14 @@
             // mnFile_New
             // 
             this.mnFile_New.Name = "mnFile_New";
-            this.mnFile_New.Size = new System.Drawing.Size(165, 22);
+            this.mnFile_New.Size = new System.Drawing.Size(180, 22);
             this.mnFile_New.Text = "New";
             this.mnFile_New.Click += new System.EventHandler(this.mnFile_New_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(162, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
             // 
             // mnFile_Open
             // 
@@ -206,7 +218,7 @@
             this.toolStripSeparator12,
             this.driverParallelLinesToolStripMenuItem});
             this.mnFile_Open.Name = "mnFile_Open";
-            this.mnFile_Open.Size = new System.Drawing.Size(165, 22);
+            this.mnFile_Open.Size = new System.Drawing.Size(180, 22);
             this.mnFile_Open.Text = "Open";
             // 
             // mnLoadFile
@@ -255,7 +267,7 @@
             // 
             this.mnFile_Save.Enabled = false;
             this.mnFile_Save.Name = "mnFile_Save";
-            this.mnFile_Save.Size = new System.Drawing.Size(165, 22);
+            this.mnFile_Save.Size = new System.Drawing.Size(180, 22);
             this.mnFile_Save.Text = "Save";
             this.mnFile_Save.Click += new System.EventHandler(this.MenuSaveFile);
             // 
@@ -263,7 +275,7 @@
             // 
             this.mnFile_SaveAs.Enabled = false;
             this.mnFile_SaveAs.Name = "mnFile_SaveAs";
-            this.mnFile_SaveAs.Size = new System.Drawing.Size(165, 22);
+            this.mnFile_SaveAs.Size = new System.Drawing.Size(180, 22);
             this.mnFile_SaveAs.Text = "Save As";
             this.mnFile_SaveAs.Click += new System.EventHandler(this.MenuSaveFileAs);
             // 
@@ -274,7 +286,7 @@
             this.driverPLLuaToolStripMenuItem});
             this.importLuaScript.Enabled = false;
             this.importLuaScript.Name = "importLuaScript";
-            this.importLuaScript.Size = new System.Drawing.Size(165, 22);
+            this.importLuaScript.Size = new System.Drawing.Size(180, 22);
             this.importLuaScript.Text = "Import Lua Script";
             // 
             // driv3rLuaToolStripMenuItem
@@ -294,12 +306,12 @@
             // mnSep1
             // 
             this.mnSep1.Name = "mnSep1";
-            this.mnSep1.Size = new System.Drawing.Size(162, 6);
+            this.mnSep1.Size = new System.Drawing.Size(177, 6);
             // 
             // mnFile_Exit
             // 
             this.mnFile_Exit.Name = "mnFile_Exit";
-            this.mnFile_Exit.Size = new System.Drawing.Size(165, 22);
+            this.mnFile_Exit.Size = new System.Drawing.Size(180, 22);
             this.mnFile_Exit.Text = "Exit";
             // 
             // editToolStripMenuItem
@@ -315,446 +327,40 @@
             // addToolStripMenuItem
             // 
             this.addToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.stringToolStripMenuItem,
-            this.objectToolStripMenuItem,
             this.toolStripSeparator5,
-            this.logicNodeToolStripMenuItem,
-            this.wireNodeToolStripMenuItem,
-            this.toolStripSeparator9,
-            this.appendBankTableToolStripMenuItem,
-            this.toolStripSeparator14,
-            this.driToolStripMenuItem});
+            this.driToolStripMenuItem,
+            this.driv3rToolStripMenuItem});
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
             this.addToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addToolStripMenuItem.Text = "Add";
-            // 
-            // stringToolStripMenuItem
-            // 
-            this.stringToolStripMenuItem.Name = "stringToolStripMenuItem";
-            this.stringToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.stringToolStripMenuItem.Text = "String";
-            this.stringToolStripMenuItem.Click += new System.EventHandler(this.stringToolStripMenuItem_Click);
-            // 
-            // objectToolStripMenuItem
-            // 
-            this.objectToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aITargetToolStripMenuItem,
-            this.aITargetToolStripMenuItem1,
-            this.toolStripSeparator1,
-            this.cameraToolStripMenuItem,
-            this.toolStripSeparator11,
-            this.characterToolStripMenuItem,
-            this.characterdrivingToolStripMenuItem,
-            this.vehicleToolStripMenuItem,
-            this.toolStripSeparator4,
-            this.toolStripSeparator8,
-            this.switchToolStripMenuItem,
-            this.objectiveIconToolStripMenuItem});
-            this.objectToolStripMenuItem.Name = "objectToolStripMenuItem";
-            this.objectToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.objectToolStripMenuItem.Text = "Actor";
-            // 
-            // aITargetToolStripMenuItem
-            // 
-            this.aITargetToolStripMenuItem.Name = "aITargetToolStripMenuItem";
-            this.aITargetToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.aITargetToolStripMenuItem.Text = "AI Path";
-            this.aITargetToolStripMenuItem.Click += new System.EventHandler(this.aITargetToolStripMenuItem_Click);
-            // 
-            // aITargetToolStripMenuItem1
-            // 
-            this.aITargetToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.followActorToolStripMenuItem,
-            this.chaseObjectBaddieToolStripMenuItem});
-            this.aITargetToolStripMenuItem1.Name = "aITargetToolStripMenuItem1";
-            this.aITargetToolStripMenuItem1.Size = new System.Drawing.Size(173, 22);
-            this.aITargetToolStripMenuItem1.Text = "AI Target";
-            // 
-            // followActorToolStripMenuItem
-            // 
-            this.followActorToolStripMenuItem.Name = "followActorToolStripMenuItem";
-            this.followActorToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
-            this.followActorToolStripMenuItem.Text = "Follow Object";
-            this.followActorToolStripMenuItem.Click += new System.EventHandler(this.followActorToolStripMenuItem_Click);
-            // 
-            // chaseObjectBaddieToolStripMenuItem
-            // 
-            this.chaseObjectBaddieToolStripMenuItem.Name = "chaseObjectBaddieToolStripMenuItem";
-            this.chaseObjectBaddieToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
-            this.chaseObjectBaddieToolStripMenuItem.Text = "Pursue Object (Baddie)";
-            this.chaseObjectBaddieToolStripMenuItem.Click += new System.EventHandler(this.chaseObjectBaddieToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(170, 6);
-            // 
-            // cameraToolStripMenuItem
-            // 
-            this.cameraToolStripMenuItem.Name = "cameraToolStripMenuItem";
-            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.cameraToolStripMenuItem.Text = "Camera";
-            this.cameraToolStripMenuItem.Click += new System.EventHandler(this.cameraToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator11
-            // 
-            this.toolStripSeparator11.Name = "toolStripSeparator11";
-            this.toolStripSeparator11.Size = new System.Drawing.Size(170, 6);
-            // 
-            // characterToolStripMenuItem
-            // 
-            this.characterToolStripMenuItem.Name = "characterToolStripMenuItem";
-            this.characterToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.characterToolStripMenuItem.Text = "Character";
-            this.characterToolStripMenuItem.Click += new System.EventHandler(this.characterToolStripMenuItem_Click);
-            // 
-            // characterdrivingToolStripMenuItem
-            // 
-            this.characterdrivingToolStripMenuItem.Name = "characterdrivingToolStripMenuItem";
-            this.characterdrivingToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.characterdrivingToolStripMenuItem.Text = "Character (driving)";
-            this.characterdrivingToolStripMenuItem.Click += new System.EventHandler(this.characterdrivingToolStripMenuItem_Click);
-            // 
-            // vehicleToolStripMenuItem
-            // 
-            this.vehicleToolStripMenuItem.Name = "vehicleToolStripMenuItem";
-            this.vehicleToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.vehicleToolStripMenuItem.Text = "Vehicle";
-            this.vehicleToolStripMenuItem.Click += new System.EventHandler(this.vehicleToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(170, 6);
-            // 
-            // toolStripSeparator8
-            // 
-            this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(170, 6);
-            // 
-            // switchToolStripMenuItem
-            // 
-            this.switchToolStripMenuItem.Name = "switchToolStripMenuItem";
-            this.switchToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.switchToolStripMenuItem.Text = "Switch";
-            this.switchToolStripMenuItem.Click += new System.EventHandler(this.switchToolStripMenuItem_Click);
-            // 
-            // objectiveIconToolStripMenuItem
-            // 
-            this.objectiveIconToolStripMenuItem.Name = "objectiveIconToolStripMenuItem";
-            this.objectiveIconToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.objectiveIconToolStripMenuItem.Text = "Objective Icon";
-            this.objectiveIconToolStripMenuItem.Click += new System.EventHandler(this.objectiveIconToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
             this.toolStripSeparator5.Size = new System.Drawing.Size(179, 6);
             // 
-            // logicNodeToolStripMenuItem
-            // 
-            this.logicNodeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mainToolStripMenuItem,
-            this.specialToolStripMenuItem,
-            this.conditionsToolStripMenuItem,
-            this.ingameCutscenesToolStripMenuItem,
-            this.trafficToolStripMenuItem});
-            this.logicNodeToolStripMenuItem.Name = "logicNodeToolStripMenuItem";
-            this.logicNodeToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.logicNodeToolStripMenuItem.Text = "Logic";
-            // 
-            // mainToolStripMenuItem
-            // 
-            this.mainToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.missionFailToolStripMenuItem,
-            this.missionSuccessToolStripMenuItem,
-            this.displayMessageToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.actorCreationToolStripMenuItem,
-            this.timerToolStripMenuItem,
-            this.musicControllerToolStripMenuItem});
-            this.mainToolStripMenuItem.Name = "mainToolStripMenuItem";
-            this.mainToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.mainToolStripMenuItem.Text = "Main";
-            // 
-            // missionFailToolStripMenuItem
-            // 
-            this.missionFailToolStripMenuItem.Name = "missionFailToolStripMenuItem";
-            this.missionFailToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.missionFailToolStripMenuItem.Text = "Mission Fail";
-            this.missionFailToolStripMenuItem.Click += new System.EventHandler(this.missionFailToolStripMenuItem_Click);
-            // 
-            // missionSuccessToolStripMenuItem
-            // 
-            this.missionSuccessToolStripMenuItem.Name = "missionSuccessToolStripMenuItem";
-            this.missionSuccessToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.missionSuccessToolStripMenuItem.Text = "Mission Success";
-            this.missionSuccessToolStripMenuItem.Click += new System.EventHandler(this.missionSuccessToolStripMenuItem_Click);
-            // 
-            // displayMessageToolStripMenuItem
-            // 
-            this.displayMessageToolStripMenuItem.Name = "displayMessageToolStripMenuItem";
-            this.displayMessageToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.displayMessageToolStripMenuItem.Text = "Display Message";
-            this.displayMessageToolStripMenuItem.Click += new System.EventHandler(this.displayMessageToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(159, 6);
-            // 
-            // actorCreationToolStripMenuItem
-            // 
-            this.actorCreationToolStripMenuItem.Name = "actorCreationToolStripMenuItem";
-            this.actorCreationToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.actorCreationToolStripMenuItem.Text = "Actor Creation";
-            this.actorCreationToolStripMenuItem.Click += new System.EventHandler(this.actorCreationToolStripMenuItem_Click);
-            // 
-            // timerToolStripMenuItem
-            // 
-            this.timerToolStripMenuItem.Name = "timerToolStripMenuItem";
-            this.timerToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.timerToolStripMenuItem.Text = "Timer";
-            this.timerToolStripMenuItem.Click += new System.EventHandler(this.timerToolStripMenuItem_Click);
-            // 
-            // musicControllerToolStripMenuItem
-            // 
-            this.musicControllerToolStripMenuItem.Name = "musicControllerToolStripMenuItem";
-            this.musicControllerToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.musicControllerToolStripMenuItem.Text = "Music Controller";
-            this.musicControllerToolStripMenuItem.Click += new System.EventHandler(this.musicControllerToolStripMenuItem_Click);
-            // 
-            // specialToolStripMenuItem
-            // 
-            this.specialToolStripMenuItem.BackColor = System.Drawing.Color.Gray;
-            this.specialToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.bombCarToolStripMenuItem,
-            this.trainControlToolStripMenuItem});
-            this.specialToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.specialToolStripMenuItem.Name = "specialToolStripMenuItem";
-            this.specialToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.specialToolStripMenuItem.Text = "Special";
-            // 
-            // bombCarToolStripMenuItem
-            // 
-            this.bombCarToolStripMenuItem.Name = "bombCarToolStripMenuItem";
-            this.bombCarToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.bombCarToolStripMenuItem.Text = "Bomb Car";
-            this.bombCarToolStripMenuItem.Click += new System.EventHandler(this.bombCarToolStripMenuItem_Click);
-            // 
-            // trainControlToolStripMenuItem
-            // 
-            this.trainControlToolStripMenuItem.Name = "trainControlToolStripMenuItem";
-            this.trainControlToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.trainControlToolStripMenuItem.Text = "Train Control";
-            this.trainControlToolStripMenuItem.Click += new System.EventHandler(this.trainControlToolStripMenuItem_Click);
-            // 
-            // conditionsToolStripMenuItem
-            // 
-            this.conditionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cutsceneSkipToolStripMenuItem,
-            this.toolStripSeparator6,
-            this.switchPressedToolStripMenuItem,
-            this.toolStripSeparator7,
-            this.proximityCheckToolStripMenuItem,
-            this.characterWatchToolStripMenuItem});
-            this.conditionsToolStripMenuItem.Name = "conditionsToolStripMenuItem";
-            this.conditionsToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.conditionsToolStripMenuItem.Text = "Conditions";
-            // 
-            // cutsceneSkipToolStripMenuItem
-            // 
-            this.cutsceneSkipToolStripMenuItem.Name = "cutsceneSkipToolStripMenuItem";
-            this.cutsceneSkipToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this.cutsceneSkipToolStripMenuItem.Text = "Cutscene Skipped";
-            this.cutsceneSkipToolStripMenuItem.Click += new System.EventHandler(this.cutsceneSkipToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(165, 6);
-            // 
-            // switchPressedToolStripMenuItem
-            // 
-            this.switchPressedToolStripMenuItem.Name = "switchPressedToolStripMenuItem";
-            this.switchPressedToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this.switchPressedToolStripMenuItem.Text = "Switch Pressed";
-            this.switchPressedToolStripMenuItem.Click += new System.EventHandler(this.switchPressedToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator7
-            // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(165, 6);
-            // 
-            // proximityCheckToolStripMenuItem
-            // 
-            this.proximityCheckToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.gettingAwayToolStripMenuItem,
-            this.gettingCloseToolStripMenuItem});
-            this.proximityCheckToolStripMenuItem.Name = "proximityCheckToolStripMenuItem";
-            this.proximityCheckToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this.proximityCheckToolStripMenuItem.Text = "Proximity Check";
-            // 
-            // gettingAwayToolStripMenuItem
-            // 
-            this.gettingAwayToolStripMenuItem.Name = "gettingAwayToolStripMenuItem";
-            this.gettingAwayToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
-            this.gettingAwayToolStripMenuItem.Text = "Getting Away";
-            this.gettingAwayToolStripMenuItem.Click += new System.EventHandler(this.gettingAwayToolStripMenuItem_Click);
-            // 
-            // gettingCloseToolStripMenuItem
-            // 
-            this.gettingCloseToolStripMenuItem.Name = "gettingCloseToolStripMenuItem";
-            this.gettingCloseToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
-            this.gettingCloseToolStripMenuItem.Text = "Getting Close";
-            this.gettingCloseToolStripMenuItem.Click += new System.EventHandler(this.gettingCloseToolStripMenuItem_Click);
-            // 
-            // characterWatchToolStripMenuItem
-            // 
-            this.characterWatchToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.characterIsDeadToolStripMenuItem,
-            this.characterIsArrestedToolStripMenuItem,
-            this.characterIsChasedToolStripMenuItem});
-            this.characterWatchToolStripMenuItem.Name = "characterWatchToolStripMenuItem";
-            this.characterWatchToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this.characterWatchToolStripMenuItem.Text = "Character Watch";
-            // 
-            // characterIsDeadToolStripMenuItem
-            // 
-            this.characterIsDeadToolStripMenuItem.Name = "characterIsDeadToolStripMenuItem";
-            this.characterIsDeadToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.characterIsDeadToolStripMenuItem.Text = "Character is Dead";
-            this.characterIsDeadToolStripMenuItem.Click += new System.EventHandler(this.characterIsDeadToolStripMenuItem_Click);
-            // 
-            // characterIsArrestedToolStripMenuItem
-            // 
-            this.characterIsArrestedToolStripMenuItem.Name = "characterIsArrestedToolStripMenuItem";
-            this.characterIsArrestedToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.characterIsArrestedToolStripMenuItem.Text = "Character is Arrested";
-            this.characterIsArrestedToolStripMenuItem.Click += new System.EventHandler(this.characterIsArrestedToolStripMenuItem_Click);
-            // 
-            // characterIsChasedToolStripMenuItem
-            // 
-            this.characterIsChasedToolStripMenuItem.Name = "characterIsChasedToolStripMenuItem";
-            this.characterIsChasedToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.characterIsChasedToolStripMenuItem.Text = "Character is Chased";
-            this.characterIsChasedToolStripMenuItem.Click += new System.EventHandler(this.characterIsChasedToolStripMenuItem_Click);
-            // 
-            // ingameCutscenesToolStripMenuItem
-            // 
-            this.ingameCutscenesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.templateCutsceneToolStripMenuItem,
-            this.toolStripSeparator10,
-            this.toggleWidescreenToolStripMenuItem,
-            this.fadeScreenToolStripMenuItem,
-            this.cameraSelectToolStripMenuItem,
-            this.playCinematicVideoToolStripMenuItem});
-            this.ingameCutscenesToolStripMenuItem.Name = "ingameCutscenesToolStripMenuItem";
-            this.ingameCutscenesToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.ingameCutscenesToolStripMenuItem.Text = "In-game Cutscenes";
-            // 
-            // templateCutsceneToolStripMenuItem
-            // 
-            this.templateCutsceneToolStripMenuItem.Name = "templateCutsceneToolStripMenuItem";
-            this.templateCutsceneToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.templateCutsceneToolStripMenuItem.Text = "Template Cutscene";
-            this.templateCutsceneToolStripMenuItem.Click += new System.EventHandler(this.templateCutsceneToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator10
-            // 
-            this.toolStripSeparator10.Name = "toolStripSeparator10";
-            this.toolStripSeparator10.Size = new System.Drawing.Size(183, 6);
-            // 
-            // toggleWidescreenToolStripMenuItem
-            // 
-            this.toggleWidescreenToolStripMenuItem.Name = "toggleWidescreenToolStripMenuItem";
-            this.toggleWidescreenToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.toggleWidescreenToolStripMenuItem.Text = "Toggle Widescreen";
-            this.toggleWidescreenToolStripMenuItem.Click += new System.EventHandler(this.toggleWidescreenToolStripMenuItem_Click);
-            // 
-            // fadeScreenToolStripMenuItem
-            // 
-            this.fadeScreenToolStripMenuItem.Name = "fadeScreenToolStripMenuItem";
-            this.fadeScreenToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.fadeScreenToolStripMenuItem.Text = "Fade Screen";
-            this.fadeScreenToolStripMenuItem.Click += new System.EventHandler(this.fadeScreenToolStripMenuItem_Click);
-            // 
-            // cameraSelectToolStripMenuItem
-            // 
-            this.cameraSelectToolStripMenuItem.Name = "cameraSelectToolStripMenuItem";
-            this.cameraSelectToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.cameraSelectToolStripMenuItem.Text = "Camera Select";
-            this.cameraSelectToolStripMenuItem.Click += new System.EventHandler(this.cameraSelectToolStripMenuItem_Click);
-            // 
-            // playCinematicVideoToolStripMenuItem
-            // 
-            this.playCinematicVideoToolStripMenuItem.Name = "playCinematicVideoToolStripMenuItem";
-            this.playCinematicVideoToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.playCinematicVideoToolStripMenuItem.Text = "Play Cinematic Video";
-            this.playCinematicVideoToolStripMenuItem.Click += new System.EventHandler(this.playCinematicVideoToolStripMenuItem_Click);
-            // 
-            // trafficToolStripMenuItem
-            // 
-            this.trafficToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copControlToolStripMenuItem,
-            this.civilianTrafficControlToolStripMenuItem});
-            this.trafficToolStripMenuItem.Name = "trafficToolStripMenuItem";
-            this.trafficToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.trafficToolStripMenuItem.Text = "Traffic";
-            // 
-            // copControlToolStripMenuItem
-            // 
-            this.copControlToolStripMenuItem.Name = "copControlToolStripMenuItem";
-            this.copControlToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.copControlToolStripMenuItem.Text = "Cop Control";
-            this.copControlToolStripMenuItem.Click += new System.EventHandler(this.copControlToolStripMenuItem_Click);
-            // 
-            // civilianTrafficControlToolStripMenuItem
-            // 
-            this.civilianTrafficControlToolStripMenuItem.Name = "civilianTrafficControlToolStripMenuItem";
-            this.civilianTrafficControlToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.civilianTrafficControlToolStripMenuItem.Text = "Civilian Traffic Control";
-            this.civilianTrafficControlToolStripMenuItem.Click += new System.EventHandler(this.civilianTrafficControlToolStripMenuItem_Click);
-            // 
-            // wireNodeToolStripMenuItem
-            // 
-            this.wireNodeToolStripMenuItem.Name = "wireNodeToolStripMenuItem";
-            this.wireNodeToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.wireNodeToolStripMenuItem.Text = "Wire Node";
-            this.wireNodeToolStripMenuItem.Click += new System.EventHandler(this.wireNodeToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator9
-            // 
-            this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(179, 6);
-            // 
-            // appendBankTableToolStripMenuItem
-            // 
-            this.appendBankTableToolStripMenuItem.Name = "appendBankTableToolStripMenuItem";
-            this.appendBankTableToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.appendBankTableToolStripMenuItem.Text = "Append Sound Bank";
-            this.appendBankTableToolStripMenuItem.Click += new System.EventHandler(this.appendBankTableToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator14
-            // 
-            this.toolStripSeparator14.Name = "toolStripSeparator14";
-            this.toolStripSeparator14.Size = new System.Drawing.Size(179, 6);
-            // 
             // driToolStripMenuItem
             // 
             this.driToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1,
+            this.actorToolStripMenuItem,
+            this.toolStripSeparator17,
             this.logicToolStripMenuItem,
-            this.actorToolStripMenuItem});
+            this.toolStripMenuItem2,
+            this.toolStripSeparator18,
+            this.toolStripMenuItem3});
             this.driToolStripMenuItem.Name = "driToolStripMenuItem";
-            this.driToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.driToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.driToolStripMenuItem.Text = "Driver: Parallel Lines";
             // 
             // logicToolStripMenuItem
             // 
             this.logicToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.playerToolStripMenuItem});
+            this.generalToolStripMenuItem1,
+            this.playerToolStripMenuItem,
+            this.minimapToolStripMenuItem});
             this.logicToolStripMenuItem.Name = "logicToolStripMenuItem";
-            this.logicToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.logicToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.logicToolStripMenuItem.Text = "Logic";
             // 
             // playerToolStripMenuItem
@@ -762,13 +368,13 @@
             this.playerToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.giveWeaponToolStripMenuItem});
             this.playerToolStripMenuItem.Name = "playerToolStripMenuItem";
-            this.playerToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
+            this.playerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.playerToolStripMenuItem.Text = "Player";
             // 
             // giveWeaponToolStripMenuItem
             // 
             this.giveWeaponToolStripMenuItem.Name = "giveWeaponToolStripMenuItem";
-            this.giveWeaponToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.giveWeaponToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.giveWeaponToolStripMenuItem.Text = "Give Weapon";
             this.giveWeaponToolStripMenuItem.Click += new System.EventHandler(this.giveWeaponToolStripMenuItem_Click);
             // 
@@ -788,7 +394,7 @@
             // getPlayerPositionToolStripMenuItem
             // 
             this.getPlayerPositionToolStripMenuItem.Name = "getPlayerPositionToolStripMenuItem";
-            this.getPlayerPositionToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.getPlayerPositionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.getPlayerPositionToolStripMenuItem.Text = "Get Player Position";
             this.getPlayerPositionToolStripMenuItem.Click += new System.EventHandler(this.getPlayerPositionToolStripMenuItem_Click);
             // 
@@ -984,7 +590,9 @@
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.enlightenNodesBTN,
-            this.useFlowgraphBTN});
+            this.useFlowgraphBTN,
+            this.toolStripSeparator16,
+            this.darkThemeBTN});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 19);
             this.viewToolStripMenuItem.Text = "View";
@@ -1062,6 +670,464 @@
             this.vehicleToolStripMenuItem1.Text = "Vehicle";
             this.vehicleToolStripMenuItem1.Click += new System.EventHandler(this.vehicleToolStripMenuItem1_Click);
             // 
+            // generalToolStripMenuItem1
+            // 
+            this.generalToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.actorCreationToolStripMenuItem1});
+            this.generalToolStripMenuItem1.Name = "generalToolStripMenuItem1";
+            this.generalToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.generalToolStripMenuItem1.Text = "General";
+            // 
+            // actorCreationToolStripMenuItem1
+            // 
+            this.actorCreationToolStripMenuItem1.Name = "actorCreationToolStripMenuItem1";
+            this.actorCreationToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.actorCreationToolStripMenuItem1.Text = "Actor Creation";
+            this.actorCreationToolStripMenuItem1.Click += new System.EventHandler(this.actorCreationToolStripMenuItem1_Click);
+            // 
+            // darkThemeBTN
+            // 
+            this.darkThemeBTN.CheckOnClick = true;
+            this.darkThemeBTN.Enabled = false;
+            this.darkThemeBTN.Name = "darkThemeBTN";
+            this.darkThemeBTN.Size = new System.Drawing.Size(199, 22);
+            this.darkThemeBTN.Text = "Dark Theme";
+            this.darkThemeBTN.Click += new System.EventHandler(this.darkThemeToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator16
+            // 
+            this.toolStripSeparator16.Name = "toolStripSeparator16";
+            this.toolStripSeparator16.Size = new System.Drawing.Size(196, 6);
+            // 
+            // driv3rToolStripMenuItem
+            // 
+            this.driv3rToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.stringToolStripMenuItem,
+            this.objectToolStripMenuItem,
+            this.toolStripSeparator9,
+            this.logicNodeToolStripMenuItem,
+            this.wireNodeToolStripMenuItem,
+            this.toolStripSeparator14,
+            this.appendBankTableToolStripMenuItem});
+            this.driv3rToolStripMenuItem.Name = "driv3rToolStripMenuItem";
+            this.driv3rToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.driv3rToolStripMenuItem.Text = "Driv3r";
+            // 
+            // appendBankTableToolStripMenuItem
+            // 
+            this.appendBankTableToolStripMenuItem.Name = "appendBankTableToolStripMenuItem";
+            this.appendBankTableToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.appendBankTableToolStripMenuItem.Text = "Append Sound Bank";
+            // 
+            // toolStripSeparator14
+            // 
+            this.toolStripSeparator14.Name = "toolStripSeparator14";
+            this.toolStripSeparator14.Size = new System.Drawing.Size(179, 6);
+            // 
+            // wireNodeToolStripMenuItem
+            // 
+            this.wireNodeToolStripMenuItem.Name = "wireNodeToolStripMenuItem";
+            this.wireNodeToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.wireNodeToolStripMenuItem.Text = "Wire Node";
+            // 
+            // logicNodeToolStripMenuItem
+            // 
+            this.logicNodeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mainToolStripMenuItem,
+            this.specialToolStripMenuItem,
+            this.conditionsToolStripMenuItem,
+            this.ingameCutscenesToolStripMenuItem,
+            this.trafficToolStripMenuItem});
+            this.logicNodeToolStripMenuItem.Name = "logicNodeToolStripMenuItem";
+            this.logicNodeToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.logicNodeToolStripMenuItem.Text = "Logic";
+            // 
+            // mainToolStripMenuItem
+            // 
+            this.mainToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.missionFailToolStripMenuItem,
+            this.missionSuccessToolStripMenuItem,
+            this.displayMessageToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.actorCreationToolStripMenuItem,
+            this.timerToolStripMenuItem,
+            this.musicControllerToolStripMenuItem});
+            this.mainToolStripMenuItem.Name = "mainToolStripMenuItem";
+            this.mainToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.mainToolStripMenuItem.Text = "General";
+            // 
+            // missionFailToolStripMenuItem
+            // 
+            this.missionFailToolStripMenuItem.Name = "missionFailToolStripMenuItem";
+            this.missionFailToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.missionFailToolStripMenuItem.Text = "Mission Fail";
+            // 
+            // missionSuccessToolStripMenuItem
+            // 
+            this.missionSuccessToolStripMenuItem.Name = "missionSuccessToolStripMenuItem";
+            this.missionSuccessToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.missionSuccessToolStripMenuItem.Text = "Mission Success";
+            // 
+            // displayMessageToolStripMenuItem
+            // 
+            this.displayMessageToolStripMenuItem.Name = "displayMessageToolStripMenuItem";
+            this.displayMessageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.displayMessageToolStripMenuItem.Text = "Display Message";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            // 
+            // actorCreationToolStripMenuItem
+            // 
+            this.actorCreationToolStripMenuItem.Name = "actorCreationToolStripMenuItem";
+            this.actorCreationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.actorCreationToolStripMenuItem.Text = "Actor Creation";
+            // 
+            // timerToolStripMenuItem
+            // 
+            this.timerToolStripMenuItem.Name = "timerToolStripMenuItem";
+            this.timerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.timerToolStripMenuItem.Text = "Timer";
+            // 
+            // musicControllerToolStripMenuItem
+            // 
+            this.musicControllerToolStripMenuItem.Name = "musicControllerToolStripMenuItem";
+            this.musicControllerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.musicControllerToolStripMenuItem.Text = "Music Controller";
+            // 
+            // specialToolStripMenuItem
+            // 
+            this.specialToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
+            this.specialToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bombCarToolStripMenuItem,
+            this.trainControlToolStripMenuItem});
+            this.specialToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.specialToolStripMenuItem.Name = "specialToolStripMenuItem";
+            this.specialToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.specialToolStripMenuItem.Text = "Special";
+            // 
+            // bombCarToolStripMenuItem
+            // 
+            this.bombCarToolStripMenuItem.Name = "bombCarToolStripMenuItem";
+            this.bombCarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bombCarToolStripMenuItem.Text = "Bomb Car";
+            // 
+            // trainControlToolStripMenuItem
+            // 
+            this.trainControlToolStripMenuItem.Name = "trainControlToolStripMenuItem";
+            this.trainControlToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.trainControlToolStripMenuItem.Text = "Train Control";
+            // 
+            // conditionsToolStripMenuItem
+            // 
+            this.conditionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cutsceneSkipToolStripMenuItem,
+            this.toolStripSeparator6,
+            this.switchPressedToolStripMenuItem,
+            this.toolStripSeparator7,
+            this.proximityCheckToolStripMenuItem,
+            this.characterWatchToolStripMenuItem});
+            this.conditionsToolStripMenuItem.Name = "conditionsToolStripMenuItem";
+            this.conditionsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.conditionsToolStripMenuItem.Text = "Conditions";
+            // 
+            // cutsceneSkipToolStripMenuItem
+            // 
+            this.cutsceneSkipToolStripMenuItem.Name = "cutsceneSkipToolStripMenuItem";
+            this.cutsceneSkipToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cutsceneSkipToolStripMenuItem.Text = "Cutscene Skipped";
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(177, 6);
+            // 
+            // switchPressedToolStripMenuItem
+            // 
+            this.switchPressedToolStripMenuItem.Name = "switchPressedToolStripMenuItem";
+            this.switchPressedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.switchPressedToolStripMenuItem.Text = "Switch Pressed";
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(177, 6);
+            // 
+            // proximityCheckToolStripMenuItem
+            // 
+            this.proximityCheckToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.gettingAwayToolStripMenuItem,
+            this.gettingCloseToolStripMenuItem});
+            this.proximityCheckToolStripMenuItem.Name = "proximityCheckToolStripMenuItem";
+            this.proximityCheckToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.proximityCheckToolStripMenuItem.Text = "Proximity Check";
+            // 
+            // gettingAwayToolStripMenuItem
+            // 
+            this.gettingAwayToolStripMenuItem.Name = "gettingAwayToolStripMenuItem";
+            this.gettingAwayToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.gettingAwayToolStripMenuItem.Text = "Getting Away";
+            // 
+            // gettingCloseToolStripMenuItem
+            // 
+            this.gettingCloseToolStripMenuItem.Name = "gettingCloseToolStripMenuItem";
+            this.gettingCloseToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.gettingCloseToolStripMenuItem.Text = "Getting Close";
+            // 
+            // characterWatchToolStripMenuItem
+            // 
+            this.characterWatchToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.characterIsDeadToolStripMenuItem,
+            this.characterIsArrestedToolStripMenuItem,
+            this.characterIsChasedToolStripMenuItem});
+            this.characterWatchToolStripMenuItem.Name = "characterWatchToolStripMenuItem";
+            this.characterWatchToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.characterWatchToolStripMenuItem.Text = "Character Watch";
+            // 
+            // characterIsDeadToolStripMenuItem
+            // 
+            this.characterIsDeadToolStripMenuItem.Name = "characterIsDeadToolStripMenuItem";
+            this.characterIsDeadToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.characterIsDeadToolStripMenuItem.Text = "Character is Dead";
+            // 
+            // characterIsArrestedToolStripMenuItem
+            // 
+            this.characterIsArrestedToolStripMenuItem.Name = "characterIsArrestedToolStripMenuItem";
+            this.characterIsArrestedToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.characterIsArrestedToolStripMenuItem.Text = "Character is Arrested";
+            // 
+            // characterIsChasedToolStripMenuItem
+            // 
+            this.characterIsChasedToolStripMenuItem.Name = "characterIsChasedToolStripMenuItem";
+            this.characterIsChasedToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.characterIsChasedToolStripMenuItem.Text = "Character is Chased";
+            // 
+            // ingameCutscenesToolStripMenuItem
+            // 
+            this.ingameCutscenesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.templateCutsceneToolStripMenuItem,
+            this.toolStripSeparator10,
+            this.toggleWidescreenToolStripMenuItem,
+            this.fadeScreenToolStripMenuItem,
+            this.cameraSelectToolStripMenuItem,
+            this.playCinematicVideoToolStripMenuItem});
+            this.ingameCutscenesToolStripMenuItem.Name = "ingameCutscenesToolStripMenuItem";
+            this.ingameCutscenesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ingameCutscenesToolStripMenuItem.Text = "In-game Cutscenes";
+            // 
+            // templateCutsceneToolStripMenuItem
+            // 
+            this.templateCutsceneToolStripMenuItem.Name = "templateCutsceneToolStripMenuItem";
+            this.templateCutsceneToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.templateCutsceneToolStripMenuItem.Text = "Template Cutscene";
+            // 
+            // toolStripSeparator10
+            // 
+            this.toolStripSeparator10.Name = "toolStripSeparator10";
+            this.toolStripSeparator10.Size = new System.Drawing.Size(183, 6);
+            // 
+            // toggleWidescreenToolStripMenuItem
+            // 
+            this.toggleWidescreenToolStripMenuItem.Name = "toggleWidescreenToolStripMenuItem";
+            this.toggleWidescreenToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.toggleWidescreenToolStripMenuItem.Text = "Toggle Widescreen";
+            // 
+            // fadeScreenToolStripMenuItem
+            // 
+            this.fadeScreenToolStripMenuItem.Name = "fadeScreenToolStripMenuItem";
+            this.fadeScreenToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.fadeScreenToolStripMenuItem.Text = "Fade Screen";
+            // 
+            // cameraSelectToolStripMenuItem
+            // 
+            this.cameraSelectToolStripMenuItem.Name = "cameraSelectToolStripMenuItem";
+            this.cameraSelectToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.cameraSelectToolStripMenuItem.Text = "Camera Select";
+            // 
+            // playCinematicVideoToolStripMenuItem
+            // 
+            this.playCinematicVideoToolStripMenuItem.Name = "playCinematicVideoToolStripMenuItem";
+            this.playCinematicVideoToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.playCinematicVideoToolStripMenuItem.Text = "Play Cinematic Video";
+            // 
+            // trafficToolStripMenuItem
+            // 
+            this.trafficToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copControlToolStripMenuItem,
+            this.civilianTrafficControlToolStripMenuItem});
+            this.trafficToolStripMenuItem.Name = "trafficToolStripMenuItem";
+            this.trafficToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.trafficToolStripMenuItem.Text = "Traffic";
+            // 
+            // copControlToolStripMenuItem
+            // 
+            this.copControlToolStripMenuItem.Name = "copControlToolStripMenuItem";
+            this.copControlToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.copControlToolStripMenuItem.Text = "Cop Control";
+            // 
+            // civilianTrafficControlToolStripMenuItem
+            // 
+            this.civilianTrafficControlToolStripMenuItem.Name = "civilianTrafficControlToolStripMenuItem";
+            this.civilianTrafficControlToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.civilianTrafficControlToolStripMenuItem.Text = "Civilian Traffic Control";
+            // 
+            // objectToolStripMenuItem
+            // 
+            this.objectToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aITargetToolStripMenuItem,
+            this.aITargetToolStripMenuItem1,
+            this.toolStripSeparator1,
+            this.cameraToolStripMenuItem,
+            this.toolStripSeparator11,
+            this.characterToolStripMenuItem,
+            this.characterdrivingToolStripMenuItem,
+            this.vehicleToolStripMenuItem,
+            this.toolStripSeparator4,
+            this.toolStripSeparator8,
+            this.switchToolStripMenuItem,
+            this.objectiveIconToolStripMenuItem});
+            this.objectToolStripMenuItem.Name = "objectToolStripMenuItem";
+            this.objectToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.objectToolStripMenuItem.Text = "Actor";
+            // 
+            // aITargetToolStripMenuItem
+            // 
+            this.aITargetToolStripMenuItem.Name = "aITargetToolStripMenuItem";
+            this.aITargetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aITargetToolStripMenuItem.Text = "AI Path";
+            // 
+            // aITargetToolStripMenuItem1
+            // 
+            this.aITargetToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.followActorToolStripMenuItem,
+            this.chaseObjectBaddieToolStripMenuItem});
+            this.aITargetToolStripMenuItem1.Name = "aITargetToolStripMenuItem1";
+            this.aITargetToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.aITargetToolStripMenuItem1.Text = "AI Target";
+            // 
+            // followActorToolStripMenuItem
+            // 
+            this.followActorToolStripMenuItem.Name = "followActorToolStripMenuItem";
+            this.followActorToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.followActorToolStripMenuItem.Text = "Follow Object";
+            // 
+            // chaseObjectBaddieToolStripMenuItem
+            // 
+            this.chaseObjectBaddieToolStripMenuItem.Name = "chaseObjectBaddieToolStripMenuItem";
+            this.chaseObjectBaddieToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.chaseObjectBaddieToolStripMenuItem.Text = "Pursue Object (Baddie)";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            // 
+            // cameraToolStripMenuItem
+            // 
+            this.cameraToolStripMenuItem.Name = "cameraToolStripMenuItem";
+            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cameraToolStripMenuItem.Text = "Camera";
+            // 
+            // toolStripSeparator11
+            // 
+            this.toolStripSeparator11.Name = "toolStripSeparator11";
+            this.toolStripSeparator11.Size = new System.Drawing.Size(177, 6);
+            // 
+            // characterToolStripMenuItem
+            // 
+            this.characterToolStripMenuItem.Name = "characterToolStripMenuItem";
+            this.characterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.characterToolStripMenuItem.Text = "Character";
+            // 
+            // characterdrivingToolStripMenuItem
+            // 
+            this.characterdrivingToolStripMenuItem.Name = "characterdrivingToolStripMenuItem";
+            this.characterdrivingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.characterdrivingToolStripMenuItem.Text = "Character (driving)";
+            // 
+            // vehicleToolStripMenuItem
+            // 
+            this.vehicleToolStripMenuItem.Name = "vehicleToolStripMenuItem";
+            this.vehicleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.vehicleToolStripMenuItem.Text = "Vehicle";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(177, 6);
+            // 
+            // switchToolStripMenuItem
+            // 
+            this.switchToolStripMenuItem.Name = "switchToolStripMenuItem";
+            this.switchToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.switchToolStripMenuItem.Text = "Switch";
+            // 
+            // objectiveIconToolStripMenuItem
+            // 
+            this.objectiveIconToolStripMenuItem.Name = "objectiveIconToolStripMenuItem";
+            this.objectiveIconToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.objectiveIconToolStripMenuItem.Text = "Objective Icon";
+            // 
+            // toolStripSeparator9
+            // 
+            this.toolStripSeparator9.Name = "toolStripSeparator9";
+            this.toolStripSeparator9.Size = new System.Drawing.Size(179, 6);
+            // 
+            // stringToolStripMenuItem
+            // 
+            this.stringToolStripMenuItem.Name = "stringToolStripMenuItem";
+            this.stringToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.stringToolStripMenuItem.Text = "String";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(182, 22);
+            this.toolStripMenuItem1.Text = "String";
+            // 
+            // toolStripSeparator17
+            // 
+            this.toolStripSeparator17.Name = "toolStripSeparator17";
+            this.toolStripSeparator17.Size = new System.Drawing.Size(179, 6);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(182, 22);
+            this.toolStripMenuItem2.Text = "Wire Node";
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(182, 22);
+            this.toolStripMenuItem3.Text = "Append Sound Bank";
+            // 
+            // toolStripSeparator18
+            // 
+            this.toolStripSeparator18.Name = "toolStripSeparator18";
+            this.toolStripSeparator18.Size = new System.Drawing.Size(179, 6);
+            // 
+            // minimapToolStripMenuItem
+            // 
+            this.minimapToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.markerControlToolStripMenuItem});
+            this.minimapToolStripMenuItem.Name = "minimapToolStripMenuItem";
+            this.minimapToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.minimapToolStripMenuItem.Text = "Minimap";
+            // 
+            // markerControlToolStripMenuItem
+            // 
+            this.markerControlToolStripMenuItem.Name = "markerControlToolStripMenuItem";
+            this.markerControlToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.markerControlToolStripMenuItem.Text = "Marker Control";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1117,63 +1183,10 @@
         private System.Windows.Forms.ToolStripMenuItem mnIstanbul;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem stringToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem objectToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem characterToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem vehicleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem aITargetToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem logicNodeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem mainToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem missionFailToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem missionSuccessToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem actorCreationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mnFile_New;
         public System.Windows.Forms.ToolStripMenuItem mnFile_SaveAs;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem objectiveIconToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem timerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem bombCarToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem displayMessageToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem characterdrivingToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripMenuItem aITargetToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem followActorToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem conditionsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem proximityCheckToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem gettingAwayToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem gettingCloseToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-        private System.Windows.Forms.ToolStripMenuItem wireNodeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem characterWatchToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem characterIsDeadToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem characterIsChasedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem characterIsArrestedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ingameCutscenesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toggleWidescreenToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem trafficToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem copControlToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fadeScreenToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem templateCutsceneToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem cameraSelectToolStripMenuItem;
-        public System.Windows.Forms.ToolStripMenuItem specialToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem chaseObjectBaddieToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem musicControllerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem playCinematicVideoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem cutsceneSkipToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-        private System.Windows.Forms.ToolStripMenuItem civilianTrafficControlToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
-        private System.Windows.Forms.ToolStripMenuItem switchToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem switchPressedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
-        private System.Windows.Forms.ToolStripMenuItem appendBankTableToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
-        private System.Windows.Forms.ToolStripMenuItem cameraToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
-        private System.Windows.Forms.ToolStripMenuItem trainControlToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem importLuaScript;
         private System.Windows.Forms.ToolStripMenuItem gameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem getPlayerPositionToolStripMenuItem;
@@ -1182,7 +1195,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
         private System.Windows.Forms.ToolStripMenuItem driv3rLuaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem driverPLLuaToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator14;
         private System.Windows.Forms.ToolStripMenuItem driToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem logicToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem playerToolStripMenuItem;
@@ -1198,6 +1210,72 @@
         private System.Windows.Forms.ToolStripMenuItem copToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator15;
         private System.Windows.Forms.ToolStripMenuItem vehicleToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem generalToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem actorCreationToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator16;
+        private System.Windows.Forms.ToolStripMenuItem darkThemeBTN;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator17;
+        private System.Windows.Forms.ToolStripMenuItem minimapToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem markerControlToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator18;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem driv3rToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stringToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem objectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aITargetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aITargetToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem followActorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem chaseObjectBaddieToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem cameraToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
+        private System.Windows.Forms.ToolStripMenuItem characterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem characterdrivingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem vehicleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.ToolStripMenuItem switchToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem objectiveIconToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
+        private System.Windows.Forms.ToolStripMenuItem logicNodeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mainToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem missionFailToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem missionSuccessToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem displayMessageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem actorCreationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem timerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem musicControllerToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem specialToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem bombCarToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem trainControlToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem conditionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cutsceneSkipToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripMenuItem switchPressedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.ToolStripMenuItem proximityCheckToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gettingAwayToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gettingCloseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem characterWatchToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem characterIsDeadToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem characterIsArrestedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem characterIsChasedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ingameCutscenesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem templateCutsceneToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
+        private System.Windows.Forms.ToolStripMenuItem toggleWidescreenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fadeScreenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cameraSelectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem playCinematicVideoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem trafficToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copControlToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem civilianTrafficControlToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem wireNodeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator14;
+        private System.Windows.Forms.ToolStripMenuItem appendBankTableToolStripMenuItem;
     }
 }
 

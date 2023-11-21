@@ -65,6 +65,57 @@ namespace Zartex
         
         string Filename;
 
+        static Color darkThemeColor1 = Color.FromArgb(50,50,50);
+        static Color darkThemeColor2 = Color.White;
+
+        static Color DeactivatedarkThemeColor1;
+        static Color DeactivatedarkThemeColor2 = Color.Black;
+        public void foreachItemInSetColors(ToolStripItemCollection col, Color c1,Color c2)
+        {
+            foreach (var btn in col)
+            {
+                if (btn is ToolStripMenuItem)
+                {
+                    var button = btn as ToolStripMenuItem;
+                    button.BackColor = c1;
+                    button.ForeColor = c2;
+                }
+                if (btn is ToolStripSeparator)
+                {
+                    var sep = btn as ToolStripSeparator;
+                    sep.BackColor = c1;
+                    sep.ForeColor = c2;
+                }
+                if (btn is ToolStripMenuItem)
+                {
+                    ToolStripMenuItem button = btn as ToolStripMenuItem;
+                    // loop loop loop
+                    foreachItemInSetColors(button.DropDownItems, c1, c2);
+                }
+            }
+        }
+        public void toggleDarkTheme()
+        {
+            if (DeactivatedarkThemeColor1==null)
+            DeactivatedarkThemeColor1 = MenuBar.BackColor;
+
+            Color c1;
+            Color c2;
+            if (darkThemeBTN.Checked)
+            {
+                c1 = darkThemeColor1;
+                c2 = darkThemeColor2;
+            }
+            else
+            {
+                c1 = DeactivatedarkThemeColor1;
+                c2 = DeactivatedarkThemeColor2;
+            }
+            // set menu bar color
+            MenuBar.BackColor = c1;
+            foreachItemInSetColors(MenuBar.Items, c1, c2);
+        }
+
         public Main()
         {
             InitializeComponent();
@@ -3171,7 +3222,7 @@ namespace Zartex
         }
 
         // LUA
-        public LuaMissionScript importLuaFromFile(string filepath)
+        public static LuaMissionScript importLuaFromFile(string filepath)
         {
             Script script = new Script();
             UserData.RegisterAssembly();
@@ -3205,7 +3256,7 @@ namespace Zartex
         }
 
         // LUA
-        public LuaMissionScriptDPL importLuaFromFileDPL(string filepath)
+        public static LuaMissionScriptDPL importLuaFromFileDPL(string filepath)
         {
             Script script = new Script();
             UserData.RegisterAssembly();
@@ -3769,6 +3820,119 @@ namespace Zartex
                     });
 
             GenerateActors();
+        }
+
+        private void actorCreationToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (MissionPackage == null)
+            {
+                MessageBox.Show("No mission loaded!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            // booly heck
+            bool hasUID = MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValue("UID") != -1;
+
+            MissionPackage.MissionData.LogicData.WireCollection.WireCollections.Add(new WireCollection(0));
+            int idx = MissionPackage.MissionData.LogicData.Nodes.Definitions.Count;
+            MissionPackage.MissionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(70, 142, 247, 255),
+                TypeId = 101,
+                StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"),
+                Properties = new List<NodeProperty>()
+            });
+            // hack
+            if (hasUID)
+                MissionPackage.MissionData.LogicData.Nodes.Definitions[idx].Properties.Add(new UIDProperty((ulong)(idx * 0x0FFFFFFF0))
+                {
+                    StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("UID")
+                });
+            MissionPackage.MissionData.LogicData.Nodes.Definitions[idx].Properties.AddRange(
+                new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(MissionPackage.MissionData.LogicData.WireCollection.WireCollections.Count-1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new ActorProperty(0) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Actor")
+                        },
+                        new EnumProperty(0) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Activity")
+                        },
+                        new FlagsProperty(0) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }           // pFlags
+                    });
+
+            logicAddToWireCollectionByUser(idx);
+            GenerateLogicNodes();
+        }
+
+        private void markerControlToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MissionPackage == null)
+            {
+                MessageBox.Show("No mission loaded!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            // booly heck
+            bool hasUID = MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValue("UID") != -1;
+
+            MissionPackage.MissionData.LogicData.WireCollection.WireCollections.Add(new WireCollection(0));
+            int idx = MissionPackage.MissionData.LogicData.Nodes.Definitions.Count;
+            MissionPackage.MissionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(70, 142, 247, 255),
+                TypeId = 186,
+                StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"),
+                Properties = new List<NodeProperty>()
+            });
+            // hack
+            if (hasUID)
+                MissionPackage.MissionData.LogicData.Nodes.Definitions[idx].Properties.Add(new UIDProperty((ulong)(idx * 0x0FFFFFFF0))
+                {
+                    StringId = (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("UID")
+                });
+            MissionPackage.MissionData.LogicData.Nodes.Definitions[idx].Properties.AddRange(
+                new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(MissionPackage.MissionData.LogicData.WireCollection.WireCollections.Count-1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new ActorProperty(0) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Actor")
+                        },
+                        new EnumProperty(1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Activity")
+                        },
+                        new EnumProperty(1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Display Type")
+                        },
+                        new EnumProperty(2) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Minimap Display Type")
+                        },
+                        new Float3Property(new Vector4(0,0,0,0))
+                        {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Minimap Icon Colour")
+                        },
+                        new EnumProperty(1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Visibility")
+                        },
+                        new LocalisedStringProperty(-1) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Description")
+                        },
+                        new FlagsProperty(2) {
+                            StringId =  (short)MissionPackage.MissionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }           // pFlags
+                    });
+
+            logicAddToWireCollectionByUser(idx);
+            GenerateLogicNodes();
+        }
+
+        private void darkThemeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            toggleDarkTheme();
         }
     }
 }
