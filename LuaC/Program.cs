@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
+using System.Windows;
+using System.Windows.Forms;
 
 using Zartex;
 
@@ -19,7 +22,11 @@ namespace LuaC
         static readonly string ArgMagic = "-";
         static bool isDPL = false;
 
-        static string Title = $"Driv3r / Driver: PL Lua Compiler\nVersion: {Version:F1}";
+        static readonly string fatalErr = "FATAL ERROR: ";
+
+        static readonly string programDir = Directory.GetCurrentDirectory();
+
+        static string Title = $"# Driv3r / Driver: PL Lua Compiler\n# Version: {Version:F2}\n# By BuilderDemo7";
         static void ShowAllArguments()
         {
             Console.WriteLine(" -dpl (driver4) --> Tells the Lua compiler this is a Driver: PL Lua mission file");
@@ -27,41 +34,57 @@ namespace LuaC
         }
         public static bool ProcessCompilationForLuaMissionScript(LuaMissionScript luaMission,string output)
         {
-            FileStream outputFile = new FileStream(output, FileMode.OpenOrCreate);
-
-            if (outputFile!=null)
+            /*
+            if (!File.Exists(output))
             {
-                MissionScriptFile MissionPackage = new MissionScriptFile(output);
-                // copy data from lua mission to current mission
-                MissionPackage.MissionData.LogicData.Actors.Definitions = luaMission.missionData.LogicData.Actors.Definitions;
-                MissionPackage.MissionData.LogicData.Nodes.Definitions = luaMission.missionData.LogicData.Nodes.Definitions;
-                MissionPackage.MissionData.LogicData.WireCollection.WireCollections = luaMission.wireCollection;
-
-                MissionPackage.MissionData.Objects.Objects = luaMission.missionData.Objects.Objects;
-
-                MissionPackage.MissionData.LogicData.StringCollection.Strings = luaMission.missionData.LogicData.StringCollection.Strings;
-
-                MissionPackage.MissionData.LogicData.SoundBankTable.Table = luaMission.missionData.LogicData.SoundBankTable.Table;
-
-                if (MissionPackage.MissionSummary == null)
-                    MissionPackage.MissionSummary = new MissionSummaryData();
-                MissionPackage.MissionSummary.StartPosition = luaMission.missionSummary.StartPosition;
-                MissionPackage.MissionSummary.CityType = luaMission.missionSummary.GetCityTypeByName(luaMission.missionSummary.Level);
-                MissionPackage.MissionSummary.MissionId = luaMission.missionSummary.MoodId;
-
-                return MissionPackage.Save(output);
+                FileStream templateFile = new FileStream("template.mpc", FileMode.Open, FileAccess.Read);
+                FileStream outputFile = new FileStream(output, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                outputFile.Write(templateFile.ReadAllBytes());
+                outputFile.Dispose();
             }
+            */
+            if (!File.Exists(programDir+"/template.mpc"))
+            {
+                Console.WriteLine(fatalErr+"template.mpc was not found in the directory of the tool!");
+                Console.WriteLine(" Solutions:");
+                Console.WriteLine($"     Copy a .mpc file as {output}");
+                Console.WriteLine($"OR   Copy a .mpc file in {Path.GetDirectoryName(output)}/{Path.GetFileName(output)}");
+                return false;
+            }
+
+                if (File.Exists(output))
+                {
+                    MissionScriptFile MissionPackage = new MissionScriptFile("template.mpc");
+                    // copy data from lua mission to current mission
+                    MissionPackage.MissionData.LogicData.Actors.Definitions = luaMission.missionData.LogicData.Actors.Definitions;
+                    MissionPackage.MissionData.LogicData.Nodes.Definitions = luaMission.missionData.LogicData.Nodes.Definitions;
+                    MissionPackage.MissionData.LogicData.WireCollection.WireCollections = luaMission.wireCollection;
+
+                    MissionPackage.MissionData.Objects.Objects = luaMission.missionData.Objects.Objects;
+
+                    MissionPackage.MissionData.LogicData.StringCollection.Strings = luaMission.missionData.LogicData.StringCollection.Strings;
+
+                    MissionPackage.MissionData.LogicData.SoundBankTable.Table = luaMission.missionData.LogicData.SoundBankTable.Table;
+
+                    if (MissionPackage.MissionSummary == null)
+                        MissionPackage.MissionSummary = new MissionSummaryData();
+                    MissionPackage.MissionSummary.StartPosition = luaMission.missionSummary.StartPosition;
+                    MissionPackage.MissionSummary.CityType = luaMission.missionSummary.GetCityTypeByName(luaMission.missionSummary.Level);
+                    MissionPackage.MissionSummary.MissionId = luaMission.missionSummary.MoodId;
+
+                    bool stat = MissionPackage.Save(output);
+                    MissionPackage.Dispose();
+                    return stat;
+                }
             return false;
         }
         static void Main(string[] args)
         {
-
-            const string fatalErr = "FATAL ERROR: ";
-
             string outputFileName;
             string inputFileName;
 
             Console.WriteLine(Title);
+            Console.WriteLine("");
             if (args.Length > 0)
             {
                 outputFileName = "mission.mpc"; // default
@@ -73,6 +96,7 @@ namespace LuaC
                 {
                     if (arg.Contains(ArgMagic)) // contains magic for commands
                     {
+                        argId++;
                         var command = arg.Replace(ArgMagic, "");
                         switch (command)
                         {
@@ -86,20 +110,20 @@ namespace LuaC
                                 continue;
                             case "output":
                             case "o":
-                                outputFileName = args[argId + 1];
-                                if (!File.Exists(outputFileName)) {
-                                    Console.WriteLine(fatalErr+"Output file name can't be empty!");
+                                outputFileName = args[argId+1];
+                                if (outputFileName=="") {
+                                    Console.WriteLine(fatalErr+$"Output file can't be empty!");
                                     Environment.Exit(0);
                                     return;
                                 }
                                 continue;
                         }
                     }
-                    argId++;
                 }
 
                 // now with all arguments set up, let's do our thing!
-                LuaMissionScript luaMission;
+                LuaMissionScript luaMission = new LuaMissionScript();
+                Console.WriteLine("Compiling script...");
                 try
                 {
                     if (!isDPL)
@@ -119,6 +143,16 @@ namespace LuaC
                         Console.WriteLine("Press any key to continue...");
                         Console.ReadKey(); // prevent console from closing up so we can see the error
                 }
+                Console.WriteLine("Making .mpc file...");
+                if (ProcessCompilationForLuaMissionScript(luaMission, outputFileName)==true)
+                {
+                    Console.WriteLine("Success!\noutputed to " + Path.GetFullPath(outputFileName));
+                }
+                else
+                {
+                    Console.WriteLine("Something went wrong, please try again later.");
+                }
+                Console.WriteLine("");
             }
             else
             {
