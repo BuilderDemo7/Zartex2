@@ -240,6 +240,7 @@ namespace Zartex
             { 209, "AreaBlocked" },
             { 210, "CircuitRaceControl" },
             { 212, "AttackerControl" },
+            { 213, "FlyControl" },
             { 215, "KeepAreaClean" },
             { 216, "MusicTrackControl" },
             { 217, "GiveWeaponToPlayer" },
@@ -263,14 +264,15 @@ namespace Zartex
             { 103, "Collectable" },
             { 104, "AnimProp" },
             { 105, "Marker" },
-            { 106, "Mission" },
-            { 110, "Icon" },
-            { 111, "Data" },
-            { 112, "PropGadget" },
-            { 115, "Empty" },
-            { 116, "Train" },
+            { 106, "Mission" }, // from DPL
+            { 110, "Icon" }, // from DPL
+            { 111, "Data" }, // from DPL
+            { 112, "PropGadget" }, // from DPL
+            { 114, "Helicopter" },
+            { 115, "Empty" }, // from DPL
+            { 116, "Train" }, // from DPL
             { 118, "Cop" }, // from DPL
-            { 121, "Marker" }
+            { 121, "Marker" } // from DPL
         };
 
         public static string GetNodeType(int type)

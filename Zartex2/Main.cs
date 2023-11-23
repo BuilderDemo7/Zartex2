@@ -821,8 +821,9 @@ namespace Zartex
                 _3dviewport.sceneObjects = objects;
                 _3dviewport.StartPosition[0] = MissionPackage.MissionSummary.StartPosition.X;
                 _3dviewport.StartPosition[1] = MissionPackage.MissionSummary.StartPosition.Y;
-                _3dviewport.UpdateScene();
             }
+            if (_3dviewport.sceneActors.Count!=0)
+                _3dviewport.UpdateScene();
 
             // Get widget ready
             var inspector = is3D ? _3dviewport.Inspector : Activator.CreateInstance<InspectorWidget>();
@@ -1511,7 +1512,7 @@ namespace Zartex
                     break;
                 }
 
-                Console.WriteLine("Couldn't find anything...");
+                Console.WriteLine($"Couldn't find anything for {cType.ToString()}...");
             }
             else
                 MessageBox.Show("No mission loaded!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -3641,7 +3642,7 @@ namespace Zartex
                 }
                 foreach (TreeNode node in Widget.Nodes.Nodes)
                 {
-                    if (node.Text.Contains(textBox.Text))
+                    if (node.Text.ToLower().Contains(textBox.Text.ToLower()))
                     {
                         
                         Widget.Nodes.SelectedNode = node;
@@ -3663,7 +3664,7 @@ namespace Zartex
                 for (int id = Widget.Nodes.SelectedNode.Index+1; id<Widget.Nodes.Nodes.Count; id++)
                 {
                     TreeNode node = Widget.Nodes.Nodes[id];
-                    if (node.Text.Contains(textBox.Text))
+                    if (node.Text.ToLower().Contains(textBox.Text.ToLower()))
                     {
                         Widget.Nodes.SelectedNode = node; return;
                     }
