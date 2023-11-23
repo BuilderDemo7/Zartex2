@@ -39,23 +39,6 @@ namespace Zartex
         public Vector3 lastPosition = new Vector3(0,0,0);
         public bool isDriverPLMission = false;
 
-        public static byte[] ReadResource(string resourceName)
-        {
-            using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
-            {
-                byte[] buffer = new byte[1024];
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    while (true)
-                    {
-                        int read = s.Read(buffer, 0, buffer.Length);
-                        if (read <= 0)
-                            return ms.ToArray();
-                        ms.Write(buffer, 0, read);
-                    }
-                }
-            }
-        }
         static Main()
         {
             DSC.VerifyGameDirectory("Driv3r", "Zartex");
@@ -826,11 +809,23 @@ namespace Zartex
             return node;
         }
 
-        private void CreateNodes<T>(List<T> definitions,int selected=-1)
+        private void CreateNodes<T>(List<T> definitions, int selected = -1, List<MissionObject> objects = null, bool is3D = false)
             where T : NodeDefinition
         {
+            // Build 3D viewport
+            _3D.viewport _3dviewport = new _3D.viewport();
+            if (definitions is List<ActorDefinition>)
+               _3dviewport.sceneActors = definitions as List<ActorDefinition>;
+            if (objects!=null & objects.Count!=0)
+            {
+                _3dviewport.sceneObjects = objects;
+                _3dviewport.StartPosition[0] = MissionPackage.MissionSummary.StartPosition.X;
+                _3dviewport.StartPosition[1] = MissionPackage.MissionSummary.StartPosition.Y;
+                _3dviewport.UpdateScene();
+            }
+
             // Get widget ready
-            var inspector = new InspectorWidget();
+            var inspector = is3D ? _3dviewport.Inspector : Activator.CreateInstance<InspectorWidget>();
             Widget = inspector;
             var nodes = inspector.Nodes;
             if (selected != -1)
@@ -1207,7 +1202,10 @@ namespace Zartex
 
             nodes.ExpandAll();
 
-            SafeAddControl(inspector);
+            if (is3D)
+               SafeAddControl(_3dviewport);
+            else
+               SafeAddControl(inspector);
             
             Cursor = Cursors.Default;
         }
@@ -1223,7 +1221,7 @@ namespace Zartex
             }
             else
             {
-                CreateNodes(MissionPackage.MissionData.LogicData.Nodes.Definitions, select);
+                CreateNodes(MissionPackage.MissionData.LogicData.Nodes.Definitions, select, (MissionPackage.MissionData.Objects.Objects != null) ? MissionPackage.MissionData.Objects.Objects : null);
             }
 
             // // Nest wires
@@ -1243,9 +1241,9 @@ namespace Zartex
             // }
         }
 
-        private void GenerateActors()
+        private void GenerateActors(int selected = -1)
         {
-            CreateNodes(MissionPackage.MissionData.LogicData.Actors.Definitions);
+            CreateNodes(MissionPackage.MissionData.LogicData.Actors.Definitions,selected,MissionPackage.MissionData.Objects.Objects,true);
         }
 
         public NodeWidget GenerateDefinition(FlowgraphWidget flowgraph, NodeDefinition def)

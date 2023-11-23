@@ -27,6 +27,12 @@
   </PropertyGroup>
   <Import Project="$(DToolsRoot)DriverTools.Common.props" Condition="Exists('$(DToolsRoot)DriverTools.Common.props')" />
   <ItemGroup>
+    <Reference Include="HelixToolkit.Wpf">
+      <HintPath>..\..\driver-tools-dev\Shared\Libraries\HelixToolkit\HelixToolkit.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="HelixToolkit.Wpf.Input">
+      <HintPath>..\..\driver-tools-dev\Shared\Libraries\HelixToolkit\HelixToolkit.Wpf.Input.dll</HintPath>
+    </Reference>
     <Reference Include="MoonSharp.Interpreter">
       <HintPath>Lua\MoonSharp.Interpreter.dll</HintPath>
     </Reference>
@@ -48,11 +54,21 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="TDx.TDxInput">
+      <HintPath>..\..\driver-tools-dev\Shared\Libraries\HelixToolkit\TDx.TDxInput.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="3D\Inspector3D.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="3D\Inspector3D.Designer.cs">
+      <DependentUpon>Inspector3D.cs</DependentUpon>
+    </Compile>
     <Compile Include="Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Config\Settings.cs" />
     <Compile Include="DataGridWidget.cs">
@@ -72,6 +88,9 @@
     </Compile>
     <Compile Include="InspectorWidget.Designer.cs">
       <DependentUpon>InspectorWidget.cs</DependentUpon>
+    </Compile>
+    <Compile Include="3D\View3D.xaml.cs">
+      <DependentUpon>View3D.xaml</DependentUpon>
     </Compile>
     <Compile Include="Memory.cs" />
     <Compile Include="MissionScript\ActorSetTableData.cs" />
@@ -129,6 +148,9 @@
       <DependentUpon>SummaryEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="TypeConverters.cs" />
+    <EmbeddedResource Include="3D\Inspector3D.resx">
+      <DependentUpon>Inspector3D.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DataGridWidget.resx">
       <DependentUpon>DataGridWidget.cs</DependentUpon>
     </EmbeddedResource>
@@ -175,5 +197,12 @@
     </Compile>
     <None Include="Resources\template.mpc" />
   </ItemGroup>
+  <ItemGroup>
+    <Page Include="3D\View3D.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

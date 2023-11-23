@@ -17,7 +17,7 @@ namespace LuaC
 {
     class Program
     {
-        public static float Version = 1.01f;
+        public static float Version = 1.02f;
 
         static readonly string ArgMagic = "-";
         static bool isDPL = false;

@@ -108,6 +108,7 @@
             this.nodeInDisable.Size = new System.Drawing.Size(14, 14);
             this.nodeInDisable.TabIndex = 2;
             this.nodeInDisable.TabStop = false;
+            this.nodeInDisable.Tag = "Disable";
             // 
             // nodeInEnable
             // 
@@ -119,6 +120,7 @@
             this.nodeInEnable.Size = new System.Drawing.Size(14, 14);
             this.nodeInEnable.TabIndex = 3;
             this.nodeInEnable.TabStop = false;
+            this.nodeInEnable.Tag = "Enable";
             // 
             // nodeOutSuccess
             // 
@@ -130,6 +132,7 @@
             this.nodeOutSuccess.Size = new System.Drawing.Size(18, 18);
             this.nodeOutSuccess.TabIndex = 4;
             this.nodeOutSuccess.TabStop = false;
+            this.nodeOutSuccess.Tag = "On Success Enable";
             // 
             // nodeOutFailure
             // 
@@ -141,6 +144,7 @@
             this.nodeOutFailure.Size = new System.Drawing.Size(18, 18);
             this.nodeOutFailure.TabIndex = 5;
             this.nodeOutFailure.TabStop = false;
+            this.nodeOutFailure.Tag = "On Failure Enable";
             // 
             // nodeOutCondition
             // 
@@ -152,6 +156,7 @@
             this.nodeOutCondition.Size = new System.Drawing.Size(18, 18);
             this.nodeOutCondition.TabIndex = 1;
             this.nodeOutCondition.TabStop = false;
+            this.nodeOutCondition.Tag = "On Condition Enable";
             // 
             // Comment
             // 

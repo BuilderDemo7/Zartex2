@@ -1550,7 +1550,7 @@ namespace Zartex
             );
             // automatic: if role == 1 (player) then set start position to this character position
             if (role == 1)
-                missionSummary.StartPosition = new Vector2(x, y);
+                missionSummary.StartPosition = new Vector2(x, z);
             short stringId = 0;
             if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }

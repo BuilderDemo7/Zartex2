@@ -231,6 +231,7 @@ namespace Zartex
             { 193, "TankControl" },
             { 197, "CharacterMoveControl" },
 
+            { 200, "GuardControl" },
             { 204, "PedestrianDensityControl" },
             { 205, "AnimateVehicleDoors" },
             { 206, "PlayAnimationForCharacter" },
@@ -240,6 +241,7 @@ namespace Zartex
             { 210, "CircuitRaceControl" },
             { 212, "AttackerControl" },
             { 215, "KeepAreaClean" },
+            { 216, "MusicTrackControl" },
             { 217, "GiveWeaponToPlayer" },
             { 218, "GlobalControl" },
             { 219, "DifficultyControl" },

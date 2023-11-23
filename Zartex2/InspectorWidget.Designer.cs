@@ -54,7 +54,7 @@
             this.Inspector.Margin = new System.Windows.Forms.Padding(0);
             this.Inspector.Name = "Inspector";
             this.Inspector.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.Inspector.Size = new System.Drawing.Size(188, 339);
+            this.Inspector.Size = new System.Drawing.Size(424, 339);
             this.Inspector.TabIndex = 0;
             // 
             // Nodes
@@ -71,7 +71,7 @@
             this.Nodes.Location = new System.Drawing.Point(0, 0);
             this.Nodes.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
             this.Nodes.Name = "Nodes";
-            this.Nodes.Size = new System.Drawing.Size(217, 357);
+            this.Nodes.Size = new System.Drawing.Size(344, 357);
             this.Nodes.TabIndex = 1;
             this.Nodes.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.LogicNodes_AfterSelect);
             this.Nodes.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.LogicNodes_NodeMouseDoubleClick);
@@ -116,8 +116,8 @@
             this.SplitPanel.Panel2.BackColor = System.Drawing.Color.Transparent;
             this.SplitPanel.Panel2.Controls.Add(this.label1);
             this.SplitPanel.Panel2.Controls.Add(this.Inspector);
-            this.SplitPanel.Size = new System.Drawing.Size(411, 357);
-            this.SplitPanel.SplitterDistance = 218;
+            this.SplitPanel.Size = new System.Drawing.Size(768, 357);
+            this.SplitPanel.SplitterDistance = 345;
             this.SplitPanel.SplitterWidth = 1;
             this.SplitPanel.TabIndex = 2;
             // 
@@ -130,7 +130,7 @@
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Margin = new System.Windows.Forms.Padding(0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(192, 18);
+            this.label1.Size = new System.Drawing.Size(422, 18);
             this.label1.TabIndex = 1;
             this.label1.Text = "Property Inspector";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -143,7 +143,7 @@
             this.Controls.Add(this.SplitPanel);
             this.DoubleBuffered = true;
             this.Name = "InspectorWidget";
-            this.Size = new System.Drawing.Size(411, 357);
+            this.Size = new System.Drawing.Size(768, 357);
             this.contextMenuStrip1.ResumeLayout(false);
             this.SplitPanel.Panel1.ResumeLayout(false);
             this.SplitPanel.Panel2.ResumeLayout(false);
