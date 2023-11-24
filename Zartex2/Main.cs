@@ -824,7 +824,7 @@ namespace Zartex
             }
             if (instances != null)
             {
-                _3dviewport.scenePropHandles = instances;
+                _3dviewport.sceneInstances = instances;
                 Debug.WriteLine($"non localised-string or no localised string availble {instances.Count}");
             }
             if (_3dviewport.sceneActors.Count!=0)
@@ -1249,7 +1249,7 @@ namespace Zartex
 
         private void GenerateActors(int selected = -1)
         {
-            CreateNodes(MissionPackage.MissionData.LogicData.Actors.Definitions,selected,MissionPackage.MissionData.Objects.Objects,MissionPackage.MissionData.PropHandles.PropHandles,true);
+            CreateNodes(MissionPackage.MissionData.LogicData.Actors.Definitions,selected,MissionPackage.MissionData.Objects.Objects,MissionPackage.MissionData.MissionInstances.Instances,true);
         }
 
         public NodeWidget GenerateDefinition(FlowgraphWidget flowgraph, NodeDefinition def)
