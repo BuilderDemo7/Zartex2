@@ -83,7 +83,7 @@ namespace Zartex
             case 23: return typeof(MatrixProperty);
                 // new types reserves
                 case 24: return typeof(UnknownTypeProperty);
-                case 25: return typeof(UnknownTypeProperty);
+                case 25: return typeof(PathProperty);
                 case 26: return typeof(UnknownTypeProperty);
                 case 27: return typeof(UnknownTypeProperty);
                 case 28: return typeof(ObjectTypeProperty);
@@ -469,18 +469,18 @@ namespace Zartex
             if (size != Size)
                 throw new InvalidOperationException("Invalid matrix property!");
 
-            Left = stream.Read<Vector4>();
-            Up = stream.Read<Vector4>();
             Forward = stream.Read<Vector4>();
+            Up = stream.Read<Vector4>();
+            Left = stream.Read<Vector4>();
             Value = stream.Read<Vector4>(); // reads position
         }
 
         public override void SaveData(Stream stream)
         {
             stream.Write(Size);
-            stream.Write(Left);
-            stream.Write(Up);
             stream.Write(Forward);
+            stream.Write(Up);
+            stream.Write(Left);
             stream.Write(Value);
         }
 
@@ -758,6 +758,58 @@ namespace Zartex
         public AudioProperty(AudioInfo value)
         {
             Value = value;
+        }
+    }
+
+    public sealed class PathProperty : NodeProperty
+    {
+        public override int TypeId
+        {
+            get { return 25; }
+        }
+
+        public override int Size
+        {
+            get { return (Path.Length*16)+4; }
+        }
+
+        public override string Notes
+        {
+            get { return "Represents a path."; }
+        }
+
+        public override string ToString()
+        {
+            return $"Path ({Path.Length})";
+        }
+
+        public Vector4[] Path { get; set; }
+
+        public override void LoadData(Stream stream)
+        {
+            stream.Position += 4; // skip size
+            var count = stream.ReadInt32();
+            Path = new Vector4[count];
+            for (int id = 0; id<count; id++)
+            {
+                Path[id] = stream.Read<Vector4>();
+            }
+        }
+
+        public override void SaveData(Stream stream)
+        {
+            stream.Write(Size);
+            stream.Write((int)Path.Length);
+            foreach(Vector4 vec in Path)
+            {
+                stream.Write<Vector4>(vec);
+            }
+        }
+
+        public PathProperty() { }
+        public PathProperty(Vector4[] path)
+        {
+            Path = path;
         }
     }
 

@@ -44,6 +44,13 @@ namespace Zartex._3D
 
         float textInfoHeight = 1.1f;
 
+        float deg = (180 / (float)Math.PI);
+
+        public static string modelsFolderName = "Models";
+
+        public static Model3D characterModel = getModel($"{modelsFolderName}/character.3ds");
+        public static Model3D vehicleModel = getModel($"{modelsFolderName}/vehicle.3ds");
+
         public static SolidColorBrush Green = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 0, 255, 0));
         public static SolidColorBrush Red = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 0, 255, 0));
         public static SolidColorBrush White = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255));
@@ -65,6 +72,18 @@ namespace Zartex._3D
                 MissionObject missionObject = null;
                 if (actor.ObjectId != -1 & actor.ObjectId < sceneObjects.Count)
                     missionObject = sceneObjects[actor.ObjectId];
+                // special for DPL format
+                if (actor.TypeId == 10)
+                {
+                    foreach (var prop in actor.Properties)
+                    {
+                        if (prop is PathProperty)
+                        {
+                            var path = prop as PathProperty;
+                            return new Vector3D(path.Path[0].X, path.Path[0].Z, path.Path[0].Y);
+                        }
+                    }
+                }
                 if (missionObject != null)
                 {
                     switch (actor.TypeId)
@@ -127,6 +146,7 @@ namespace Zartex._3D
                     if (prop is MatrixProperty)
                     {
                         MatrixProperty matrix = prop as MatrixProperty;
+                        // wait that's not, ah, I don't care, just if it works
                         return new Vector3D(matrix.Forward.X, matrix.Forward.Z, matrix.Forward.Y);
                     }
                 }
@@ -203,8 +223,33 @@ namespace Zartex._3D
                 // make sure the position isn't null or smth (I made this to identify it because it can't just be null)
                 if (!Vector3DIsDead(pos))
                 {
-                    Transform3D tnf = new TranslateTransform3D(pos);
                     Vector3D fwd = FindActorForwardVector(actor);
+                    float angle = ((float)Math.Atan2(fwd.Y, fwd.X)) * deg;
+                    // calculates rotation
+                    Transform3D rot = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0,0,1), angle));
+                    // now the rotated transform with the position, etc.
+                    Transform3D tnf = new MatrixTransform3D(new Matrix3D()
+                    {
+                        OffsetX = pos.X,
+                        OffsetY = pos.Y,
+                        OffsetZ = pos.Z,
+                        // right
+                        M11 = rot.Value.M11,
+                        M12 = rot.Value.M12,
+                        M13 = rot.Value.M13,
+                        M14 = rot.Value.M14,
+                        // forward
+                        M21 = rot.Value.M21,
+                        M22 = rot.Value.M22,
+                        M23 = rot.Value.M23,
+                        M24 = rot.Value.M24,
+                        // up
+                        M31 = rot.Value.M31,
+                        M32 = rot.Value.M32,
+                        M33 = rot.Value.M33,
+                        M34 = rot.Value.M34,
+
+                    }); //new TranslateTransform3D(pos);
 
                     var pureColor = System.Windows.Media.Color.FromArgb(255, (byte)actor.Color.R, (byte)actor.Color.G, (byte)actor.Color.B);
                     var actorColor = new System.Windows.Media.SolidColorBrush(pureColor);
@@ -235,6 +280,7 @@ namespace Zartex._3D
                         });
                         continue; // cancel the others representations
                     }
+                    // path representation
                     if (actor.TypeId == 6)
                     {
                         var lines = new LinesVisual3D();
@@ -282,14 +328,57 @@ namespace Zartex._3D
                         });
                         continue; // cancel the others representations
                     }
+                    // path representation (Driver: Parallel Lines)
+                    // the code is very very similiar to the path representation of Driv3r
+                    // but this time it gets the path property instead of the actual mission object, etc...
+                    if (actor.TypeId == 10)
+                    {
+                        var lines = new LinesVisual3D();
+                        lines.Color = pureColor;
+                        lines.Thickness = pathLineThickness;
+
+                        foreach(var prop in actor.Properties)
+                        if (prop is PathProperty)
+                        {
+                            var path = prop as PathProperty;
+                            int id = 0;
+                            foreach (Vector4 pathvec in path.Path)
+                            {
+                                lines.Points.Add(new Point3D(pathvec.X, pathvec.Z, pathvec.Y));
+                                if (id < path.Path.Length - 1)
+                                    lines.Points.Add(new Point3D(path.Path[id + 1].X, path.Path[id + 1].Z, path.Path[id + 1].Y));
+
+                                id++;
+                                //if (id == pathObject.Path.Length-1)
+                                //     last = new Vector3D(pathvec.X, pathvec.Z, pathvec.Y);
+                            }
+                            break; // breaks the loop as this is the property we want and no longer need to advance
+                        }
+                        // start point
+                        vp.Children.Add(new SphereVisual3D()
+                        {
+                            Transform = tnf,
+                            Fill = actorColor,
+                            Radius = 0.2f
+                        });
+                        // lines connection
+                        vp.Children.Add(lines);
+                        continue; // cancel the others representations
+                    }
 
                     // common representation
-                    var representation1 = new CubeVisual3D()
+                    var representation1 = getRepresentationModelForActorType(actor.TypeId,pureColor); /*new CubeVisual3D()
                     {
                         Transform = tnf,
                         Fill = actorColor,
-                    };
+                    };*/
                     // forward representation
+                    representation1.Transform = tnf;
+                    // set color
+
+                    sceneDevice.Children.Add(representation1);
+                    // I don't think I need this anymore because there is models that you can know what they are facing
+                    /*
                     var representation2 = new ArrowVisual3D()
                     {
                         Diameter = arrowHeadSize,
@@ -298,9 +387,8 @@ namespace Zartex._3D
                         Transform = tnf,
                         Fill = actorColor,
                     };
-                    sceneDevice.Children.Add(representation1);
                     if (!Vector3DIsDead(fwd))
-                       sceneDevice.Children.Add(representation2);
+                       sceneDevice.Children.Add(representation2); */
                 }
                 //}
 
@@ -320,7 +408,7 @@ namespace Zartex._3D
             //viewport3D.Viewport3D.Children.Add(device);
         }
 
-        public Model3D getModel(string path)
+        public static Model3D getModel(string path)
         {
             Model3D device = null;
             try
@@ -330,6 +418,47 @@ namespace Zartex._3D
             }
             catch (Exception e)
             { }
+            return device;
+        }
+
+        public static Model3DGroup getModelAsGroup(string path)
+        {
+            Model3DGroup device = null;
+            try
+            {
+                ModelImporter import = new ModelImporter();
+                device = import.Load(path);
+            }
+            catch (Exception e)
+            { }
+            return device;
+        }
+
+        public ModelVisual3D getRepresentationModelForActorType(int type,System.Windows.Media.Color color)
+        {
+            ModelVisual3D device = new ModelVisual3D();
+            Model3D model = null;
+            switch (type)
+            {
+                case 2:
+                    model = characterModel;
+                    break;
+                case 3:
+                    model = vehicleModel;
+                    break;
+            }
+            if (model == null) { return new CubeVisual3D() { Fill = new SolidColorBrush(color) }; }
+
+            GeometryModel3D md = model as GeometryModel3D;
+
+            if (md != null)
+            {
+                DiffuseMaterial material = new DiffuseMaterial(new SolidColorBrush(color));
+                md.Material = material;
+                md.BackMaterial = material;
+            }
+
+            device.Content = model;
             return device;
         }
         
