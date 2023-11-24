@@ -116,6 +116,7 @@
     <Compile Include="MissionScript\LuaMissionScript.cs" />
     <Compile Include="MissionScript\MissionScriptFile.cs" />
     <Compile Include="MissionScript\MissionSummaryData.cs" />
+    <Compile Include="MissionScript\PropHandleData.cs" />
     <Compile Include="MPC.cs" />
     <Compile Include="MissionScript\Logic\NodeProperty.cs" />
     <Compile Include="MissionScript\Objects\MissionObject.cs" />

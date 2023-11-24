@@ -71,7 +71,7 @@ namespace Zartex
                 int id = 0;
                 foreach (var bank in Table)
                 {
-                    Debug.WriteLine($"Save => Bank No. {id} : {bank}");
+                    //Debug.WriteLine($"Save => Bank No. {id} : {bank}");
                     fBnk.Write(bank);
 
                     id++;
