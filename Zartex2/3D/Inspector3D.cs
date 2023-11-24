@@ -23,6 +23,7 @@ namespace Zartex._3D
     {
         public List<ActorDefinition> sceneActors = new List<ActorDefinition>();
         public List<MissionObject> sceneObjects = new List<MissionObject>();
+        public List<MissionInstance> sceneInstances = new List<MissionInstance>();
 
         float boxesWidth = 0.5f;
         float boxesCharacterHeight = 1f;
@@ -211,6 +212,40 @@ namespace Zartex._3D
             // set camera position to the place we're working on
             if (updateCamera)
                vp.Camera.Position = new Point3D(StartPosition[0]-8.5f,StartPosition[1]+8.5f,4);
+            // add representation to un-viewable scene objects
+            int objectId = 0;
+            foreach (MissionObject mb in sceneObjects)
+            {
+                switch (mb.TypeId)
+                {
+                    case 8:
+                        var propObject = mb as PropObject;
+
+                        // at least exists or tried to
+                        if (propObject.Id>-1 & propObject.Id< sceneInstances.Count)
+                        {
+                            MissionInstance inst = sceneInstances[propObject.Id];
+                            Vector3D pos = new Vector3D(inst.Position.X, inst.Position.Z, inst.Position.Y);
+
+                            Transform3D tnf = new TranslateTransform3D(pos);
+
+                            vp.Children.Add(new BillboardTextVisual3D()
+                            {
+                                Text = $"({objectId}) {ExportedMissionObjects.GetObjectNameById(mb.TypeId)}",
+                                Position = new Point3D(pos.X, pos.Y, pos.Z + textInfoHeight),
+                                Material = new SpecularMaterial(White, 5.0),
+                                Foreground = White
+                            });
+                            vp.Children.Add(new CubeVisual3D()
+                            {
+                                Transform = tnf,
+                                Fill = White,
+                            });
+                        }
+                        break;
+                }
+                objectId++;
+            }
             int actorId = 0;
             foreach (ActorDefinition actor in sceneActors)
             {

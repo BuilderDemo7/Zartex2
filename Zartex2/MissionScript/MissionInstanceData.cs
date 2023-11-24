@@ -8,36 +8,37 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 using DSCript;
 using DSCript.Spooling;
 
 namespace Zartex
 {
-    public class PropHandle
+    public class MissionInstance
     {
         public static int DataBufferSize = 32;
 
         [Category("Instance"), Description("Position of this prop")]
         [PropertyOrder(10)]
         public Vector4 Position { get; set; }
-        [Category("Instance"), Description("The ID to the instance this prop handle is using.")]
+        [Category("Instance"), Description("The ID to the world instance this instance is using.")]
         [PropertyOrder(20)]
         public short InstanceId { get; set; }
-        [Category("Misc"), Description("The ID to the prop handle this prop handle is attached to.")]
+        [Category("Misc"), Description("The ID to the instance this instance is attached to.")]
         [PropertyOrder(30)]
         public short AttachedTo { get; set; }
         [Category("Misc"), Description("XYZ coordinates representing a bounding box.")]
         [PropertyOrder(40)]
         public Vector4 BoundingBox { get; set; }
 
-        public PropHandle() { }
-        public PropHandle(Vector4 pos,short instanceId,short attachedTo,Vector4 boundingBox)
+        public MissionInstance() { }
+        public MissionInstance(Vector4 pos,short instanceId,short attachedTo,Vector4 boundingBox)
         {
             Position = pos; InstanceId = instanceId; AttachedTo = attachedTo; BoundingBox = boundingBox;
         } 
     }
-    public class PropHandleData : SpoolableResource<SpoolableBuffer>
+    public class MissionInstanceData : SpoolableResource<SpoolableBuffer>
     {
         public static int HeaderBufferSize = 64;
 
@@ -54,12 +55,21 @@ namespace Zartex
         public Vector3 LoadPosition { get; set; }
         public Vector4 StartPosition { get; set; }
 
-        public PropHandle[] PropHandles { get; set; }
+        public List<MissionInstance> Instances { get; set; }
+
+        public MissionInstance this[int index]
+        {
+            get { return Instances[index]; }
+            set { Instances[index] = value; }
+        }
 
         protected override void Load()
         {
+            Debug.WriteLine("Load from prop handles called");
             using (var f = Spooler.GetMemoryStream())
             {
+                Debug.WriteLine("Loading");
+                Debug.WriteLine($"Stream position: {f.Position}, Size {f.Length}");
                 int count = f.ReadInt32();
                 Unk1 = f.ReadInt32();
                 Unk2 = f.ReadInt32();
@@ -73,16 +83,18 @@ namespace Zartex
                 LoadPosition = f.Read<Vector3>();
                 StartPosition = f.Read<Vector4>();
 
-                PropHandles = new PropHandle[count];
+                Instances = new List<MissionInstance>(count);
+                Debug.WriteLine($"Count of PHs -> {count}");
                 for (int id = 0; id < count; id++)
                 {
-                    PropHandles[id] = new PropHandle(f.Read<Vector4>(), f.ReadInt16(), f.ReadInt16(), f.Read<Vector4>());
+                    Debug.WriteLine($"Processing PH ID: {id}");
+                    Instances[id] = new MissionInstance(f.Read<Vector4>(), f.ReadInt16(), f.ReadInt16(), f.Read<Vector4>());
                 }
             }
         }
         protected override void Save()
         {
-            var bufferSize = HeaderBufferSize+(PropHandle.DataBufferSize*PropHandles.Length);
+            var bufferSize = HeaderBufferSize+(MissionInstance.DataBufferSize* Instances.Count);
 
             var propBuffer = new byte[bufferSize];
 
@@ -101,10 +113,9 @@ namespace Zartex
                 f.Write<Vector3>(LoadPosition);
                 f.Write<Vector4>(StartPosition);
 
-                PropHandles = new PropHandle[count];
-                foreach (PropHandle proph in PropHandles)
+                foreach (MissionInstance inst in Instances)
                 {
-                    f.Write<Vector4>(proph.Position); f.Write(proph.InstanceId); f.Write(proph.AttachedTo); f.Write<Vector4>(proph.BoundingBox);
+                    f.Write<Vector4>(inst.Position); f.Write(inst.InstanceId); f.Write(inst.AttachedTo); f.Write<Vector4>(inst.BoundingBox);
                 }
             }
 

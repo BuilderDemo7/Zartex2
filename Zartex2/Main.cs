@@ -809,7 +809,7 @@ namespace Zartex
             return node;
         }
 
-        private void CreateNodes<T>(List<T> definitions, int selected = -1, List<MissionObject> objects = null, bool is3D = false)
+        private void CreateNodes<T>(List<T> definitions, int selected = -1, List<MissionObject> objects = null, List<MissionInstance> instances = null, bool is3D = false)
             where T : NodeDefinition
         {
             // Build 3D viewport
@@ -821,6 +821,11 @@ namespace Zartex
                 _3dviewport.sceneObjects = objects;
                 _3dviewport.StartPosition[0] = MissionPackage.MissionSummary.StartPosition.X;
                 _3dviewport.StartPosition[1] = MissionPackage.MissionSummary.StartPosition.Y;
+            }
+            if (instances != null)
+            {
+                _3dviewport.scenePropHandles = instances;
+                Debug.WriteLine($"non localised-string or no localised string availble {instances.Count}");
             }
             if (_3dviewport.sceneActors.Count!=0)
                 _3dviewport.UpdateScene();
@@ -1244,7 +1249,7 @@ namespace Zartex
 
         private void GenerateActors(int selected = -1)
         {
-            CreateNodes(MissionPackage.MissionData.LogicData.Actors.Definitions,selected,MissionPackage.MissionData.Objects.Objects,true);
+            CreateNodes(MissionPackage.MissionData.LogicData.Actors.Definitions,selected,MissionPackage.MissionData.Objects.Objects,MissionPackage.MissionData.PropHandles.PropHandles,true);
         }
 
         public NodeWidget GenerateDefinition(FlowgraphWidget flowgraph, NodeDefinition def)
