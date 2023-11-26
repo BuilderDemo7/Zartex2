@@ -150,6 +150,7 @@ namespace Zartex
             mnFile_Save.Enabled = MissionPackage.IsLoaded;
             mnFile_SaveAs.Enabled = MissionPackage.IsLoaded;
 
+
             importMPCBTN.Enabled = true;
             importLuaScript.Enabled = true;
 
@@ -168,6 +169,9 @@ namespace Zartex
 
             MissionPackage.FileName = filename;
             MissionPackage.IsLoaded = true;
+            if (!isDriverPLMission)
+                toolSelectMission.Enabled = false;
+
             InitTools();
         }
         
@@ -3374,7 +3378,7 @@ namespace Zartex
                 if (MissionPackage.MissionSummary == null)
                     MissionPackage.MissionSummary = new MissionSummaryData();
                 MissionPackage.MissionSummary.StartPosition = luaMission.missionSummary.StartPosition;
-                MissionPackage.MissionSummary.CityType = luaMission.missionSummary.GetCityTypeByName(luaMission.missionSummary.Level);
+                MissionPackage.MissionSummary.CityType = MissionSummary.GetCityTypeByName(luaMission.missionSummary.Level);
                 MissionPackage.MissionSummary.MissionId = luaMission.missionSummary.MoodId;
 
                 MessageBox.Show("Success loading Lua mission script file!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -3542,7 +3546,7 @@ namespace Zartex
                         Text = "Cancel"
                     };
 
-                    confirmation.Click += delegate { prompt.Close(); };
+                    //confirmation.Click += delegate { prompt.Close(); };
 
                     prompt.Controls.Add(textBox);
                     prompt.Controls.Add(confirmation);
@@ -3555,9 +3559,15 @@ namespace Zartex
                     {
 
                             missionId = Convert.ToInt32(textBox.Text);
+                            if (missionId < 0)
+                            {
+                               MessageBox.Show("Mission ID cannot be negative", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                               return;
+                            }
                             isDriverPLMission = true;
                             LoadScriptFile(openFileDialog.FileName, isDriverPLMission, missionId);
-
+                            prompt.Close();
+                            toolSelectMission.Enabled = true;
 
                     }
                 }
@@ -3566,6 +3576,8 @@ namespace Zartex
                     // else, just load the mission with mission ID set to zero
                     isDriverPLMission = true;
                     LoadScriptFile(openFileDialog.FileName, isDriverPLMission);
+                    toolSelectMission.Enabled = false;
+
                 }
             }
         }
@@ -4233,6 +4245,86 @@ namespace Zartex
                     MessageBox.Show($"Successfully exported mission to '{saveFileDialog.FileName}'!","Success",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 else
                     MessageBox.Show("Something went wrong :(","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
+        }
+
+        private void toolSelectMission_Click(object sender, EventArgs e)
+        {
+            int missionId = 0;
+            Form prompt = new Form()
+            {
+                Width = 500,
+                Height = 150,
+
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                StartPosition = FormStartPosition.CenterScreen,
+
+                Text = "Enter a mission ID"
+            };
+
+            Label textLabel = new Label()
+            {
+                Left = 50,
+                Top = 20,
+
+                Text = "Enter a number:"
+            };
+
+            TextBox textBox = new TextBox()
+            {
+                Left = 50,
+                Top = 50,
+
+                Width = 400,
+
+                SelectedText = "0"
+            };
+
+            Button confirmation = new Button()
+            {
+                Left = 250,
+                Top = 70,
+
+                Width = 100,
+                DialogResult = DialogResult.OK,
+
+                Text = "OK"
+            };
+
+            Button cancel = new Button()
+            {
+                Left = 350,
+                Top = 70,
+
+                Width = 100,
+                DialogResult = DialogResult.Cancel,
+
+                Text = "Cancel"
+            };
+
+            //confirmation.Click += delegate { prompt.Close(); };
+
+            prompt.Controls.Add(textBox);
+            prompt.Controls.Add(confirmation);
+            prompt.Controls.Add(cancel);
+            prompt.Controls.Add(textLabel);
+            prompt.AcceptButton = confirmation;
+
+            DialogResult dialogResult = prompt.ShowDialog();
+            if (dialogResult == DialogResult.OK)
+            {
+
+                missionId = Convert.ToInt32(textBox.Text);
+                if (missionId < 0)
+                {
+                    MessageBox.Show("Mission ID cannot be negative", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                isDriverPLMission = true;
+                MissionPackage.MissionData = MissionPackage.Missions[missionId];
+                prompt.Close();
+                GenerateLogicNodes();
+
             }
         }
     }

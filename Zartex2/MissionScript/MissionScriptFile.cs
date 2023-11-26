@@ -26,6 +26,7 @@ namespace Zartex
         public string BuildInfo = null;
 
         private SpoolableBuffer _buildinfo = null;
+        public List<ExportedMission> Missions = new List<ExportedMission>();
 
         public bool IsLoaded { get; set; }
 
@@ -107,8 +108,9 @@ namespace Zartex
             {
             case ChunkType.ExportedMissionChunk:
                     {
+                        Missions.Add(sender.AsResource<ExportedMission>(true));
                         if (_mid == MissionIndex) {
-                            MissionData = sender.AsResource<ExportedMission>(true);
+                            MissionData = Missions[_mid]; //sender.AsResource<ExportedMission>(true);
                         }
                         if (isDriverPLMission)
                             _mid++;
@@ -120,8 +122,6 @@ namespace Zartex
                             _buildinfo = sender as SpoolableBuffer;
                             BuildInfo = _buildinfo.GetMemoryStream().Read<string>(_buildinfo.Size);
                         }
-                        if (isDriverPLMission)
-                            _mid++;
                     }
                     break;
             case ChunkType.MissionSummary:

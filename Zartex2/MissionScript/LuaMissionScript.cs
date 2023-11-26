@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -149,7 +150,7 @@ namespace Zartex
         public float X { get { return this.StartPosition.X; } set { this.StartPosition = new Vector2(value, this.StartPosition.Y); } }
         public float Y { get { return this.StartPosition.Y; } set { this.StartPosition = new Vector2(this.StartPosition.X, value); } }
 
-        public string GetCityNameByType(MissionCityType cityType)
+        public static string GetCityNameByType(MissionCityType cityType)
         {
             switch (cityType)
             {
@@ -170,7 +171,7 @@ namespace Zartex
             }
         }
 
-        public MissionCityType GetCityTypeByName(string cityType)
+        public static MissionCityType GetCityTypeByName(string cityType)
         {
             switch (cityType)
             {
@@ -215,9 +216,37 @@ namespace Zartex
     [MoonSharpUserData]
     public class LuaMissionScript
     {
-        public static void ImportMissionScriptFromFile(string filename,bool isDriverPL,int missionIndex)
+        public void ImportMissionScriptFromFile(string filename,bool isDriverPL = false,int missionIndex = 0)
         {
-            throw new NotImplementedException();
+            MissionScriptFile externalMissionPackage;
+            if (!File.Exists(filename))
+            {
+                throw new ScriptRuntimeException("Bad argument #1 - The given file path does not exists.");
+            }
+
+            // catch any error and return as a Lua error
+            try
+            {
+                externalMissionPackage = new MissionScriptFile(filename,isDriverPL,missionIndex);
+            }
+            catch (Exception ex)
+            {
+                throw new ScriptRuntimeException(ex);
+            }
+
+            missionData.LogicData.Actors.Definitions = externalMissionPackage.MissionData.LogicData.Actors.Definitions;
+            missionData.LogicData.Nodes.Definitions = externalMissionPackage.MissionData.LogicData.Nodes.Definitions;
+
+            wireCollection = externalMissionPackage.MissionData.LogicData.WireCollection.WireCollections;
+
+            missionSummary = externalMissionPackage.MissionSummary as MissionSummary;
+            missionSummary.Level = MissionSummary.GetCityNameByType(externalMissionPackage.MissionSummary.CityType);
+
+            if (externalMissionPackage.MissionData.MissionInstances!=null)
+              instanceData.Instances = externalMissionPackage.MissionData.MissionInstances.Instances;
+
+            actorSetup.Table = externalMissionPackage.MissionData.LogicData.ActorSetTable.Table;
+            //throw new NotImplementedException();
         }
 
         public ExportedMission missionData = new ExportedMission();
