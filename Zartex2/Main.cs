@@ -653,6 +653,10 @@ namespace Zartex
                 var wId = hasUID ? 1 : 0;
                 var wires = wireCollections[w].Wires;
                 var lNodeIdx = nodeDefs.FindIndex(0, (def) => (int)def.Properties[wId].Value == w);
+                if (lNodeIdx < 0)
+                    continue;
+                if (lNodeIdx > nodeDefs.Count-1)
+                    continue;
 
                 var lNode = nodeDefs[lNodeIdx];
                 var lNodeName = MissionPackage.MissionData.LogicData.StringCollection[lNode.StringId];
@@ -1016,10 +1020,10 @@ namespace Zartex
                             foreach (var wire in MissionPackage.MissionData.LogicData.WireCollection.WireCollections)
                             {
                                 if (del)
-                                    break; // breaks loop if already duplicated (task done)
+                                    break; // breaks loop if already deleted (task done)
                                 foreach (WireNode wnode in wire.Wires)
                                 {
-                                    // duplicates if this is the source
+                                    // deleted if this is the source
                                     if (wnode.Equals(wiren))
                                     {
                                         wire.Wires.Remove(wiren);
@@ -1056,6 +1060,15 @@ namespace Zartex
                                         del = true;
                                         break;
                                     }
+                                }
+                            }
+                            // hack
+                            foreach (var wire in MissionPackage.MissionData.LogicData.WireCollection.WireCollections)
+                            {
+                                foreach (var wiredef in wire.Wires)
+                                {
+                                    if (wiredef.NodeId > id)
+                                        wiredef.NodeId -= 1;
                                 }
                             }
                             MissionPackage.MissionData.LogicData.Nodes.Definitions.Remove(def);
