@@ -18,7 +18,7 @@ namespace Zartex
         public LogicDataCollection<ActorDefinition> Actors { get; set; }
         public LogicDataCollection<NodeDefinition> Nodes { get; set; }
 
-        public SpoolableBuffer ActorSetTable { get; set; }
+        public ActorSetTableData ActorSetTable { get; set; } // old class: SpoolableBuffer
         public WireCollectionData WireCollection { get; set; }
         public SpoolableBuffer ScriptCounters { get; set; }
         
@@ -33,7 +33,9 @@ namespace Zartex
             //Debug.WriteLine($"[ZARTEX] Logic Nodes: Offset = {logicNodes.BaseOffset}, Size = {logicNodes.Size}, Context = {logicNodes.Context:C4}");
             Nodes = logicNodes.AsResource<LogicDataCollection<NodeDefinition>>(true);
 
-            ActorSetTable = Spooler.GetFirstChild(ChunkType.LogicExportActorSetTable) as SpoolableBuffer;
+            //ActorSetTable = Spooler.GetFirstChild(ChunkType.LogicExportActorSetTable) as SpoolableBuffer;
+            ActorSetTable = Spooler.GetFirstChild(ChunkType.LogicExportActorSetTable).AsResource<ActorSetTableData>(true);
+
             WireCollection = Spooler.GetFirstChild(ChunkType.LogicExportWireCollections).AsResource<WireCollectionData>(true);
             ScriptCounters = Spooler.GetFirstChild(ChunkType.LogicExportScriptCounters) as SpoolableBuffer;
         }
@@ -48,6 +50,7 @@ namespace Zartex
             SpoolableResourceFactory.Save(SoundBankTable);
             SpoolableResourceFactory.Save(Actors);
             SpoolableResourceFactory.Save(Nodes);
+            SpoolableResourceFactory.Save(ActorSetTable);
             SpoolableResourceFactory.Save(WireCollection);
         }
     }

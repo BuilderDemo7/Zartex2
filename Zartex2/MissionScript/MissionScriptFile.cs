@@ -22,6 +22,11 @@ namespace Zartex
         public MissionSummaryData MissionSummary { get; set; } // old class: SpoolableBuffer
         public ActorDefinition[] ActorSetTable { get; set; }
 
+        public bool hasBuildInfo { get { return BuildInfo != null; } }
+        public string BuildInfo = null;
+
+        private SpoolableBuffer _buildinfo = null;
+
         public bool IsLoaded { get; set; }
 
         public string FileName { get; set; }
@@ -108,6 +113,17 @@ namespace Zartex
                         if (isDriverPLMission)
                             _mid++;
                     } break;
+                case ChunkType.BuildInfo:
+                    {
+                        if (_mid == MissionIndex)
+                        {
+                            _buildinfo = sender as SpoolableBuffer;
+                            BuildInfo = _buildinfo.GetMemoryStream().Read<string>(_buildinfo.Size);
+                        }
+                        if (isDriverPLMission)
+                            _mid++;
+                    }
+                    break;
             case ChunkType.MissionSummary:
                     {
                         if (_mid == MissionIndex)
@@ -129,6 +145,19 @@ namespace Zartex
 
         protected override void OnFileSaveBegin()
         {
+            // build info buffer is null but there is a build info from the local string
+            if (_buildinfo == null & hasBuildInfo == true)
+            {
+                _buildinfo = new SpoolableBuffer()
+                {
+                    Context = (int)ChunkType.BuildInfo,
+                    Description = "Build info"
+                };
+                this.Children.Add(_buildinfo);
+            }
+            if (_buildinfo != null & BuildInfo != null)
+                _buildinfo.SetBuffer(Encoding.ASCII.GetBytes(BuildInfo));
+
             SpoolableResourceFactory.Save(MissionData);
             SpoolableResourceFactory.Save(MissionSummary);
         }

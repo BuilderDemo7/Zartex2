@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 using DSCript;
 
@@ -10,6 +11,7 @@ using MoonSharp.Interpreter;
 
 namespace Zartex
 {
+    // Logic data to Lua
     [MoonSharpUserData]
     public class Actor
     {
@@ -48,7 +50,7 @@ namespace Zartex
         }
     }
     [MoonSharpUserData]
-    public class Node
+    public class Node 
     {
         public NodeDefinition TheNode = new ActorDefinition();
         public int index; // extremely important
@@ -86,6 +88,7 @@ namespace Zartex
             TheNode.Properties[id].Value = (int)actor.index;
         }
     }
+    // LEWC to Lua
     [MoonSharpUserData]
     public class CollectionOfWires : WireCollection
     {
@@ -108,6 +111,34 @@ namespace Zartex
         {
             index = idx;
         }
+    }
+    // GEBI to Lua
+    [MoonSharpUserData]
+    public class BuildingInstanceData : MissionInstanceData
+    {
+        public List<MissionObject> _props = new List<MissionObject>();
+        public void CreateInstance(float x, float y, float z, short instanceId, short attachedTo=-1, float bx = 1, float by = 0, float bz = 0, float bw = 101)
+        {
+            _props.Add(new PropObject() { Id = Instances.Count });
+            Instances.Add(new MissionInstance(new Vector3(x, y, z), instanceId, attachedTo, new Vector4(bx, by, bz, bw)));
+        }
+        public BuildingInstanceData() : base() { Instances = new List<MissionInstance>(); Unk1 = -4; Unk2 = -4; }
+    }
+    // LEAS to Lua
+    [MoonSharpUserData]
+    public class ActorSetting : ActorSet
+    {
+        public int index; // extremely important
+    }
+    [MoonSharpUserData]
+    public class ActorSetup : ActorSetTableData
+    {
+        public void Add(ActorSetting actorSetting)
+        {
+            actorSetting.index = Table.Count;
+            Table.Add(actorSetting);
+        }
+        public ActorSetup() { Table = new List<ActorSet>(); }
     }
     [MoonSharpUserData]
     public class MissionSummary : MissionSummaryData
@@ -184,13 +215,32 @@ namespace Zartex
     [MoonSharpUserData]
     public class LuaMissionScript
     {
+        public static void ImportMissionScriptFromFile(string filename,bool isDriverPL,int missionIndex)
+        {
+            throw new NotImplementedException();
+        }
+
         public ExportedMission missionData = new ExportedMission();
         public MissionSummary missionSummary = new MissionSummary();
+        public BuildingInstanceData instanceData = new BuildingInstanceData();
+        public ActorSetup actorSetup = new ActorSetup();
 
         public List<WireCollection> wireCollection = new List<WireCollection>();
         //public Table wireCollection;
 
-
+        // table must contain Actor in each
+        public ActorSetting CreateActorSetting(Table set)
+        {
+            ActorSetting actorSetting = new ActorSetting();
+            foreach(DynValue actorSetEntry in set.Keys)
+            {
+                UserData cast = actorSetEntry.UserData;
+                int index = (int)(actorSetEntry.Number)-1;
+                Actor actorCast = new Actor(missionData.LogicData.Actors.Definitions[index],index);//cast.Object as Actor;
+                actorSetting.Sets.Add(actorCast.index);
+            }
+            return actorSetting;
+        }
 
         public LuaMissionScript()
         {
@@ -257,6 +307,15 @@ namespace Zartex
             if ((id - 1) < 0)
                 throw new ScriptRuntimeException("Bad argument #1 - Index ID can't be negative");
             return new Actor(missionData.LogicData.Actors.Definitions[(id - 1)], (id - 1));
+        }
+
+        public Node GetNodeById(int id)
+        {
+            if ((id - 1) > missionData.LogicData.Actors.Definitions.Count - 1)
+                throw new ScriptRuntimeException("Bad argument #1 - Index ID can't be bigger than the size of the array");
+            if ((id - 1) < 0)
+                throw new ScriptRuntimeException("Bad argument #1 - Index ID can't be negative");
+            return new Node(missionData.LogicData.Nodes.Definitions[(id - 1)], (id - 1));
         }
 
         public Node LogicStart(string note = "", int r = 0, int g = 200, int b = 122)
@@ -571,27 +630,32 @@ namespace Zartex
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
-        public Node VehicleWrecked(Actor vehicle, int flags = 5, string note = "Vehicle.Wrecked == true", int r = 128, int g = 0, int b = 255)
+        public Node VehicleWrecked(Actor vehicle, int flags = 5, string note = "Vehicle.Wrecked == true/false", int r = 128, int g = 0, int b = 255)
         {
             return VehicleWatch(vehicle, 1, 1.0f, flags, note, r, g, b);
         }
 
-        public Node VehicleFlipped(Actor vehicle, int flags = 5, string note = "Vehicle.Flipped == true", int r = 128, int g = 0, int b = 255)
+        public Node VehicleFlipped(Actor vehicle, int flags = 5, string note = "Vehicle.Flipped == true/false", int r = 128, int g = 0, int b = 255)
         {
             return VehicleWatch(vehicle, 2, 1.0f, flags, note, r, g, b);
         }
 
-        public Node CharacterHasDied(Actor character, int flags = 0, string note = "Character.Dead == true", int r = 0, int g = 20, int b = 255)
+        public Node VehicleOnWater(Actor vehicle, int flags = 5, string note = "Vehicle.OnWater == true/false", int r = 128, int g = 0, int b = 255)
+        {
+            return VehicleWatch(vehicle, 7, 1.0f, flags, note, r, g, b);
+        }
+
+        public Node CharacterHasDied(Actor character, int flags = 0, string note = "Character.Dead == true/false", int r = 0, int g = 20, int b = 255)
         {
             return CharacterWatch(character, 1, 0, null, flags, note, r, g, b);
         }
 
-        public Node CharacterWasArrested(Actor character, int flags = 5, string note = "Character.Arrested == true", int r = 0, int g = 20, int b = 255)
+        public Node CharacterWasArrested(Actor character, int flags = 5, string note = "Character.Arrested == true/false", int r = 0, int g = 20, int b = 255)
         {
             return CharacterWatch(character, 3, 0, null, flags, note, r, g, b);
         }
 
-        public Node CharacterIsBeingChased(Actor character, int flags = 14, string note = "Character.Chased == true", int r = 0, int g = 20, int b = 255)
+        public Node CharacterIsBeingChased(Actor character, int flags = 14, string note = "Character.Chased == true/false", int r = 0, int g = 20, int b = 255)
         {
             return CharacterWatch(character, 9, 0, null, flags, note, r, g, b);
         }
@@ -1710,9 +1774,20 @@ namespace Zartex
         {
         }
 
-        // LUA functions: MISSION.functionName(args)
-        public new Node Timer(float interval, int flags = 1,string note = "", int r = 0, int g = 200, int b = 122)
+        public Node LogicStart(int flags = 0, string note = "", int r = 0, int g = 200, int b = 122)
         {
+            Node LS = base.LogicStart(note,r,g,b);
+            LS.TheNode.Properties.Add(new FlagsProperty(flags)
+            {
+                StringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+            });
+            return LS;
+        }
+
+        public Node ActorCreation(Actor actor, int activity = 1, int flags = 1, string note = "", int r = 0, int g = 200, int b = 122)
+        {
+            if (actor == null)
+                throw new ScriptRuntimeException("Bad argument #1 - Attempt to give creation to a nil value");
             short stringId = 0;
             if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
@@ -1731,6 +1806,42 @@ namespace Zartex
                         new WireCollectionProperty(pWireCollection) {
                             StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
                         },
+                        new FloatProperty(actor.index) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Interval")
+                        },
+                        new EnumProperty(activity) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Activity")
+                        },
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }
+                    }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
+        // LUA functions: MISSION.functionName(args)
+        public new Node Timer(float interval, int flags = 1,string note = "", int r = 0, int g = 200, int b = 122)
+        {
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 3,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
                         new FloatProperty(interval) {
                             StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Interval")
                         },
@@ -1743,7 +1854,7 @@ namespace Zartex
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
-        public Node FadeControl(int direction,float duration,int flags = 0, byte R = 0, byte G = 0, byte B = 0, byte A = 0, string note = "", int r = 0, int g = 200, int b = 122)
+        public new Node Fade(int direction,float duration,int flags = 0, byte R = 0, byte G = 0, byte B = 0, byte A = 0, string note = "", int r = 0, int g = 200, int b = 122)
         {
             short stringId = 0;
             if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
@@ -1783,14 +1894,14 @@ namespace Zartex
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
-        public Node FadeOut(float duration = 0.5f, int flags = 0, byte R = 0, byte G = 0, byte B = 0, byte A = 0, string note = "FadeOut()", int r = 0, int g = 200, int b = 122)
+        public new Node FadeAway(float duration = 0.5f, int flags = 0, byte R = 0, byte G = 0, byte B = 0, byte A = 0, string note = "FadeOut()", int r = 0, int g = 200, int b = 122)
         {
-            return FadeControl(1, duration, flags, R, G, B, A, note, r, g, b);
+            return Fade(1, duration, flags, R, G, B, A, note, r, g, b);
         }
 
-        public Node FadeIn(float duration = 0.5f, int flags = 0, byte R = 0, byte G = 0, byte B = 0, byte A = 0, string note = "FadeOut()", int r = 0, int g = 200, int b = 122)
+        public new Node FadeOn(float duration = 0.5f, int flags = 0, byte R = 0, byte G = 0, byte B = 0, byte A = 0, string note = "FadeIn()", int r = 0, int g = 200, int b = 122)
         {
-            return FadeControl(2, duration, flags, R, G, B, A, note, r, g, b);
+            return Fade(2, duration, flags, R, G, B, A, note, r, g, b);
         }
 
         // NOTE: use flags 65537 to make this the player

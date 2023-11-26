@@ -21,7 +21,7 @@ namespace Zartex
 
         [Category("Instance"), Description("Position of this prop")]
         [PropertyOrder(10)]
-        public Vector4 Position { get; set; }
+        public Vector3 Position { get; set; }
         [Category("Instance"), Description("The ID to the world instance this instance is using.")]
         [PropertyOrder(20)]
         public short InstanceId { get; set; }
@@ -33,7 +33,7 @@ namespace Zartex
         public Vector4 BoundingBox { get; set; }
 
         public MissionInstance() { }
-        public MissionInstance(Vector4 pos,short instanceId,short attachedTo,Vector4 boundingBox)
+        public MissionInstance(Vector3 pos,short instanceId,short attachedTo,Vector4 boundingBox)
         {
             Position = pos; InstanceId = instanceId; AttachedTo = attachedTo; BoundingBox = boundingBox;
         } 
@@ -41,6 +41,12 @@ namespace Zartex
     public class MissionInstanceData : SpoolableResource<SpoolableBuffer>
     {
         public static int HeaderBufferSize = 64;
+
+        // custom spoolable buffer
+        public SpoolableBuffer Spooler {
+            get { return base.Spooler; }
+            set { base.Spooler = value; }
+        }
 
         public int Unk1 { get; set; }
         public int Unk2 { get; set; }
@@ -65,11 +71,8 @@ namespace Zartex
 
         protected override void Load()
         {
-            Debug.WriteLine("Load from prop handles called");
             using (var f = Spooler.GetMemoryStream())
             {
-                Debug.WriteLine("Loading");
-                Debug.WriteLine($"Stream position: {f.Position}, Size {f.Length}");
                 int count = f.ReadInt32();
                 Unk1 = f.ReadInt32();
                 Unk2 = f.ReadInt32();
@@ -83,12 +86,10 @@ namespace Zartex
                 LoadPosition = f.Read<Vector3>();
                 StartPosition = f.Read<Vector4>();
 
-                Instances = new List<MissionInstance>(count);
-                Debug.WriteLine($"Count of PHs -> {count}");
+                Instances = new List<MissionInstance>();
                 for (int id = 0; id < count; id++)
                 {
-                    Debug.WriteLine($"Processing PH ID: {id}");
-                    Instances[id] = new MissionInstance(f.Read<Vector4>(), f.ReadInt16(), f.ReadInt16(), f.Read<Vector4>());
+                    Instances.Add( new MissionInstance(f.Read<Vector3>(), f.ReadInt16(), f.ReadInt16(), f.Read<Vector4>()) );
                 }
             }
         }
@@ -100,22 +101,23 @@ namespace Zartex
 
             using (var f = new MemoryStream(propBuffer))
             {
-                int count = f.ReadInt32();
+                int count = Instances.Count;
+                f.Write(count);
                 f.Write(Unk1);
                 f.Write(Unk2);
                 f.Write(Unk3);
                 f.Write(Unk4);
                 f.Write(Unk5);
-                f.Write(InstanceCount);
-                f.Write(Unk6);
-                f.Write(Unk7);
+                f.Write(count); // InstanceCount
+                f.Write(count);
+                f.Write(count);
 
                 f.Write<Vector3>(LoadPosition);
                 f.Write<Vector4>(StartPosition);
 
                 foreach (MissionInstance inst in Instances)
                 {
-                    f.Write<Vector4>(inst.Position); f.Write(inst.InstanceId); f.Write(inst.AttachedTo); f.Write<Vector4>(inst.BoundingBox);
+                    f.Write<Vector3>(inst.Position); f.Write(inst.InstanceId); f.Write(inst.AttachedTo); f.Write<Vector4>(inst.BoundingBox);
                 }
             }
 

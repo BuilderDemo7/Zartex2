@@ -33,6 +33,8 @@ namespace Zartex
 {
     public partial class Main : Form
     {
+        public string info_Version = "1.0.47"; // version of the tool
+        //public int LuaContext = 1396790604; // "LUAS"
         public InspectorWidget Widget;
 
         public Process gameProcess;
@@ -192,8 +194,8 @@ namespace Zartex
                 // close the old file
 
                 // but before get some stuff
-                var isDPL = MissionPackage.isDriverPLMission;
-                var mIdx = MissionPackage.MissionIndex;
+                //var isDPL = MissionPackage.isDriverPLMission;
+                //var mIdx = MissionPackage.MissionIndex;
 
                 if (MissionPackage != null)
                 {
@@ -202,7 +204,7 @@ namespace Zartex
                 }
                 ScriptFile.InitialDirectory = Path.GetDirectoryName(ScriptFile.FileName);
 
-                LoadScriptFile(ScriptFile.FileName, isDPL, mIdx);
+                LoadScriptFile(ScriptFile.FileName/*, isDPL, mIdx*/);
             }
         }
 
@@ -1249,7 +1251,10 @@ namespace Zartex
 
         private void GenerateActors(int selected = -1)
         {
-            CreateNodes(MissionPackage.MissionData.LogicData.Actors.Definitions,selected,MissionPackage.MissionData.Objects.Objects,MissionPackage.MissionData.MissionInstances.Instances,true);
+            List<MissionInstance> GEBI = null;
+            if (MissionPackage.MissionData.MissionInstances != null)
+                GEBI = MissionPackage.MissionData.MissionInstances.Instances;
+            CreateNodes(MissionPackage.MissionData.LogicData.Actors.Definitions,selected,MissionPackage.MissionData.Objects.Objects, GEBI, true);
         }
 
         public NodeWidget GenerateDefinition(FlowgraphWidget flowgraph, NodeDefinition def)
@@ -3325,6 +3330,28 @@ namespace Zartex
                 MissionPackage.MissionData.LogicData.Nodes.Definitions = luaMission.missionData.LogicData.Nodes.Definitions;
                 MissionPackage.MissionData.LogicData.WireCollection.WireCollections = luaMission.wireCollection;
 
+                MissionPackage.MissionData.LogicData.ActorSetTable.Table = luaMission.actorSetup.Table;
+
+                // mission instance data
+                if (MissionPackage.MissionData.MissionInstances == null & luaMission.instanceData.Instances.Count != 0)
+                {
+                    MissionPackage.MissionData.MissionInstances = new MissionInstanceData();
+
+                    MissionPackage.MissionData.MissionInstances.Spooler = new DSCript.Spooling.SpoolableBuffer()
+                    {
+                        Context = (int)ChunkType.BuildingInstanceData,
+                        Description = "Custom Mission Instances data",
+                    };
+                    // add the spooler to mission data
+                    MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.MissionInstances.Spooler);
+                }
+                if (luaMission.instanceData.Instances.Count != 0)
+                {
+                    MissionPackage.MissionData.MissionInstances.Instances = luaMission.instanceData.Instances;
+                    // add it's objects for them ofc
+                    luaMission.missionData.Objects.Objects.AddRange(luaMission.instanceData._props);
+                }
+
                 MissionPackage.MissionData.Objects.Objects = luaMission.missionData.Objects.Objects;
 
                 MissionPackage.MissionData.LogicData.StringCollection.Strings = luaMission.missionData.LogicData.StringCollection.Strings;
@@ -3408,9 +3435,11 @@ namespace Zartex
             uint addr5 = 0x58;
             uint addr6 = 0x40;
 
-            if (mem.Attach(isDPL ? dplp[0] : d3p[0], 0x001F0FFF))
+            Process prc = isDPL ? dplp[0] : d3p[0];
+
+            if (mem.Attach(prc, 0x001F0FFF))
             {
-                gameProcess = isDPL ? dplp[0] : d3p[0];
+                gameProcess = prc;
                 gameProcess.Exited += delegate { gameProcess = null; };
 
                 uint playerAddr = isDPL ? addr4 : addr1;
@@ -4109,6 +4138,10 @@ namespace Zartex
                 MissionPackage.MissionData.LogicData.SoundBankTable.Table =
                     externalMissionPackage.MissionData.LogicData.SoundBankTable.Table;
 
+                // actor set table
+                //MissionPackage.MissionData.LogicData.ActorSetTable.Spooler.SetBuffer(externalMissionPackage.MissionData.LogicData.ActorSetTable.Spooler.GetBuffer());
+                MissionPackage.MissionData.LogicData.ActorSetTable.Table = externalMissionPackage.MissionData.LogicData.ActorSetTable.Table;
+
                 externalMissionPackage.Dispose();
                 useFlowgraph = false;
                 GenerateLogicNodes();
@@ -4165,6 +4198,19 @@ namespace Zartex
                 externalMissionPackage.MissionData.LogicData.SoundBankTable.Table = MissionPackage.MissionData.LogicData.SoundBankTable.Table;
 
                 externalMissionPackage.MissionSummary = MissionPackage.MissionSummary;
+
+                // actor set table
+                //externalMissionPackage.MissionData.LogicData.ActorSetTable.Spooler.SetBuffer(MissionPackage.MissionData.LogicData.ActorSetTable.Spooler.GetBuffer());
+                externalMissionPackage.MissionData.LogicData.ActorSetTable.Table = MissionPackage.MissionData.LogicData.ActorSetTable.Table;
+
+                DialogResult res = MessageBox.Show("Would you like to add a custom build info to your mission? :)", "Add Build Info", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                bool addBINF = (res == DialogResult.Yes);
+
+                if (addBINF)
+                {
+                    var game = isDriverPLMission ? "Driver: Parallel Lines" : "Driv3r";
+                    externalMissionPackage.BuildInfo = $"Generated by Zartex 2.0 v{info_Version}\nExport from: {MissionPackage.FileName}\nExport to: {saveFileDialog.FileName}\n\nGame: {game}\nAt date: {DateTime.Now.ToString()} ";
+                }
 
                 bool suc = false;
                 //if (externalMissionPackage.Spooler != null)

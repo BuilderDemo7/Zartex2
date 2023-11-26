@@ -30,6 +30,7 @@ namespace Zartex._3D
 
         public Model3DGroup sceneContent = new Model3DGroup();
         public ModelVisual3D sceneDevice = new ModelVisual3D();
+        public ModelVisual3D scene3DTextDevice = new ModelVisual3D();
         public MeshBuilder cubes = new MeshBuilder();
 
         public System.Windows.Media.SolidColorBrush selectedColor = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 0,0));
@@ -196,7 +197,8 @@ namespace Zartex._3D
                     }
                 }
             }
-            return new Vector3D(deadVector, deadVector, -1);
+            return new Vector3D(1, 0, 0);
+            //return new Vector3D(deadVector, deadVector, -1);
         }
         private bool Vector3DIsDead(Vector3D vector)
         {
@@ -231,10 +233,11 @@ namespace Zartex._3D
 
                             vp.Children.Add(new BillboardTextVisual3D()
                             {
-                                Text = $"({objectId}) {ExportedMissionObjects.GetObjectNameById(mb.TypeId)}",
+                                // {ExportedMissionObjects.GetObjectNameById(mb.TypeId)}
+                                Text = $"({objectId}) Instance (Object)",
                                 Position = new Point3D(pos.X, pos.Y, pos.Z + textInfoHeight),
                                 Material = new SpecularMaterial(White, 5.0),
-                                Foreground = White
+                                Foreground = White,
                             });
                             vp.Children.Add(new CubeVisual3D()
                             {
@@ -359,7 +362,7 @@ namespace Zartex._3D
                         {
                             Transform = tnf,
                             Fill = actorColor,
-                            Radius = 2
+                            Radius = 1
                         });
                         continue; // cancel the others representations
                     }
