@@ -12,6 +12,13 @@ namespace Zartex
     public class LogicDataCollection<T> : SpoolableResource<SpoolablePackage>
         where T : NodeDefinition, new()
     {
+        // custom public spoolable buffer
+        public SpoolablePackage Spooler
+        {
+            get { return base.Spooler; }
+            set { base.Spooler = value; }
+        }
+
         protected SpoolableBuffer DefinitionsTable { get; set; }
         protected SpoolableBuffer PropertiesTable { get; set; }
 

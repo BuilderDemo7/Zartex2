@@ -117,6 +117,7 @@
     <Compile Include="MissionScript\MissionScriptFile.cs" />
     <Compile Include="MissionScript\MissionSummaryData.cs" />
     <Compile Include="MissionScript\MissionInstanceData.cs" />
+    <Compile Include="MissionScript\SpoolSystemLookup.cs" />
     <Compile Include="MPC.cs" />
     <Compile Include="MissionScript\Logic\NodeProperty.cs" />
     <Compile Include="MissionScript\Objects\MissionObject.cs" />

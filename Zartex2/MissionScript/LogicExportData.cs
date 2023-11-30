@@ -12,6 +12,13 @@ namespace Zartex
 {
     public class LogicExportData : SpoolableResource<SpoolablePackage>
     {
+        // custom public spoolable buffer
+        public SpoolablePackage Spooler
+        {
+            get { return base.Spooler; }
+            set { base.Spooler = value; }
+        }
+
         public StringCollectionData StringCollection { get; set; }
         public SoundBankTableData SoundBankTable { get; set; }
 

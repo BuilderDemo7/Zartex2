@@ -1209,6 +1209,8 @@ namespace Zartex
 
                 if (wireId < 0)
                     break;
+                if (wireId > MissionPackage.MissionData.LogicData.WireCollection.WireCollections.Count-1)
+                    break;
 
                 foreach (var wire in MissionPackage.MissionData.LogicData.WireCollection.WireCollections[wireId].Wires)
                 {
@@ -3269,7 +3271,7 @@ namespace Zartex
             GenerateLogicNodes();
         }
 
-        // LUA
+        // LUA D3
         public static LuaMissionScript importLuaFromFile(string filepath)
         {
             Script script = new Script();
@@ -3303,14 +3305,15 @@ namespace Zartex
             return LMS;
         }
 
-        // LUA
-        public static LuaMissionScriptDPL importLuaFromFileDPL(string filepath)
+        // LUA DPL
+        public static LuaMissionPackage importLuaFromFileDPL(string filepath)
         {
             Script script = new Script();
             UserData.RegisterAssembly();
 
-            LuaMissionScriptDPL LMS = new LuaMissionScriptDPL();
-            script.Globals["MISSION"] = LMS;
+            LuaMissionPackage LMS = new LuaMissionPackage(); //new LuaMissionScriptDPL();
+            script.Globals["PACKAGE"] = LMS;
+            script.Globals["MISSION"] = LMS.InitMission; // classic mode?
 
             //script.DoString("local logicStart = MISSION.logicStart()"); // logic start global variable
 
@@ -3395,37 +3398,88 @@ namespace Zartex
 
             if (luaFileDialog.ShowDialog() == DialogResult.OK)
             {
-                LuaMissionScriptDPL luaMission;
-                //try
-                //{
+                LuaMissionPackage luaMission;
+                try
+                {
                     luaMission = importLuaFromFileDPL(luaFileDialog.FileName);
-                //}
-                //catch (ScriptRuntimeException ex)
-                //{
-                //    Console.WriteLine(ex.DecoratedMessage);
-                //    MessageBox.Show(ex.DecoratedMessage+"\n / \n"+ex.Message, "Import Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //    return;
-                //}
+                }
+                catch (ScriptRuntimeException ex)
+                {
+                    Console.WriteLine(ex.DecoratedMessage);
+                    MessageBox.Show(ex.DecoratedMessage, "Import Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
                 // copy data from lua mission to current mission
-                MissionPackage.MissionData.LogicData.Actors.Definitions = luaMission.missionData.LogicData.Actors.Definitions;
-                MissionPackage.MissionData.LogicData.Nodes.Definitions = luaMission.missionData.LogicData.Nodes.Definitions;
-                MissionPackage.MissionData.LogicData.WireCollection.WireCollections = luaMission.wireCollection;
 
-                MissionPackage.MissionData.Objects.Objects = luaMission.missionData.Objects.Objects;
+                // HARDCODED S***!!!
+                MissionPackage.Children = luaMission.Children;
+                MissionPackage.MissionData = luaMission.InitMission.missionData;
+                MissionPackage.MissionData.LogicData = luaMission.InitMission.missionData.LogicData;
+                MissionPackage.MissionData.LogicData.Spooler = new DSCript.Spooling.SpoolablePackage()
+                {
+                    Context = (int)ChunkType.LogicExportData,
+                    Description = "Logic export data"
+                };
+                MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.LogicData.Spooler);
 
-                MissionPackage.MissionData.LogicData.StringCollection.Strings = luaMission.missionData.LogicData.StringCollection.Strings;
+                MissionPackage.MissionData.LogicData.WireCollection = luaMission.InitMission.missionData.LogicData.WireCollection;
+                MissionPackage.MissionData.LogicData.WireCollection.Spooler = new DSCript.Spooling.SpoolableBuffer()
+                {
+                    Context = (int)ChunkType.LogicExportWireCollections,
+                    Description = "Wire collections"
+                };
+                MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.LogicData.WireCollection.Spooler);
 
-                MissionPackage.MissionData.LogicData.SoundBankTable.Table = luaMission.missionData.LogicData.SoundBankTable.Table;
+                MissionPackage.MissionData.LogicData.StringCollection.Spooler = new DSCript.Spooling.SpoolableBuffer()
+                {
+                    Context = (int)ChunkType.LogicExportStringCollection,
+                    Description = "String collection"
+                };
+                MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.LogicData.StringCollection.Spooler);
 
-                // hack hacked succesfully
-                var off = MissionPackage.MissionSummary.DPLBuffer.Length - 1;
-                MissionPackage.MissionSummary.DPLBuffer[off] = 0;
-                MissionPackage.MissionSummary.DPLBuffer[off-1] = 0;
+                MissionPackage.MissionData.LogicData.SoundBankTable.Spooler = new DSCript.Spooling.SpoolableBuffer()
+                {
+                    Context = (int)ChunkType.LogicExportSoundBank,
+                    Description = "Sound bank table"
+                };
+                MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.LogicData.SoundBankTable.Spooler);
 
-                //MissionPackage.MissionSummary.StartPosition = luaMission.missionSummary.StartPosition;
-                //MissionPackage.MissionSummary.CityType = luaMission.missionSummary.GetCityTypeByName(luaMission.missionSummary.Level);
-                //MissionPackage.MissionSummary.MissionId = luaMission.missionSummary.MoodId;
+                MissionPackage.MissionData.LogicData.Actors = luaMission.InitMission.missionData.LogicData.Actors;
+                MissionPackage.MissionData.LogicData.Actors.Spooler = new DSCript.Spooling.SpoolablePackage()
+                {
+                    Context = (int)ChunkType.LogicExportActorsChunk,
+                    Description = "Actors Definitions table"
+                };
+                MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.LogicData.Actors.Spooler);
+
+                MissionPackage.MissionData.LogicData.Nodes = luaMission.InitMission.missionData.LogicData.Nodes;
+                MissionPackage.MissionData.LogicData.Nodes.Spooler = new DSCript.Spooling.SpoolablePackage()
+                {
+                    Context = (int)ChunkType.LogicExportNodesChunk,
+                    Description = "Logic Definitions table"
+                };
+                MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.LogicData.Nodes.Spooler);
+
+                MissionPackage.MissionData.Objects = luaMission.InitMission.missionData.Objects;
+
+                MissionPackage.MissionData.Objects.Spooler = new DSCript.Spooling.SpoolableBuffer()
+                {
+                    Context = (int)ChunkType.ExportedMissionObjects,
+                    Description = "Exported mission objects"
+                };
+                MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.Objects.Spooler);
+
+                MissionPackage.MissionIndex = 0;
+                MissionPackage.Missions = new List<ExportedMission>();
+
+                // of course add the init mission
+                MissionPackage.Missions.Add(luaMission.InitMission.missionData);
+                // converting list of missions to list of exported missions
+                foreach (LuaMissionScriptDPL mission in luaMission.Missions)
+                {
+                    MissionPackage.Missions.Add(mission.missionData);
+                }
 
                 MessageBox.Show("Success loading Lua mission script file!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -4320,8 +4374,14 @@ namespace Zartex
                     MessageBox.Show("Mission ID cannot be negative", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
+                if (missionId> MissionPackage.Missions.Count-1)
+                {
+                    MessageBox.Show($"Mission ID cannot be bigger than the max of number of missions ({MissionPackage.Missions.Count})", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
                 isDriverPLMission = true;
                 MissionPackage.MissionData = MissionPackage.Missions[missionId];
+                MissionPackage.MissionIndex = missionId;
                 prompt.Close();
                 GenerateLogicNodes();
 

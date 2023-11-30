@@ -6,6 +6,7 @@ using System.Text;
 using System.Diagnostics;
 
 using DSCript;
+using DSCript.Spooling;
 
 using MoonSharp;
 using MoonSharp.Interpreter;
@@ -1793,6 +1794,88 @@ namespace Zartex
         {
             Actor testVolume = TestVolume(x2, y2, z2, null, 0, 1, "Camera Target", r, g, b);
             return CreateCamera(x1, y1, z1, 0, 0, 0, cameraZoom, speed, blur, testVolume, attachTo, note, flags, r, g, b);
+        }
+    }
+    // Mission package class for Lua for Driver: PL
+    [MoonSharpUserData]
+    public class LuaMissionPackage : FileChunker
+    {
+        public LuaMissionScriptDPL InitMission = new LuaMissionScriptDPL();
+        public List<LuaMissionScriptDPL> Missions = new List<LuaMissionScriptDPL>();
+        public List<SpoolablePackage> MissionSpoolerPackages = new List<SpoolablePackage>();
+
+        public bool IsLoaded { get; set; }
+
+        public string FileName { get; set; }
+
+        public SpoolablePackage InitSpooler = new SpoolablePackage()
+        {
+            Context = (int)ChunkType.SpoolSystemInitChunker,
+            Description = "Initialize mission container"
+        };
+
+        public SpoolSystemLookup MissionsLookup = new SpoolSystemLookup()
+        {
+            ShortFlags = 1,
+            Flags = -2147483643, // 05 00 00 80
+            SpoolFlags = 1,
+            Unk3 = 2,
+            Spooler =  new SpoolableBuffer()
+        {
+            Context = (int)ChunkType.SpoolSystemLookup,
+            Description = "Chunk containing missions sub IDs and chunk IDs"
+        } };
+
+        public LuaMissionScriptDPL AddMission(short subMissionId,string name = null)
+        {
+            LuaMissionScriptDPL mission = new LuaMissionScriptDPL();
+            // EPMR
+            SpoolablePackage package = new SpoolablePackage()
+            {
+                Context = (int)ChunkType.ExportedMissionRoot,
+            };
+            if (name != null)
+                package.Description = name;
+
+            // SSLP
+            MissionsLookup.Lookups.Add(new LookupEntry((short)subMissionId, MissionSpoolerPackages.Count));
+
+            // EM__
+            mission.missionData.Spooler = new SpoolablePackage()
+            {
+                Context = (int)ChunkType.ExportedMissionChunk,
+                Description = "Exported mission"
+            };
+            mission.missionData.Objects.Spooler = new SpoolableBuffer()
+            {
+                Context = (int)ChunkType.ExportedMissionObjects,
+                Description = "Exported mission objects"
+            };
+            package.Children.Add(mission.missionData.Spooler as SpoolablePackage);
+            MissionSpoolerPackages.Add(package);
+
+            Children.Add(package);
+            return mission;
+        }
+
+        public LuaMissionPackage() : base() {
+            Children.Add(InitSpooler);
+            InitMission.missionData.Spooler = new SpoolablePackage()
+            {
+                Context = (int)ChunkType.ExportedMissionChunk
+            };
+            InitSpooler.Children.Add(InitMission.missionData.Spooler);
+            IsLoaded = true;
+        }
+
+        protected override void OnFileSaveBegin()
+        {
+            SpoolableResourceFactory.Save(InitMission.missionData);
+            foreach (LuaMissionScriptDPL mission in Missions)
+            {
+                SpoolableResourceFactory.Save(mission.missionData);
+            }
+            SpoolableResourceFactory.Save(MissionsLookup);
         }
     }
     // Now this is the Lua mission script class for Driver: PL

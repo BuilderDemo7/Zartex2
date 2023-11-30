@@ -27,6 +27,9 @@ namespace Zartex
 
         private SpoolableBuffer _buildinfo = null;
         public List<ExportedMission> Missions = new List<ExportedMission>();
+        public List<string> SpooledLocaleTexts = new List<string>();
+
+        public string Era = "then";
 
         public bool IsLoaded { get; set; }
 
@@ -35,6 +38,8 @@ namespace Zartex
         public bool HasLocale { get; private set; }
 
         public Spooler Spooler { get; set; }
+
+        public SpoolerCollection Children { get; set; }
 
         public Dictionary<int, string> LocaleStrings { get; set; }
 
@@ -167,6 +172,7 @@ namespace Zartex
             MissionIndex = missionIndex;
             isDriverPLMission = driverPLMission;
             Load(filename); // loads file
+            Era = filename.ToLower().Contains("then") ? "then" : "now";
         }
     }
 }

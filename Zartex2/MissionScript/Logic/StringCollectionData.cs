@@ -12,6 +12,13 @@ namespace Zartex
 {
     public class StringCollectionData : SpoolableResource<SpoolableBuffer>
     {
+        // custom public spoolable buffer
+        public SpoolableBuffer Spooler
+        {
+            get { return base.Spooler; }
+            set { base.Spooler = value; }
+        }
+
         public List<String> Strings { get; set; }
 
         public int Count

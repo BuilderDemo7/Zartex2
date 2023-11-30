@@ -13,6 +13,13 @@ namespace Zartex
 {
     public class SoundBankTableData : SpoolableResource<SpoolableBuffer>
     {
+        // custom public spoolable buffer
+        public SpoolableBuffer Spooler
+        {
+            get { return base.Spooler; }
+            set { base.Spooler = value; }
+        }
+
         public List<int> Table { get; set; }
 
         public int Count

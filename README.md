@@ -13,6 +13,7 @@ It's still in beta stage so you might get something like "being used by another 
 Make sure it has same folder as Zartex 2.0 as both are shared projects.
 # Requirements
 You'll need an IDE that supports C# 6.0 and atleast .NET Framework 4.0, unless otherwise specified. Most of the code here was written in Visual Studio 2017 Community.
+So it is recommended to you to get Microsoft Visual Studio 2017 Community in order to open the source code.
 # Licensing / Warranty
 Everything is provided "as-is" and without any warranty of any kind. You may use and/or redistribute this code freely*. No credit is necessary, but would be very much appreciated.
 # Releases

@@ -10,6 +10,13 @@ namespace Zartex
 {
     public class WireCollectionData : SpoolableResource<SpoolableBuffer>
     {
+        // custom public spoolable buffer
+        public SpoolableBuffer Spooler
+        {
+            get { return base.Spooler; }
+            set { base.Spooler = value; }
+        }
+
         public List<WireCollection> WireCollections { get; set; }
 
         public WireCollection this[int index]

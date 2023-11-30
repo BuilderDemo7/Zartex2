@@ -12,6 +12,13 @@ namespace Zartex
 {
     public class ExportedMissionObjects : SpoolableResource<SpoolableBuffer>
     {
+        // custom public spoolable buffer
+        public SpoolableBuffer Spooler
+        {
+            get { return base.Spooler; }
+            set { base.Spooler = value; }
+        }
+
         public List<MissionObject> Objects { get; set; }
 
         public static Type GetObjectTypeById(int typeId)

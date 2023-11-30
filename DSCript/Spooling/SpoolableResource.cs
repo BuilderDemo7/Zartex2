@@ -45,7 +45,7 @@ namespace DSCript.Spooling
         internal void VerifyAccess()
         {
             if (Spooler == null)
-                throw new Exception("Cannot perform operation on a null spooler!");
+                throw new NullReferenceException("Cannot perform operation on a null spooler!");
         }
 
         /// <summary>
