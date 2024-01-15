@@ -21,7 +21,7 @@ for i=1,10 do
    if col>4 then col = 0 end
    MISSION.CreateVehicle(X+(i*6),Y-0.5,Z-5,i*20,0x5+i,col)
 end
-for i=0,20 do
+for i=0,23 do
    MISSION.CreateCollectable(X+i,Y,Z-10,i,9999,0)
 end
 

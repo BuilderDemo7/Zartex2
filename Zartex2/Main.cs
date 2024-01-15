@@ -3278,6 +3278,7 @@ namespace Zartex
             UserData.RegisterAssembly();
 
             LuaMissionScript LMS = new LuaMissionScript();
+            LMS.WorkingDirectory = Path.GetDirectoryName(filepath);
             script.Globals["MISSION"] = LMS;
 
             // enums and stuff
@@ -3297,9 +3298,25 @@ namespace Zartex
             script.Globals["PERSONALITY_PATHANDVEHICLE"] = 2;
             script.Globals["PERSONALITY_PATHFACE"] = 9;
 
+            script.Globals["VEHICLEFLAGS_SPAWNED_AND_UNLOCKED"] = 0x12030001;
+            script.Globals["VEHICLEFLAGS_UNSPAWNED_AND_UNLOCKED"] = 0x12030000;
+
+            script.Globals["CHARACTERFLAGS_UNSPAWNED"] = 131072;
+            script.Globals["CHARACTERFLAGS_SPAWNED"] = 131073;
+
+            script.Globals["SPECIALEFFECT_FAKE_EXPLOSION"] = 4;
+            script.Globals["SPECIALEFFECT_EXPLOSION"] = 1;
+
+            script.Globals["VehicleType"] = typeof(VehicleType);
+
+            script.Globals["CHEAT_INFINITEMASS"] = 1;
+
             //script.DoString("local logicStart = MISSION.logicStart()"); // logic start global variable
 
+
+            
             DynValue res = script.DoFile(filepath);
+            
 
             //script.DoString("LogicStart()"); // calls the logic start
             return LMS;
@@ -3334,19 +3351,35 @@ namespace Zartex
             if (luaFileDialog.ShowDialog() == DialogResult.OK)
             {
                 LuaMissionScript luaMission;
+#if NDEBUG
                 try
                 {
+#endif
                     luaMission = importLuaFromFile(luaFileDialog.FileName);
+#if NDEBUG
                 }
-                catch (ScriptRuntimeException ex)
+                catch (Exception ex)
                 {
-                    Console.WriteLine(ex.DecoratedMessage);
-                    MessageBox.Show(ex.DecoratedMessage, "Import Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (ex is ScriptRuntimeException)
+                    {
+                        ScriptRuntimeException r = ex as ScriptRuntimeException;
+                        MessageBox.Show(r.DecoratedMessage, "Lua Runtime Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else if (ex is MoonSharp.Interpreter.SyntaxErrorException)
+                    {
+                        MoonSharp.Interpreter.SyntaxErrorException s = ex as MoonSharp.Interpreter.SyntaxErrorException;
+                        MessageBox.Show(s.DecoratedMessage, "Lua Syntax Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show(ex.Message, "Unhandled Exception Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                     return;
                 }
+#endif
 
-                // copy data from lua mission to current mission
-                MissionPackage.MissionData.LogicData.Actors.Definitions = luaMission.missionData.LogicData.Actors.Definitions;
+                    // copy data from lua mission to current mission
+                    MissionPackage.MissionData.LogicData.Actors.Definitions = luaMission.missionData.LogicData.Actors.Definitions;
                 MissionPackage.MissionData.LogicData.Nodes.Definitions = luaMission.missionData.LogicData.Nodes.Definitions;
                 MissionPackage.MissionData.LogicData.WireCollection.WireCollections = luaMission.wireCollection;
 
@@ -3514,11 +3547,17 @@ namespace Zartex
                 gameProcess.Exited += delegate { gameProcess = null; };
 
                 uint playerAddr = isDPL ? addr4 : addr1;
+                Debug.WriteLine($"-> {playerAddr:X4}");
                 uint address1 = isDPL ? addr5 : addr2;
+                Debug.WriteLine($"--> {address1:X4}");
                 uint address2 = isDPL ? addr6 : addr3;
+                Debug.WriteLine($"---> {address2:X4}");
 
                 uint addr = (uint)(mem.Read(playerAddr) + address1);
+                Debug.WriteLine($"---->: {addr:X4}");
+
                 addr = (uint)(mem.Read(addr) + address2);
+                Debug.WriteLine($"Result: {addr:X4}");
                 float x = mem.ReadFloat(addr);
                 float y = mem.ReadFloat(addr+4);
                 float z = mem.ReadFloat(addr+8);

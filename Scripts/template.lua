@@ -16,7 +16,7 @@ local X,Y,Z,angle = -1894.6520, 1.0625, -453.1732, 0 -- Player position as a glo
 
 MISSION.missionSummary.Level = "Miami_Day" -- set up the city, you have other options like "Istanbul" and "Nice" and the day time options "Day" and "Night"
 -- Set start position so the game loads nicely with no delay
-MISSION.missionSummary.X = X; MISSION.missionSummary.Y = Y
+MISSION.missionSummary.X = X; MISSION.missionSummary.Y = Z
 -- Set our sky to normal one...
 MISSION.missionSummary.MoodId = 33 -- sky_trapped.d3s (Miami at Day - Dry)
 
