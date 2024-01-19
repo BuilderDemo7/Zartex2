@@ -33,7 +33,7 @@ namespace Zartex
 {
     public partial class Main : Form
     {
-        public string info_Version = "1.0.47"; // version of the tool
+        public string info_Version = "1.0.49"; // version of the tool
         //public int LuaContext = 1396790604; // "LUAS"
         public InspectorWidget Widget;
 
