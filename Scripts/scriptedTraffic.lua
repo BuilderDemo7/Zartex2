@@ -24,8 +24,9 @@ local drivingSpeed = 15
 local burnoutTime = 1
 local desiredTransport = 0
 local civilianVulnerability = 2
-local CIVCAR1 = MISSION.CreateVehicle(-1913.595, 0.5190591, -455.0526, -3.45654-45+90, VehicleType.Mustang_Grey, 1, "CIVCAR1")
-local CIV1 = MISSION.CreateCharacterInVehicle(CIVCAR1, 5, "Civilian", 1, 1, 1.0, 0, 0, 0, civilianVulnerability, 0,0,0, 2, "CIV1", 131073,   28, 241, 28, 17)
+local CIVCAR1 = MISSION.CreateVehicle(-1913.595, 0.5190591, -455.0526, -3.45654, VehicleType.Mustang_Grey, 1, "CIVCAR1")
+local CIV1 = MISSION.CreateCharacterInVehicle(CIVCAR1, SKIN_MIAMI_WMWSBP, 5, "Civilian", 1, 1, 1.0, 0, 0, civilianVulnerability,  0.35, 0.01, -0.01)
+--MISSION.CreateCharacterInVehicle(CIVCAR1, SKIN_MIAMI_WMWSBP, 5, "Civilian", 1, 1, 1.0, 0, 0, 0, civilianVulnerability, 0,0,0, 2)
 local CIV1Path = {
     {-1912.26, 0.5194987, -455.585},
     {-1878.728, 0.5184318, -457.1945},
@@ -47,8 +48,8 @@ local CIV1Path = {
 	{-2071.333, 0.5186058, -43.58247}
 };
 local CIV1PathActor = MISSION.CreateAIPath(CIV1,CIV1Path,drivingSpeed, burnoutTime, desiredTransport)
-local CIV2CAR = MISSION.CreateVehicle(-1832.179, 0.5194556, -464.6792, -171.6823-45, VehicleType.Mustang_Grey, 2, "CIVCAR2")
-local CIV2 = MISSION.CreateCharacterInVehicle(CIV2CAR, 5, "Civilian", 1, 1, 1.0, 0, 0, 0, civilianVulnerability, 0,0,0, 2, "CIV2", 131073,   28, 241, 28, 17)
+local CIV2CAR = MISSION.CreateVehicle(-1832.179, 0.5194556, -464.6792, -171.6823, VehicleType.Mustang_Grey, 2, "CIVCAR2")
+local CIV2 = MISSION.CreateCharacterInVehicle(CIV2CAR, SKIN_MIAMI_WOMYBHJP, 5, "Civilian", 1, 1, 1.0, 0, 0, civilianVulnerability, 0,0,0, 2, "CIV2", 131073,   28, 241, 28, 17)
 local CIV2Path = {
     {-1832.682, 0.517638, -464.7524},
     {-1843.607, 0.5212051, -466.203},
@@ -64,7 +65,7 @@ local CIV2Path = {
 };
 local CIV2PathActor = MISSION.CreateAIPath(CIV2,CIV2Path,drivingSpeed, burnoutTime, desiredTransport)
 local CIVCAR3 = MISSION.CreateVehicle(-1827.396, 0.5189827, -375.1512, -43.93795, VehicleType.Challenger, 1, "CIVCAR3")
-local CIV3 = MISSION.CreateCharacterInVehicle(CIVCAR3, 5, "Civilian", 1, 1, 1.0, 0, 0, 0, civilianVulnerability, 0,0,0, 2, "CIV3", 131073,   28, 241, 28, 17)
+local CIV3 = MISSION.CreateCharacterInVehicle(CIVCAR3, SKIN_MIAMI_BMWSBP, 5, "Civilian", 1, 1, 1.0, 0, 0, civilianVulnerability, 0,0,0, 2, "CIV3", 131073,   28, 241, 28, 17)
 local CIV3Path = {
     {-1825.543, 0.5193697, -376.935},
     {-1812.459, 0.5189157, -389.557},
@@ -76,9 +77,9 @@ local CIV3Path = {
 	{-1753.642, 10.50421, -541.4252}
 };
 local CIV3PathActor = MISSION.CreateAIPath(CIV3,CIV3Path,drivingSpeed, burnoutTime, desiredTransport)
-local CIVCAR4 = MISSION.CreateVehicle(-1939.896, 1.68, -456.3064, -3.45654-45+90, VehicleType.RigTruck, 0, "CIVCAR4")
+local CIVCAR4 = MISSION.CreateVehicle(-1939.896, 1.68, -456.3064, -3.45654, VehicleType.RigTruck, 0, "CIVCAR4")
 --local CIV4CARRIAGE = MISSION.CreateVehicle(-1939.896, 0.520709, -456.3064, -3.45654-45+90, VehicleType.RigTrailer, 1, "CIV4CARRIAGE")
-local CIV4 = MISSION.CreateCharacterInVehicle(CIVCAR4, 5, "Civilian", 1, 1, 1.0, 0, 0, civilianVulnerability, 0,0,0, 2, "CIV4", 131073, 28, 241, 28)
+local CIV4 = MISSION.CreateCharacterInVehicle(CIVCAR4, SKIN_MIAMI_BWMTTBS, 5, "Civilian", 1, 1, 1.0, 0, 0, civilianVulnerability, 0,0,0, 2, "CIV4", 131073, 28, 241, 28)
 local CIV4Path = {
     {-1936.09, 0.5191002, -456.7126},
     {-1919.698, 0.5180494, -458.517},
@@ -102,7 +103,7 @@ local CIV4Path = {
 local CIV4PathActor = MISSION.CreateAIPath(CIV4,CIV4Path,drivingSpeed, burnoutTime, desiredTransport)
 
 -- Creates the player
-local Player = MISSION.CreateCharacter(X,Y,Z,angle, 1, "Player", -1, -1, 1.0, 0.0, 0, 1.0)
+local Player = MISSION.CreateCharacter(X,Y,Z,angle, SKIN_TANNER, 1, "Player", -1, -1, 1.0, 0.0, 0, 1.0)
 --local Player = MISSION.CreateCharacterInVehicle(CIVCAR1, 1, "Player", -1, -1, 1.0, 0.0, 0, 1.0, 0.1, -4, 0, 10)
 
 -- Time for some logic scripting here

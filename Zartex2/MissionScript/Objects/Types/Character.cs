@@ -31,20 +31,25 @@ namespace Zartex
 
         public byte[] CreationData { get; set; }
 
-        public Vector4 Position { get; set; }
+        public Vector3 Position { get; set; }
+
+        [TypeConverter(typeof(HexStringConverter))]
+        public uint SkinId { get; set; }
 
         [TypeConverter(typeof(HexStringConverter))]
         public int UID { get; set; }
 
         protected override void LoadData(Stream stream)
         {
-            Position = stream.Read<Vector4>();
+            Position = stream.Read<Vector3>();
+            SkinId = stream.Read<uint>();
             UID = stream.ReadInt32();
         }
 
         protected override void SaveData(Stream stream)
         {
             stream.Write(Position);
+            stream.Write(SkinId);
             stream.Write(UID);
         }
 

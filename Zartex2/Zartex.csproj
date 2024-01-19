@@ -25,6 +25,9 @@
     <IncludeDSCLibrary>true</IncludeDSCLibrary>
     <UsesFreeImage>false</UsesFreeImage>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <DefineConstants>TRACE;NDEBUG</DefineConstants>
+  </PropertyGroup>
   <Import Project="$(DToolsRoot)DriverTools.Common.props" Condition="Exists('$(DToolsRoot)DriverTools.Common.props')" />
   <ItemGroup>
     <Reference Include="HelixToolkit.Wpf">

@@ -11,7 +11,7 @@ local LogicStart = MISSION.LogicStart("President's Run - Start")
 local IGCS = MISSION.ToggleIngameCutscene(true,true)
 
 local mainInfo = {
-	startPosition = {2570.653, 48.74743, -377.0986,  90},
+	startPosition = {864.1714, 10.0, -627.9531, -95},
 	vehicleId = VehicleType.BMW_Alpina, 
 	vehicleColorId = 1,
 	vehicleSoftness = 1.1, -- this will make the car a bit weaker
@@ -19,17 +19,20 @@ local mainInfo = {
 	vehicleFragility = 0.8, -- make parts less breakable
 	-- set up the city, you have other options like "Istanbul" and "Nice" and the day time options "Day" and "Night"
 	city = "Nice_Day",
-	MoodId = 11, -- For example, 33 is Miami at Day Dry.
+	MoodId = 17, -- For example, 33 is Miami at Day Dry.
 	
 	FirstPersonCamera = false, -- enable this for an test first person camera
 	FirstPersonCameraOffset = {0.4, 0.5, 0},
-	CountdownCameraPosition = {2582.367, 60.5261, -340.5441},
-	Countdown2CameraPosition = {2571.294, 48.59531, -368.57},
+	CountdownCameraPosition = {883.0967, 13.72495, -677.8094},
+	Countdown2CameraPosition = {871.0052, 9.91834, -644.2992},
 	
 	CountdownCameraBlendTime = 0,
 	Countdown2CameraBlendTime = 4,
 	
-	CountdownCameraZoom = 0.5,
+	CountdownCameraZoom = 3,
+	Countdown2CameraZoom = 1.5,
+	
+	PlayerSkin = 0,
 	
 	wreckedMessageId = 5,
 	objectiveMessageId = 6,
@@ -46,12 +49,23 @@ local roadBlocks = {
 	--{2535.714, 47.51862, -364.6821, 90.0},
 	--{2535.709, 47.58025, -368.8509, 84.0},
 
+    {-1594.595, 6.70713, 704.7729, -115.0641},
+	{-1592.507, 6.557433, 709.2252, -115.2365},
+	{-1590.737, 6.557465, 712.9821, -115.2364},
+	{-1589.003, 6.557533, 716.673, -115.2362},
+	{-1586.881, 6.632001, 721.0812, -115.9522},
+	{-1586.156, 6.877462, 726.3002, -61.45793},
+	{-2129.229, 8.701674, 864.8749, -87.26768},
+	{-2129.336, 8.846882, 869.2698, -86.95452},
+	{-2128.785, 8.845162, 860.5769, -87.42158},
+	{-2200.302, 10.70258, 865.3787, 3.944548}
+
     -- near a jump
-    {1992.631, 31.58685, 231.0061, -164.8},
-    {1987.562, 31.4365, 229.6413, -164.8},
-    {1982.611, 31.43652, 228.3073, -164.8},
-    {1977.902, 31.43661, 227.0376, -164.8},
-    {1974.511, 31.58654, 226.161, -164.8}
+    --{1992.631, 31.58685, 231.0061, -164.8},
+    --{1987.562, 31.4365, 229.6413, -164.8},
+    --{1982.611, 31.43652, 228.3073, -164.8},
+    --{1977.902, 31.43661, 227.0376, -164.8},
+    --{1974.511, 31.58654, 226.161, -164.8}
 };
 for rID = 1, #roadBlocks do
    local x,y,z,a = roadBlocks[rID][1],roadBlocks[rID][2],roadBlocks[rID][3], roadBlocks[rID][4] -- /2+45
@@ -60,8 +74,8 @@ end
 
 local gCar = MISSION.CreateVehicle(mainInfo.startPosition[1],mainInfo.startPosition[2],mainInfo.startPosition[3], mainInfo.startPosition[4], mainInfo.vehicleId, mainInfo.vehicleColorId, "gCar", 302186497, 0, mainInfo.vehicleSoftness, mainInfo.vehicleWeight, mainInfo.vehicleFragility)
 -- NOTE: the passenger should be created before the driver or else if the player is the driver he can't move.
-local gPresident = MISSION.CreateCharacterInVehicle(gCar,1, "Civilian", -1, -1, 1.0, 0.0,  0,  0.0,   -0.35, -0.1, -0.9,  10)
-local gPlayer = MISSION.CreateCharacterInVehicle(gCar,1, "Player", -1, -1, 1.0, 0.0,  0,  0.0,   0.4, -0.1, 0,  1)
+local gPresident = MISSION.CreateCharacterInVehicle(gCar, math.floor(0x3F92B120), 1, "Civilian", -1, -1, 1.0, 0.0,  0,  0.0,   -0.35, -0.1, -0.9,  10)
+local gPlayer = MISSION.CreateCharacterInVehicle(gCar, mainInfo.PlayerSkin, 1, "Player", -1, -1, 1.0, 0.0,  0,  0.0,   0.4, -0.1, 0,  1)
 
 MISSION.missionSummary.Level = mainInfo.city
 MISSION.missionSummary.MoodId = mainInfo.MoodId
@@ -72,7 +86,7 @@ local survivalCopsControl = MISSION.CopControl(3, 1, copsAggresion, copsArmor, 0
 LogicStart.wireCollection.Add(survivalCopsControl)
 local firstPersonCamera = MISSION.CreateCamera(mainInfo.FirstPersonCameraOffset[1], mainInfo.FirstPersonCameraOffset[2], mainInfo.FirstPersonCameraOffset[3],   0, 0, 0,   1, 1, 0, nil, gPlayer)
 local countdownCamera = MISSION.CreateCamera(mainInfo.CountdownCameraPosition[1], mainInfo.CountdownCameraPosition[2], mainInfo.CountdownCameraPosition[3],   0, 0, 0,   mainInfo.CountdownCameraZoom, 1, 0, gPlayer, nil)
-local countdown2Camera = MISSION.CreateCamera(mainInfo.Countdown2CameraPosition[1], mainInfo.Countdown2CameraPosition[2], mainInfo.Countdown2CameraPosition[3],   0, 0, 0,   mainInfo.CountdownCameraZoom, 1, 0, gPlayer, nil)
+local countdown2Camera = MISSION.CreateCamera(mainInfo.Countdown2CameraPosition[1], mainInfo.Countdown2CameraPosition[2], mainInfo.Countdown2CameraPosition[3],   0, 0, 0,   mainInfo.Countdown2CameraZoom, 1, 0, gPlayer, nil)
 local countdownCameraSelect = MISSION.CameraSelect(countdownCamera,1,0.01,mainInfo.CountdownCameraBlendTime)
 local countdown2CameraSelect = MISSION.CameraSelect(countdown2Camera,1,0,mainInfo.Countdown2CameraBlendTime)
 local countdown3CameraSelect = MISSION.CameraSelect(gCar,2,   1,1)
