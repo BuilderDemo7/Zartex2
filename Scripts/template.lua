@@ -21,7 +21,7 @@ MISSION.missionSummary.X = X; MISSION.missionSummary.Y = Z
 MISSION.missionSummary.MoodId = 33 -- sky_trapped.d3s (Miami at Day - Dry)
 
 -- Creates the player
-local Player = MISSION.CreateCharacter(X,Y,Z,angle, 1, "Player", -1, -1, 1.0, 0.0, 0, 1.0)
+local Player = MISSION.CreateCharacter(X,Y,Z,angle, SKIN_TANNER, 1, "Player", -1, -1, 1.0, 0.0, 0, 1.0)
 
 -- Time for some logic scripting here
 -- Let's make the basic stuff like when the player is dead, arrested or being chased!

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -44,7 +45,7 @@ namespace Zartex._3D
 
         double pathLineThickness = 1.3;
 
-        float textInfoHeight = 1.1f;
+        float textInfoHeight = 1.3f;
 
         float deg = (180 / (float)Math.PI);
 
@@ -56,6 +57,15 @@ namespace Zartex._3D
         public static SolidColorBrush Green = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 0, 255, 0));
         public static SolidColorBrush Red = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 0, 255, 0));
         public static SolidColorBrush White = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255));
+
+        public MissionObject GetActorMissionObject(ActorDefinition actor)
+        {
+            MissionObject missionObject = null;
+            if (actor.ObjectId != -1 & actor.ObjectId < sceneObjects.Count)
+                missionObject = sceneObjects[actor.ObjectId];
+
+            return missionObject;
+        }
 
         public Vector3D FindActorPosition(ActorDefinition actor)
         {
@@ -107,8 +117,17 @@ namespace Zartex._3D
                             }
                             else if (missionObject is AreaObject)
                             {
-                                // TODO:
-                                // Add AreaObject representation
+                                var areaObject = (AreaObject)missionObject;
+                                float x, y, z;
+                                MemoryStream str = new MemoryStream(areaObject.CreationData);
+                                using (var f = new BinaryReader(str, Encoding.UTF8))
+                                {
+                                    str.Position = 0x20;
+                                    x = f.ReadSingle();
+                                    y = f.ReadSingle();
+                                    z = f.ReadSingle();
+                                }
+                                return new Vector3D(x, z, y);
                             }
                             break;
                         // path
@@ -258,7 +277,9 @@ namespace Zartex._3D
                 //if (missionObject != null)
                 //{
                 Vector3D pos = FindActorPosition(actor);
+                MissionObject actorObject = GetActorMissionObject(actor);
                 // make sure the position isn't null or smth (I made this to identify it because it can't just be null)
+                actorId++;
                 if (!Vector3DIsDead(pos))
                 {
                     Vector3D fwd = FindActorForwardVector(actor);
@@ -296,13 +317,38 @@ namespace Zartex._3D
                     // base representation
                     vp.Children.Add(new BillboardTextVisual3D()
                     {
-                        Text = $"({actorId}) {NodeTypes.GetActorType(actor.TypeId)}",
+                        Text = $"({actorId-1}) {NodeTypes.GetActorType(actor.TypeId)}",
                         Position = new Point3D(pos.X, pos.Y, pos.Z + textInfoHeight),
                         Material = new SpecularMaterial(White,5.0),
                         Foreground = White
                     });
-                    // we're no longer using actorId now and the "continue"s can not progress it so...
-                    actorId++;
+                    // test volume representation (if the object is a area)
+                    /*
+                    if (actor.TypeId == 4)
+                    {
+                        if (actorObject is AreaObject)
+                        {
+                            var areaObject = (AreaObject)actorObject;
+                            float x, y, z;
+                            float ax, ay, az;
+                            MemoryStream str = new MemoryStream(areaObject.CreationData);
+                            using (var f = new BinaryReader(str, Encoding.UTF8))
+                            {
+                                str.Position = 0x20;
+                                x = f.ReadSingle();
+                                y = f.ReadSingle();
+                                z = f.ReadSingle();
+                                str.Position = 0x30;
+                                ax = f.ReadSingle();
+                                ay = f.ReadSingle();
+                                az = f.ReadSingle();
+                            }
+                            ScaleTransform3D scale = new ScaleTransform3D(new Vector3D(ax, az, ay), new Point3D(x, z, y));
+                            sceneDevice.Children.Add(new CubeVisual3D() { Fill = actorColor, Transform = scale });
+                            continue;
+                        }
+                    }
+                    */
                     // objective icon representation
                     if (actor.TypeId == 5)
                     {

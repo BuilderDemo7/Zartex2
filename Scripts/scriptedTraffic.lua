@@ -12,7 +12,7 @@
 -- Let's start up by the initial data
 
 -- Location : Downtown Bar (Miami)
-local X,Y,Z,angle = -1894.6520, 1.0625, -453.1732, 0 -- Player position as a global variable just in case.
+local X,Y,Z,angle = -1914.513, 1.0625, -451.9783, -32.80185 -- Player position as a global variable just in case.
 
 MISSION.missionSummary.Level = "Miami_Day" -- set up the city, you have other options like "Istanbul" and "Nice" and the day time options "Day" and "Night"
 -- Set start position so the game loads nicely with no delay
@@ -21,9 +21,10 @@ MISSION.missionSummary.X = X; MISSION.missionSummary.Y = Z
 MISSION.missionSummary.MoodId = 33 -- sky_trapped.d3s (Miami at Day - Dry)
 
 local drivingSpeed = 15
-local burnoutTime = 1
-local desiredTransport = 0
+local burnoutTime = 1 -- oops, never used
+local desiredTransport = 1
 local civilianVulnerability = 2
+local transportFlags = 65536
 local CIVCAR1 = MISSION.CreateVehicle(-1913.595, 0.5190591, -455.0526, -3.45654, VehicleType.Mustang_Grey, 1, "CIVCAR1")
 local CIV1 = MISSION.CreateCharacterInVehicle(CIVCAR1, SKIN_MIAMI_WMWSBP, 5, "Civilian", 1, 1, 1.0, 0, 0, civilianVulnerability,  0.35, 0.01, -0.01)
 --MISSION.CreateCharacterInVehicle(CIVCAR1, SKIN_MIAMI_WMWSBP, 5, "Civilian", 1, 1, 1.0, 0, 0, 0, civilianVulnerability, 0,0,0, 2)
@@ -47,7 +48,7 @@ local CIV1Path = {
 	{-1888.276, 0.5187631, -43.72892},
 	{-2071.333, 0.5186058, -43.58247}
 };
-local CIV1PathActor = MISSION.CreateAIPath(CIV1,CIV1Path,drivingSpeed, burnoutTime, desiredTransport)
+local CIV1PathActor = MISSION.CreateAIPath(CIV1,CIV1Path,drivingSpeed, burnoutTime, desiredTransport, transportFlags)
 local CIV2CAR = MISSION.CreateVehicle(-1832.179, 0.5194556, -464.6792, -171.6823, VehicleType.Mustang_Grey, 2, "CIVCAR2")
 local CIV2 = MISSION.CreateCharacterInVehicle(CIV2CAR, SKIN_MIAMI_WOMYBHJP, 5, "Civilian", 1, 1, 1.0, 0, 0, civilianVulnerability, 0,0,0, 2, "CIV2", 131073,   28, 241, 28, 17)
 local CIV2Path = {
@@ -63,7 +64,7 @@ local CIV2Path = {
     {-2108.286, 0.6641797, -461.774},
     {-2108.486, 0.657473, -475.1469}
 };
-local CIV2PathActor = MISSION.CreateAIPath(CIV2,CIV2Path,drivingSpeed, burnoutTime, desiredTransport)
+local CIV2PathActor = MISSION.CreateAIPath(CIV2,CIV2Path,drivingSpeed, burnoutTime, desiredTransport, transportFlags)
 local CIVCAR3 = MISSION.CreateVehicle(-1827.396, 0.5189827, -375.1512, -43.93795, VehicleType.Challenger, 1, "CIVCAR3")
 local CIV3 = MISSION.CreateCharacterInVehicle(CIVCAR3, SKIN_MIAMI_BMWSBP, 5, "Civilian", 1, 1, 1.0, 0, 0, civilianVulnerability, 0,0,0, 2, "CIV3", 131073,   28, 241, 28, 17)
 local CIV3Path = {
@@ -76,7 +77,7 @@ local CIV3Path = {
 	{-1757.413, 4.871417, -498.9307},
 	{-1753.642, 10.50421, -541.4252}
 };
-local CIV3PathActor = MISSION.CreateAIPath(CIV3,CIV3Path,drivingSpeed, burnoutTime, desiredTransport)
+local CIV3PathActor = MISSION.CreateAIPath(CIV3,CIV3Path,drivingSpeed, burnoutTime, desiredTransport, transportFlags)
 local CIVCAR4 = MISSION.CreateVehicle(-1939.896, 1.68, -456.3064, -3.45654, VehicleType.RigTruck, 0, "CIVCAR4")
 --local CIV4CARRIAGE = MISSION.CreateVehicle(-1939.896, 0.520709, -456.3064, -3.45654-45+90, VehicleType.RigTrailer, 1, "CIV4CARRIAGE")
 local CIV4 = MISSION.CreateCharacterInVehicle(CIVCAR4, SKIN_MIAMI_BWMTTBS, 5, "Civilian", 1, 1, 1.0, 0, 0, civilianVulnerability, 0,0,0, 2, "CIV4", 131073, 28, 241, 28)
@@ -100,7 +101,7 @@ local CIV4Path = {
 	-- this clone might stop the truck, I think
     {-1896.429, 0.6526512, -197.744},
 };
-local CIV4PathActor = MISSION.CreateAIPath(CIV4,CIV4Path,drivingSpeed, burnoutTime, desiredTransport)
+local CIV4PathActor = MISSION.CreateAIPath(CIV4,CIV4Path,drivingSpeed, burnoutTime, desiredTransport, transportFlags)
 
 -- Creates the player
 local Player = MISSION.CreateCharacter(X,Y,Z,angle, SKIN_TANNER, 1, "Player", -1, -1, 1.0, 0.0, 0, 1.0)
@@ -115,7 +116,10 @@ local LogicStart = MISSION.LogicStart("Scripted Traffic - Start")
 LogicStart.wireCollection.Add(MISSION.CivilianTrafficControl(0, 0, 0, 0, -3, 65536, "No traffic"))
 LogicStart.wireCollection.Add(MISSION.CopControl(0))
 -- Make scripted traffic
-LogicStart.wireCollection.Add(MISSION.FollowPath(CIV1PathActor,"CIV1 follow path"))
+local CIV1FOLLOW = MISSION.FollowPath(CIV1PathActor,"CIV1 follow path")
+CIV1FOLLOW.wireCollection.Add(MISSION.DestroyActor(CIV1))
+CIV1FOLLOW.wireCollection.Add(MISSION.DestroyActor(CIVCAR1))
+LogicStart.wireCollection.Add(CIV1FOLLOW)
 local CIV2FOLLOW = MISSION.FollowPath(CIV2PathActor,"CIV2 follow path")
 CIV2FOLLOW.wireCollection.Add(CIV2FOLLOW,2)
 LogicStart.wireCollection.Add(CIV2FOLLOW)

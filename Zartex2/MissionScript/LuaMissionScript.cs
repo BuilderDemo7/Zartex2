@@ -207,8 +207,8 @@ namespace Zartex
     {
         public NodeDefinition TheNode = new ActorDefinition();
         public int index; // extremely important
-        private CollectionOfWires _wirecollection = new CollectionOfWires();
         public CollectionOfWires WireCollection { get; set; }
+        public CollectionOfWires Wires { get { return WireCollection; } set { WireCollection = value; } }
 
         public Node(NodeDefinition node, int idx)
         {
@@ -400,6 +400,8 @@ namespace Zartex
         public float X { get { return this.StartPosition.X; } set { this.StartPosition = new Vector2(value, this.StartPosition.Y); } }
         public float Y { get { return this.StartPosition.Y; } set { this.StartPosition = new Vector2(this.StartPosition.X, value); } }
 
+        public SpoolableBuffer Spooler { get { return base.Spooler; } set { base.Spooler = value; } }
+
         public static string GetCityNameByType(MissionCityType cityType)
         {
             switch (cityType)
@@ -472,6 +474,164 @@ namespace Zartex
             return BitConverter.ToInt32(f, 0);
         }
 
+        public static LuaMissionScript LoadScriptFromFile(string filepath)
+        {
+            Script script = new Script();
+            UserData.RegisterAssembly();
+
+            LuaMissionScript LMS = new LuaMissionScript();
+            LMS.WorkingDirectory = Path.GetDirectoryName(filepath);
+            script.Globals["MISSION"] = LMS;
+
+            // enums and stuff
+            script.Globals["COLLECTABLE_PISTOL"] = CollectableType.Pistol;
+            script.Globals["COLLECTABLE_BERETTA"] = CollectableType.Beretta;
+            script.Globals["COLLECTABLE_SILENCED"] = CollectableType.Silenced;
+            script.Globals["COLLECTABLE_M4A1"] = CollectableType.M4A1;
+            script.Globals["COLLECTABLE_SHOTGUN"] = CollectableType.Shotgun;
+            script.Globals["COLLECTABLE_UZI"] = CollectableType.Uzi;
+            script.Globals["COLLECTABLE_SMG"] = CollectableType.SubMachineGun;
+            script.Globals["COLLECTABLE_MG"] = CollectableType.MachineGun;
+            script.Globals["COLLECTABLE_MEDKIT"] = CollectableType.Medkit;
+
+            // hmm.. I'm not sure if these really help
+            script.Globals["PERSONALITY_UNDEFINED"] = -1;
+            script.Globals["PERSONALITY_CIVILIANSTUCK"] = 0;
+            script.Globals["PERSONALITY_NORMAL"] = 1;
+            script.Globals["PERSONALITY_PATHANDVEHICLE"] = 2;
+            script.Globals["PERSONALITY_PATHFACE"] = 9;
+
+            // for Vehicle actor
+            script.Globals["VEHICLEFLAGS_SPAWNED_AND_UNLOCKED"] = 0x12030001;
+            script.Globals["VEHICLEFLAGS_UNSPAWNED_AND_UNLOCKED"] = 0x12030000;
+
+            // for Character actor
+            script.Globals["CHARACTERFLAGS_UNSPAWNED"] = 131072;
+            script.Globals["CHARACTERFLAGS_SPAWNED"] = 131073;
+
+            // for SpecialEffect actor
+            script.Globals["SPECIALEFFECT_FAKE_EXPLOSION"] = 4;
+            script.Globals["SPECIALEFFECT_EXPLOSION"] = 1;
+
+            // vehicle types enum for Lua (as a class)
+            script.Globals["VehicleType"] = typeof(VehicleType);
+
+            // for CheatControl node
+            script.Globals["CHEAT_INFINITEMASS"] = 1;
+
+            // for ProximityCheck node
+            script.Globals["PROXIMITYCHECKTYPE_APROXIMATE"] = 1;
+            script.Globals["PROXIMITYCHECKTYPE_DISTANCE"] = 2;
+
+            // for OpenCargoDoorsControl node
+            script.Globals["CARGODOORSACTION_OPEN"] = 1;
+            script.Globals["CARGODOORSACTION_CLOSE"] = 2;
+
+            // temporary
+			// CharacterControl.pProperty: 18 = teleport?
+
+            // for AIPath actor
+            script.Globals["PATHFLAGS_STOP_WHEN_DONE"] = 65536;
+            script.Globals["PATHFLAGS_CONTINUE_WHEN_DONE"] = 1;
+
+            // for CountdownIntro node
+            script.Globals["CLOCKCOMMAND_START_TIMER"] = 1;
+            script.Globals["CLOCKCOMMAND_EQUALS"] = 1;
+            script.Globals["CLOCKCOMMAND_START_COUNTDOWN"] = 4;
+            script.Globals["CLOCKCOMMAND_STOP"] = 5;
+            script.Globals["CLOCKCOMMAND_HIDE"] = 6;
+
+            // thanks "Welcome to Nice" mission!
+            script.Globals["COUNTERACTION_EQUALS"] = 1;
+            script.Globals["COUNTERACTION_SOMATE"] = 2;
+            script.Globals["COUNTERACTION_SUBTRACT"] = 3;
+
+            script.Globals["COUNTERCONDITION_SMALLERTHAN"] = 5;
+            script.Globals["COUNTERCONDITION_BIGGERTHAN"] = 4;
+			
+            script.Globals["COLLISIONWATCH_FLAGS_TOUCH"] = 1;
+
+            // Messages display types
+            script.Globals["DISPLAYMESSAGE_CENTER_UP"] = 0x010000;
+            script.Globals["DISPLAYMESSAGE_LEFT_CORNER_DOWN"] = 0x000002;
+
+            // Character skins
+            script.Globals["SKIN_TANNER"] = 0xBA125961;
+            script.Globals["SKIN_JONES"] = 0xE52A26EA;
+
+            script.Globals["SKIN_LOMAZ"] = 0x759C10B3;
+            script.Globals["SKIN_CALITA"] = 0xDCE0D782;
+            script.Globals["SKIN_BADHAND"] = 0xF52DB73B;
+            script.Globals["SKIN_JERICHO"] = 0x1517B105;
+
+            script.Globals["SKIN_BODYGUARD1"] = 0x1944FDE4;
+            script.Globals["SKIN_BODYGUARD2"] = 0x804DAC5E;
+
+            script.Globals["SKIN_BACCUS"] = 0xA8EAD1AE;
+            script.Globals["SKIN_TICO"] = 0x11C25CD5;
+
+            // South beach goons
+            script.Globals["SKIN_SB_GOON1"] = 0x9E892CAC;
+            script.Globals["SKIN_SB_GOON2"] = 0x7807D16;
+
+            script.Globals["SKIN_THE_GATOR"] = 0x613C6BD2;
+
+            // The Gator's goons
+            script.Globals["SKIN_GATOR_GOON1"] = 0xA99D8E66;
+            script.Globals["SKIN_GATOR_GOON2"] = 0x3094DFDC;
+            script.Globals["SKIN_GATOR_GOON3"] = 0x4793EF4A;
+
+            // Jericho's goons (from Istanbul)
+            script.Globals["SKIN_JERICHO_GOON1"] = 0x135E6F23;
+            script.Globals["SKIN_JERICHO_GOON2"] = 0x8A573E99;
+            script.Globals["SKIN_JERICHO_GOON3"] = 0xFD500E0F;
+
+            script.Globals["SKIN_TIMMY"] = 0x10B0D246;
+
+            script.Globals["SKIN_TURKISH_UNDERCOVER"] = 0xAC1CD5A4;
+            script.Globals["SKIN_FRENCH_UNDERCOVER"] = 0x9B548DB;
+
+            script.Globals["SKIN_MIAMICOP1"] = 0xEC1491ED; // chief
+            script.Globals["SKIN_MIAMICOP2"] = 0x751DC057;
+            script.Globals["SKIN_MIAMICOP3"] = 0xEB7955F4;
+            script.Globals["SKIN_MIAMICOP4"] = 0xCAD3FF7B; // black cop
+            script.Globals["SKIN_NICECOP1"] = 0x8C95F722;
+            script.Globals["SKIN_NICECOP2"] = 0x65F65217;
+
+            script.Globals["SKIN_MIAMI_WMWSBP"] = 0x54B76AD8;    // White Male: wearing White Shirt and Black Pants 
+            script.Globals["SKIN_MIAMI_WOMYBHJP"] = 0xCDBE3B62;  // White Old Male: Yellow Brown Hair and wearing Jeans Pants
+            script.Globals["SKIN_MIAMI_BMWSBP"] = 0xBAB90BF4;    // Black Male: wearing White Shirt and Black Pants
+            script.Globals["SKIN_MIAMI_BWMTTBS"] = 0x24DD9E57;   // Bald White Male: wearing Tank Top and Brown Shorts
+            script.Globals["SKIN_MIAMI_WMPSWP"] = 0x53DAAEC1;    // White Male: wearing Pink Suit and White Pants
+            script.Globals["SKIN_MIAMI_WFWD"] = 0x5A6CE2EA;      // White Female: wearing White Dress
+            script.Globals["SKIN_MIAMI_WMBSBS"] = 0xD3C8CE3A;    // White Male: wearing Black Sweater and Black Jeans
+            script.Globals["SKIN_MIAMI_BFBSBP"] = 0xA4CFFEAC;    // Black Female: wearing Brown Sweater and Black Pants
+            script.Globals["SKIN_MIAMI_WFBSBP"] = 0x3470E33D;    // White Female: wearing Black Sweater and Black Pants
+
+            //script.Globals["SKIN_MIAMI_MARATHONIST_WOMAN"] = DynValue.NewNumber(0x3AAB6B0F);
+            //script.Globals["SKIN_MIAMI_BLACK_WOMAN"] = DynValue.NewNumber(0xCDBE3B62);
+            //script.Globals["SKIN_MIAMI_BLACK_WOMAN"] = DynValue.NewNumber(0xD3C8CE3A);
+
+            // I fix it later :)
+            // TODO: Fix skin IDs (mission57.dam)
+            /*
+            script.Globals["SKIN_NICE_WHITESHIRT_MAN"] = 0xBF80D1DB;
+            script.Globals["SKIN_NICE_BLACKSHIRT_MAN"] = 0x518EB0F7;
+            script.Globals["SKIN_NICE_TANKTOP_MAN"] = 0xCFEA2554;
+            script.Globals["SKIN_NICE_BUSY_WOMAN"] = 0x21E44478;
+            script.Globals["SKIN_NICE_YOUNG_WOMAN"] = 0xA69BE09A; 
+            script.Globals["SKIN_NICE_BIKINI_WOMAN"] = 0xC65C697F;
+            script.Globals["SKIN_NICE_BUSY_MAN"] = 0x3F92B120;
+            script.Globals["SKIN_NICE_SWEATER_WOMAN"] = 0xD6F11415;
+            */
+
+            //script.DoString("local logicStart = MISSION.logicStart()"); // logic start global variable
+
+            DynValue res = script.DoFile(filepath);
+
+            //script.DoString("LogicStart()"); // calls the logic start
+            return LMS;
+        }
 
         public ExportedMission missionData = new ExportedMission();
         public MissionSummary missionSummary = new MissionSummary();
@@ -775,6 +935,44 @@ namespace Zartex
                     {
                         new WireCollectionProperty(pWireCollection) {
                             StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        }
+                    }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
+        public Node CharacterNameControl(Actor character, string name, bool showName = true, int playerNum = 1, string note = "", int r = 0, int g = 200, int b = 122)
+        {
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 107,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new ActorProperty(character == null ? -1 : character.index) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pCharacter")
+                        },
+                        new UnicodeStringProperty(name) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pCharacterName")
+                        },
+                        new BooleanProperty(showName) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pShowName")
+                        },
+                        new IntegerProperty(playerNum) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pPlayerNum")
                         }
                     }
             });
@@ -1285,6 +1483,97 @@ namespace Zartex
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
+        public Node RearVehicleShooting(Actor vehicle, Actor player, int weapon1, int weapon2, int vehicleType = 2, string note = "", int r = 255, int g = 190, int b = 122)
+        {
+            if (vehicle == null)
+                throw new ScriptRuntimeException("Bad Argument #1 - Actor of type Vehicle expected, got nil");
+            if (player == null)
+                throw new ScriptRuntimeException("Bad Argument #2 - Actor of type Character expected, got nil");
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 105,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+
+                        new ActorProperty(vehicle.index) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pVehicle")
+                        },
+                        new ActorProperty(player.index) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pPlayer")
+                        },
+
+                        new EnumProperty(weapon1) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWeapon1")
+                        },
+                        new EnumProperty(weapon2) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWeapon2")
+                        },
+
+                        new EnumProperty(vehicleType) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pVehicleType")
+                        }
+                    }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
+        public Node CollisionWatch(Actor actor, Actor secondActor = null, int impactForce = 500, int flags = 1, string note = "", int r = 255, int g = 190, int b = 122)
+        {
+            if (actor == null)
+                throw new ScriptRuntimeException("Bad Argument #1 - Actor expected, got nil");
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 22,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+
+                        new ActorProperty(actor) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pActor")
+                        },
+                        new ActorProperty(secondActor == null ? -1 : secondActor.index) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pSecondActor")
+                        },
+
+                        new FloatProperty(impactForce) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pImpactForce")
+                        },
+                        
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pFlags")
+                        }
+                    }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
         public Node VehicleGunnerControl(Actor player, Actor passenger, int weapon, int numberOfBullets, bool alwaysOverlay = false, string note = "", int r = 0, int g = 200, int b = 122)
         {
             short stringId = 0;
@@ -1328,7 +1617,7 @@ namespace Zartex
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
-        public Node CounterControl(int value, int counterIndex, int action = 1, int flags = 0, string note = "", int r = 0, int g = 200, int b = 122)
+        public Node CounterControl(int value, int counterIndex, int action, string name = null, int flags = 0, string note = "", int r = 0, int g = 200, int b = 122)
         {
             short stringId = 0;
             if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
@@ -1363,10 +1652,34 @@ namespace Zartex
                     }
             });
             int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            if (name!=null)
+            {
+                missionData.LogicData.Nodes.Definitions[idx].Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new StringProperty((short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(name)) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pName")
+                        },
+                        new IntegerProperty(value) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pValue")
+                        },
+                        new IntegerProperty(counterIndex) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pCounterIndex")
+                        },
+                        new EnumProperty(action) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pAction")
+                        },
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pFlags")
+                        }
+                    };
+            }
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
-        public Node CounterWatch(int value, int counterIndex, int condition, int flags = 0, string note = "", int r = 0, int g = 200, int b = 122)
+        public Node CounterWatch(int value, int counterIndex, int condition, string name = null, int flags = 0, string note = "", int r = 0, int g = 200, int b = 122)
         {
             short stringId = 0;
             if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
@@ -1401,6 +1714,30 @@ namespace Zartex
                     }
             });
             int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            if (name != null)
+            {
+                missionData.LogicData.Nodes.Definitions[idx].Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new StringProperty((short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(name)) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pName")
+                        },
+                        new IntegerProperty(value) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pValue")
+                        },
+                        new IntegerProperty(counterIndex) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pCounterIndex")
+                        },
+                        new EnumProperty(condition) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pCondition")
+                        },
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pFlags")
+                        }
+                    };
+            }
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
@@ -1656,19 +1993,70 @@ namespace Zartex
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
-        public Node SetCharacterFelonyTo(Actor character, float felony, int flags = 0, string note = "", int r = 200, int g = 255, int b = 100)
+        public Node SetCharacterFelonyTo(Actor character, float felony, int flags = 0, string note = "Character.SetFelonyTo()", int r = 200, int g = 255, int b = 100)
         {
             return CharacterControl(character, 6, felony, 0, -1, null, null, "", -1, "", 0, flags, note, r, g, b);
         }
 
-        public Node SetCharacterTakeHealth(Actor character, float amount, int flags = 0, string note = "", int r = 200, int g = 255, int b = 100)
+        public Node SetCharacterTakeHealth(Actor character, float amount, int flags = 0, string note = "Character.TakeHealth()", int r = 200, int g = 255, int b = 100)
         {
             return CharacterControl(character, 1, amount, 0, -1, null, null, "", -1, "", 0, flags, note, r, g, b);
+        }
+
+        public Node SetCharacterVulnerability(Actor character, float vulnerability, int flags = 0, string note = "Character.SetVulnerability()", int r = 200, int g = 255, int b = 100)
+        {
+            return CharacterControl(character, 7, vulnerability, 0, -1, null, null, "", -1, "", 0, flags, note, r, g, b);
+        }
+
+        public Node SetCharacterPositionTo(Actor character, float x, float y, float z, float angle = 0, int flags = 0, string note = "Character.SetPositionTo(float,float,float,float)", int r = 200, int g = 255, int b = 100)
+        {
+            var a = (Math.PI / 180) * angle; // convert degrees to radians
+            Vector3 fwd = new Vector3(
+                (float)(Math.Cos(0) * Math.Cos(a)), // x
+
+                1, //(float)-Math.Sin(angle), // altitude
+
+                (float)(Math.Cos(0) * Math.Sin(a)) // z
+            );
+
+            Actor marker = Marker(x, y, z, fwd.X, fwd.Y, fwd.Z);
+            return CharacterControl(character, 18, 0, 0, -1, null, marker, "", -1, "", 0, flags, note, r, g, b);
+        }
+
+        public Node SetCharacterPositionTo(Actor character, Actor actor, int flags = 0, string note = "Character.SetPositionTo(Actor)", int r = 200, int g = 255, int b = 100)
+        {
+            return CharacterControl(character, 18, 0, 0, -1, null, actor, "", -1, "", 0, flags, note, r, g, b);
         }
 
         public Node SetCharacterStuckInVehicle(Actor character, int flags = 0, string note = "SetCharacterStuckInVehicle()", int r = 200, int g = 255, int b = 100)
         {
             return CharacterControl(character, 12, 1, 0, -1, null, null, "", -1, "", 0, flags, note, r, g, b);
+        }
+
+        public Node ClearCharacterWeapons(Actor character, int flags = 0, string note = "ClearCharacterWeapons()", int r = 200, int g = 255, int b = 100)
+        {
+            return CharacterControl(character, 27, 0, 0, -1, null, null, "", -1, "", 0, flags, note, r, g, b);
+        }
+
+        public Node SetCharacterGetOutOfVehicle(Actor character, int flags = 0, string note = "SetCharacterGetOutOfVehicle()", int r = 200, int g = 255, int b = 100)
+        {
+            return CharacterControl(character, 20, 0, 0, -1, null, null, "", -1, "", 0, flags, note, r, g, b);
+        }
+
+        public Node GiveCharacterWeapon(Actor character, int weapon, float clips, int flags = 0, string note = "GiveCharacterWeapon()", int r = 200, int g = 255, int b = 100)
+        {
+            return CharacterControl(character, 9, clips, weapon, -1, null, null, "", -1, "", 0, flags, note, r, g, b);
+        }
+
+        // thanks welcome to nice
+        public Node CharacterEquipWeapon(Actor character, int flags = 0, string note = "CharacterEquipWeapon()", int r = 200, int g = 255, int b = 100)
+        {
+            return CharacterControl(character, 22, 0, 0, -1, null, null, "", -1, "", 0, flags, note, r, g, b);
+        }
+
+        public Node CharacterReholsterWeapon(Actor character, int flags = 0, string note = "CharacterReholsterWeapon()", int r = 200, int g = 255, int b = 100)
+        {
+            return CharacterControl(character, 23, 0, 0, -1, null, null, "", -1, "", 0, flags, note, r, g, b);
         }
 
         public Node FailMission(int message, float failDelay = 2.0f, int flags = 0, string note = "", int r = 0, int g = 200, int b = 122)
@@ -2273,6 +2661,83 @@ namespace Zartex
             return new Actor(missionData.LogicData.Actors.Definitions[idx], idx);
         }
 
+        public Actor Marker(float x1, float y1, float z1, float x2 = 1, float y2 = 0, float z2 = 0, string note = "", int r = 100, int g = 128, int b = 255)
+        {
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            missionData.LogicData.Actors.Definitions.Add(new ActorDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 105,
+                StringId = stringId,
+                ObjectId = missionData.Objects.Objects.Count,
+                Flags = 0x72D5,
+                Properties = new List<NodeProperty>
+                    {
+                       // yes, nothing :)
+                    }
+            });
+            missionData.Objects.Objects.Add(new MarkerObject() { Position = new Vector3((float)x1, (float)y1, (float)z1), V1 = new Vector3((float)x2, (float)y2, (float)z2) });
+
+            int idx = missionData.LogicData.Actors.Definitions.Count - 1;
+            return new Actor(missionData.LogicData.Actors.Definitions[idx], idx);
+        }
+
+        public Actor CreateArea(float x, float y, float z,  float areaX, float areaY, float areaZ, float areaW,   float w = 1.0f, Actor attachedTo = null, float radius = 0, int flags = 1, string note = "", int r = 100, int g = 128, int b = 255)
+        {
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            missionData.LogicData.Actors.Definitions.Add(new ActorDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 4,
+                StringId = stringId,
+                ObjectId = missionData.Objects.Objects.Count,
+                Flags = 0x72D5,
+                Properties = new List<NodeProperty>
+                    {
+                        new ActorProperty(attachedTo == null ? -1 : attachedTo.index) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pAttachTo")
+                        },           // pAttachTo
+                        new FloatProperty(radius) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pRadius")
+                        },           // pRadius
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pFlags")
+                        }             // pFlags 
+                    }
+            });
+            MemoryStream stream = new MemoryStream(0x40);
+            using (var f = new BinaryWriter(stream, Encoding.UTF8))
+            {
+                f.Write((long)1);
+                f.Write((long)0);
+
+                f.Write(areaX);
+                f.Write(areaY);
+                f.Write(areaZ);
+                f.Write(areaW);
+                f.Write(x);
+                f.Write(y);
+                f.Write(z);
+                f.Write(w);
+
+                f.Write((int)1);
+                f.Write((int)524292);
+                f.Write((long)0xA161BD0010101B8);
+            }
+            missionData.Objects.Objects.Add(new AreaObject() { CreationData = stream.GetBuffer() });
+            stream.Dispose();
+
+            int idx = missionData.LogicData.Actors.Definitions.Count - 1;
+            return new Actor(missionData.LogicData.Actors.Definitions[idx], idx);
+        }
+
+        // AnimProp
         public Actor GetAnimatedObjectAt(float x, float y, float z, int type = 0, string note = "", int r = 200, int g = 128, int b = 128)
         {
             short stringId = 0;
@@ -2313,7 +2778,7 @@ namespace Zartex
 
             int testVolumeidx = missionData.LogicData.Actors.Definitions.Count;
 
-            // ai target
+            // test volume
             missionData.LogicData.Actors.Definitions.Add(new ActorDefinition()
             {
                 Color = new NodeColor(r, g, b, 255),
@@ -2358,6 +2823,44 @@ namespace Zartex
                         }          // pFlags
                     }
             });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
+        public Node AreaWatch(Actor actor, Actor area, int flags = 1, string note = "ActorHasReachedPoint", int r = 100, int g = 128, int b = 255)
+        {
+            if (area == null)
+                throw new ScriptRuntimeException("Bad argument #1 - Attempt to watch a nil value");
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 12,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },         // pWireCollection
+                        new ActorProperty(area.index) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pArea")
+                        },         // pArea
+                        new ActorProperty(actor.index) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pActor")
+                        },         // pActor
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pFlags")
+                        }          // pFlags
+                    }
+            });
+
             int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
@@ -2547,6 +3050,29 @@ namespace Zartex
             return ActorCreation(new Actor(missionData.LogicData.Actors.Definitions[idx], idx));
         }
 
+        // chaserType
+        // 0 (default) = chases the actor but uses patrolling cop icon
+        // 1 = chases the actor but uses red alerted cop icon
+        // 2 = chases the actor but uses red alerted cop icon and goes faster and ram the target
+        public Node CharacterChaseActor(Actor character, Actor actor, float driveSpeed, int chaserType = 0, string note = "CharacterDriveToActor", int r = 128, int g = 0, int b = 255)
+        {
+            int flags = 25690112; 
+            switch (chaserType)
+            {
+                case 0:
+                default:
+                    flags = 25690112;
+                    break;
+                case 1:
+                    flags = 8912896;
+                    break;
+                case 2:
+                    flags = 9961472;
+                    break;
+            }
+            return CharacterDriveFollowingActor(character, actor, driveSpeed, 2, flags, note, r,g,b);
+        }
+
         public Actor AITarget(Actor character, float x, float y, float z, float walkSpeed, float driveSpeed, int desiredTransport, int flags = 0, string note = "", int r = 128, int g = 0, int b = 255)
         {
             if (character.TheActor.TypeId != 2)
@@ -2683,6 +3209,7 @@ namespace Zartex
             return new Actor(missionData.LogicData.Actors.Definitions[idx], idx);
         }
 
+        // follows the actor
         public Node CharacterDriveFollowingActor(Actor character, Actor actor, float driveSpeed, int desiredTransport = 2, int flags = 0, string note = "CharacterDriveFollowingActor", int r = 128, int g = 0, int b = 255)
         {
             Node driveTo = CharacterDriveTo(character, 0, 0, 0, driveSpeed, desiredTransport, flags, note, r, g, b);
@@ -2693,7 +3220,7 @@ namespace Zartex
             return driveTo;
         }
 
-        public Node CameraSelect(Actor target, int cameraType, float duration = 0, float blendTime = 1, float thrillCamZoom = 1, float thrillCamSpeed = 1, float thrillCamBlur = 0, int flags = 0, string note = "CameraSelect()", int r = 128, int g = 0, int b = 255)
+        public Node CameraSelect(Actor target, int cameraType, float duration = 0, float blendTime = 0, float thrillCamZoom = 1, float thrillCamSpeed = 1, float thrillCamBlur = 0, int flags = 0, string note = "CameraSelect()", int r = 128, int g = 0, int b = 255)
         {
             if (target == null)
                 throw new ScriptRuntimeException("Bad argument #1 - Camera target can't be a nil value");
@@ -2862,7 +3389,7 @@ namespace Zartex
         }
 
         // direction
-        // 0 = regressive countdown
+        // 0 = countdown
         // 1 = timer
         public Node StartClock(uint direction = 0, int flags = 0, string note = "", int r = 255, int g = 101, int b = 200)
         {
@@ -2917,7 +3444,7 @@ namespace Zartex
 
         public Actor CreateObjectiveIconAttachedTo(Actor actor, int height = 1, int maxAdaptiveHeight = 0, int type = 0, bool canGoUp = true, string note = "", int r = 255, int g = 200, int b = 122)
         {
-            Actor objectiveIcon = CreateObjectiveIcon(0, 0, 0, height, maxAdaptiveHeight, type, canGoUp, note, r, g, b);
+            Actor objectiveIcon = CreateObjectiveIcon(0, height, 0, height, maxAdaptiveHeight, type, canGoUp, note, r, g, b);
             objectiveIcon.TheActor.Properties[0].Value = (int)actor.index;
             return objectiveIcon;
         }
@@ -2926,7 +3453,7 @@ namespace Zartex
         {
             var a = (Math.PI / 180) * (angle); // convert degrees to radians
             // convert player/character angle to vehicle angle
-            a = (a / 2) + 45;
+            a = (a / 2) + 45; // TODO: subtract this with 25
             Vector3 fwd = new Vector3(
                 (float)(Math.Cos(0) * Math.Cos(a)), // x
 
@@ -3005,9 +3532,9 @@ namespace Zartex
                         // unknown byte gang
                         5,0x20,0,0,
                         // more zeros.... and 1.0f again.
-                        0,0,0,0,    0,0,0,0,     0,0,0,0,   0,0,0x80,0x3F,
+                        0,0,0,0,    0,0,0,0,     0,0,0,0,   0,0,0x0,0x0,
                         // AND..... the end!
-                        0,0,0x80,0x3F,  bDMG[0],bDMG[1],bDMG[2],bDMG[3],    0,0,0,0
+                        0,0,0x0,0x0,  bDMG[0],bDMG[1],bDMG[2],bDMG[3],    0,0,0,0
                 },
                 Position = new DSCript.Vector4((float)x, (float)y, (float)z, angle)
             });
@@ -3178,22 +3705,29 @@ namespace Zartex
         public Actor CreateCamera(float x, float y, float z, double pitch, double yaw, double roll, float cameraZoom = 1, float speed = 1, float blur = 0, Actor lookAt = null, Actor attachTo = null, string note = "", int flags = 0, byte r = 0, byte g = 155, int b = 200)
         {
             // camera direction generation
-            Vector4 v2 = new Vector4(
-                (float)(Math.Cos(pitch) * Math.Cos(yaw)), // x
-
-                (float)-Math.Sin(pitch), // altitude
-
-                (float)(Math.Cos(pitch) * Math.Sin(yaw)), // z
-                (float)Math.Sin(roll)
-            );
+            double pi = (Math.PI / 180) * pitch; // convert degrees to radians
+            double ya = (Math.PI / 180) * yaw; // convert degrees to radians
+            double ro = (Math.PI / 180) * roll; // convert degrees to radians
             Vector4 v1 = new Vector4(
-                (float)-(Math.Cos(pitch) * Math.Cos(yaw)), // x
+                (float)-(Math.Cos(pi) * Math.Cos(ya)), // x
 
-                (float)Math.Sin(pitch), // altitude
+                (float)Math.Sin(pi), // altitude
 
-                (float)-(Math.Cos(pitch) * Math.Sin(yaw)), // z
-                (float)-Math.Sin(roll)
+                (float)-(Math.Cos(pi) * Math.Sin(ya)), // z
+                (float)-Math.Sin(ro)
             );
+            Vector4 v2 = new Vector4(v1.X * -1, v1.Y * -1, v1.Z * -1, v1.W * -1);
+            /*
+            Vector4 v2 = new Vector4(
+                (float)(Math.Cos(p) * Math.Cos(y)), // x
+
+                (float)-Math.Sin(p), // altitude
+
+                (float)(Math.Cos(p) * Math.Sin(y)), // z
+                (float)Math.Sin(r)
+            );
+            */
+            
             short stringId = 0;
             if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
@@ -3247,10 +3781,6 @@ namespace Zartex
         public List<LuaMissionScriptDPL> Missions = new List<LuaMissionScriptDPL>();
         public List<SpoolablePackage> MissionSpoolerPackages = new List<SpoolablePackage>();
 
-        public bool IsLoaded { get; set; }
-
-        public string FileName { get; set; }
-
         public SpoolablePackage InitSpooler = new SpoolablePackage()
         {
             Context = (int)ChunkType.SpoolSystemInitChunker,
@@ -3269,39 +3799,127 @@ namespace Zartex
             Description = "Chunk containing missions sub IDs and chunk IDs"
         } };
 
-        public LuaMissionScriptDPL AddMission(short subMissionId,string name = null)
+        public LuaMissionScriptDPL CreateMission(string packageName = null, short id = 5, float x = 0, float y = 0, int flags = 0x01010000)
         {
             LuaMissionScriptDPL mission = new LuaMissionScriptDPL();
             // EPMR
-            SpoolablePackage package = new SpoolablePackage()
+            mission.Spooler = new SpoolablePackage()
             {
                 Context = (int)ChunkType.ExportedMissionRoot,
             };
-            if (name != null)
-                package.Description = name;
-
-            // SSLP
-            MissionsLookup.Lookups.Add(new LookupEntry((short)subMissionId, MissionSpoolerPackages.Count));
-
+            if (packageName != null)
+                mission.Spooler.Description = packageName;
             // EM__
             mission.missionData.Spooler = new SpoolablePackage()
             {
                 Context = (int)ChunkType.ExportedMissionChunk,
-                Description = "Exported mission"
+                Description = "Exported Mission"
             };
+            mission.missionSummary.Spooler = new SpoolableBuffer()
+            {
+                Context = (int)ChunkType.MissionSummary,
+                Description = "Mission Summary"
+            };
+            mission.missionSummary.Spooler.GetMemoryStream().Position = 0;
+            mission.missionSummary.Spooler.Write((byte)0x01);
+            mission.missionSummary.Spooler.Write(new byte[7]);
+            mission.missionSummary.Spooler.Write((byte)0x01);
+            mission.missionSummary.Spooler.Write(new byte[3]);
+            mission.missionSummary.Spooler.Write(id);
+            mission.missionSummary.Spooler.Write((ushort)0xCCCC);
+            mission.missionSummary.Spooler.Write(x);
+            mission.missionSummary.Spooler.Write(y);
+            mission.missionSummary.Spooler.Write(flags);
             mission.missionData.Objects.Spooler = new SpoolableBuffer()
             {
                 Context = (int)ChunkType.ExportedMissionObjects,
-                Description = "Exported mission objects"
+                Description = "Exported Mission Objects"
             };
-            package.Children.Add(mission.missionData.Spooler as SpoolablePackage);
-            MissionSpoolerPackages.Add(package);
+            mission.missionData.LogicData.Spooler = new DSCript.Spooling.SpoolablePackage()
+            {
+                Context = (int)ChunkType.LogicExportData,
+                Description = "Logic Export Data"
+            };
+            mission.missionData.Spooler.Children.Add(mission.missionData.LogicData.Spooler);
 
-            Children.Add(package);
+            mission.missionData.LogicData.Actors.Spooler = new DSCript.Spooling.SpoolablePackage()
+            {
+                Context = (int)ChunkType.LogicExportActorsChunk,
+                Description = "Logic Export Data"
+            };
+            mission.missionData.Spooler.Children.Add(mission.missionData.LogicData.Spooler);
+
+            mission.missionData.LogicData.WireCollection = new WireCollectionData();
+            mission.missionData.LogicData.WireCollection.Spooler = new DSCript.Spooling.SpoolableBuffer()
+            {
+                Context = (int)ChunkType.LogicExportWireCollections,
+                Description = "Exported Wire Collections"
+            };
+            mission.missionData.Spooler.Children.Add(mission.missionData.LogicData.WireCollection.Spooler);
+
+            mission.missionData.LogicData.StringCollection.Spooler = new DSCript.Spooling.SpoolableBuffer()
+            {
+                Context = (int)ChunkType.LogicExportStringCollection,
+                Description = "String Collection"
+            };
+            mission.missionData.Spooler.Children.Add(mission.missionData.LogicData.StringCollection.Spooler);
+
+            mission.missionData.LogicData.SoundBankTable.Spooler = new DSCript.Spooling.SpoolableBuffer()
+            {
+                Context = (int)ChunkType.LogicExportSoundBank,
+                Description = "Sound Bank Table"
+            };
+            mission.missionData.Spooler.Children.Add(mission.missionData.LogicData.SoundBankTable.Spooler);
+
+            mission.missionData.LogicData.Actors = new LogicDataCollection<ActorDefinition>();
+            mission.missionData.LogicData.Actors.Spooler = new DSCript.Spooling.SpoolablePackage()
+            {
+                Context = (int)ChunkType.LogicExportActorsChunk,
+                Description = "Actors Definitions table"
+            };
+            mission.missionData.Spooler.Children.Add(mission.missionData.LogicData.Actors.Spooler);
+
+            mission.missionData.LogicData.Nodes = new LogicDataCollection<NodeDefinition>();
+            mission.missionData.LogicData.Nodes.Spooler = new DSCript.Spooling.SpoolablePackage()
+            {
+                Context = (int)ChunkType.LogicExportNodesChunk,
+                Description = "Logic Definitions Table"
+            };
+            mission.missionData.LogicData.Spooler.Children.Add(mission.missionData.LogicData.Nodes.Spooler);
+            mission.missionData.LogicData.Nodes.Definitions = new List<NodeDefinition>();
+
+            mission.missionData.Spooler.Children.Add(new DSCript.Spooling.SpoolablePackage()
+            {
+                Context = (int)ChunkType.LogicExportPropertiesTable,
+                Description = "Logic Properties Table"
+            });
+
+            mission.missionData.Objects = new ExportedMissionObjects();
+            mission.missionData.Objects.Spooler = new DSCript.Spooling.SpoolableBuffer()
+            {
+                Context = (int)ChunkType.ExportedMissionObjects,
+                Description = "Exported Mission Objects"
+            };
+            mission.missionData.Spooler.Children.Add(mission.missionData.Objects.Spooler);
+            mission.missionData.Objects.Objects = new List<MissionObject>();
+            ((SpoolablePackage)mission.Spooler).Children.Add(mission.missionData.Spooler as SpoolablePackage);
+
+            
+            Children.Add(mission.Spooler as SpoolablePackage);
+
             return mission;
         }
 
+        public void AddMission(LuaMissionScriptDPL mission,short subMissionId,string name = null)
+        {
+            // SSLP
+            MissionsLookup.Lookups.Add(new LookupEntry((short)subMissionId, MissionSpoolerPackages.Count));
+            MissionSpoolerPackages.Add(mission.Spooler as SpoolablePackage);
+        }
+
         public LuaMissionPackage() : base() {
+            InitMission = CreateMission("Initial Mission", 5, 0, 0, 0);
+
             Children.Add(InitSpooler);
             InitMission.missionData.Spooler = new SpoolablePackage()
             {
@@ -3328,6 +3946,8 @@ namespace Zartex
         public LuaMissionScriptDPL() : base()
         {
         }
+
+        public Spooler Spooler { get; set; }
 
         public Node LogicStart(int flags = 0, string note = "", int r = 0, int g = 200, int b = 122)
         {

@@ -80,6 +80,7 @@
     <Compile Include="DataGridWidget.Designer.cs">
       <DependentUpon>DataGridWidget.cs</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\SpoolableBufferExtensions.cs" />
     <Compile Include="FlowgraphWidget.cs">
       <SubType>UserControl</SubType>
     </Compile>

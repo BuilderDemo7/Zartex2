@@ -37,7 +37,10 @@
       <HintPath>..\Zartex2\Lua\MoonSharp.Interpreter.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -47,6 +50,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MissionScript\ActorSetTableData.cs" />
+    <Compile Include="MissionScript\ExportedMission.cs" />
+    <Compile Include="MissionScript\ExportedMissionObjects.cs" />
+    <Compile Include="MissionScript\LogicExportData.cs" />
+    <Compile Include="MissionScript\Logic\ActorDefinition.cs" />
+    <Compile Include="MissionScript\Logic\LogicDataCollection.cs" />
+    <Compile Include="MissionScript\Logic\NodeColor.cs" />
+    <Compile Include="MissionScript\Logic\NodeDefinition.cs" />
+    <Compile Include="MissionScript\Logic\NodeProperty.cs" />
+    <Compile Include="MissionScript\Logic\NodeTypes.cs" />
+    <Compile Include="MissionScript\Logic\SoundBankTableData.cs" />
+    <Compile Include="MissionScript\Logic\StringCollectionData.cs" />
+    <Compile Include="MissionScript\Logic\WireCollection.cs" />
+    <Compile Include="MissionScript\Logic\WireCollectionData.cs" />
+    <Compile Include="MissionScript\Logic\WireNode.cs" />
+    <Compile Include="MissionScript\Logic\WireNodeType.cs" />
+    <Compile Include="MissionScript\LuaMissionScript.cs" />
+    <Compile Include="MissionScript\MissionInstanceData.cs" />
+    <Compile Include="MissionScript\MissionScriptFile.cs" />
+    <Compile Include="MissionScript\MissionSummaryData.cs" />
+    <Compile Include="MissionScript\Objects\MissionObject.cs" />
+    <Compile Include="MissionScript\Objects\Types\AnimProp.cs" />
+    <Compile Include="MissionScript\Objects\Types\Area.cs" />
+    <Compile Include="MissionScript\Objects\Types\Camera.cs" />
+    <Compile Include="MissionScript\Objects\Types\Character.cs" />
+    <Compile Include="MissionScript\Objects\Types\Collectable.cs" />
+    <Compile Include="MissionScript\Objects\Types\Marker.cs" />
+    <Compile Include="MissionScript\Objects\Types\ObjectiveIcon.cs" />
+    <Compile Include="MissionScript\Objects\Types\Path.cs" />
+    <Compile Include="MissionScript\Objects\Types\Prop.cs" />
+    <Compile Include="MissionScript\Objects\Types\Switch.cs" />
+    <Compile Include="MissionScript\Objects\Types\Vehicle.cs" />
+    <Compile Include="MissionScript\Objects\Types\Volume.cs" />
+    <Compile Include="MissionScript\Objects\Types\Weapon.cs" />
+    <Compile Include="MissionScript\SpoolSystemLookup.cs" />
+    <Compile Include="MPC.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -54,6 +93,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="PropertySorter.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="TypeConverters.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -64,10 +106,6 @@
       <Project>{09c8aa4a-afb8-4bdb-866b-b8c88d48d9eb}</Project>
       <Name>DSCript</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Zartex2\Zartex.csproj">
-      <Project>{614ef28c-7366-49f1-8996-f0fca85e33e9}</Project>
-      <Name>Zartex</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -75,5 +113,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

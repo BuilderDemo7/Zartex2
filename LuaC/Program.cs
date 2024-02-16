@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 using Zartex;
 
+using DSCript.Spooling;
 using MoonSharp;
 using MoonSharp.Interpreter;
 
@@ -17,7 +18,7 @@ namespace LuaC
 {
     class Program
     {
-        public static float Version = 1.02f;
+        public static float Version = 1.03f;
 
         static readonly string ArgMagic = "-";
         static bool isDPL = false;
@@ -26,13 +27,25 @@ namespace LuaC
 
         static readonly string programDir = Directory.GetCurrentDirectory();
 
+        static bool Log = false;
+        static string LogFileName = "compile";
+        public static StringWriter consoleLog = new StringWriter();
+        public static void WriteLine(string line)
+        {
+            consoleLog.WriteLine(line);
+            Console.WriteLine(line);
+        }
+
+        // Eh.. I don't care about the title I think...
+#if USE_TITLE
         static string Title = $"# Driv3r / Driver: PL Lua Compiler\n# Version: {Version:F2}\n# By BuilderDemo7";
+#endif
         static void ShowAllArguments()
         {
-            Console.WriteLine(" -dpl (driver4) --> Tells the Lua compiler this is a Driver: PL Lua mission file");
-            Console.WriteLine(" -o (output) --> Set the output file (default: mission.mpc)");
+            WriteLine(" -dpl (driver4) --> Tells the Lua compiler this is a Driver: PL Lua mission file");
+            WriteLine(" -o (output) --> Set the output file (default: mission.mpc)");
         }
-        public static bool ProcessCompilationForLuaMissionScript(LuaMissionScript luaMission,string output)
+        public static bool ProcessCompilationForLuaMissionScript(LuaMissionScript luaMission, string output, string buildInfo = null)
         {
             /*
             if (!File.Exists(output))
@@ -46,10 +59,10 @@ namespace LuaC
             /*
             if (!File.Exists(programDir+"/template.mpc"))
             {
-                Console.WriteLine(fatalErr+"template.mpc was not found in the directory of the tool or in a local directory!");
-                Console.WriteLine(" Solutions:");
-                Console.WriteLine($"     Copy a .mpc file as {output}");
-                Console.WriteLine($"OR   Copy a .mpc file in {Path.GetDirectoryName(output)}/{Path.GetFileName(output)}");
+                WriteLine(fatalErr+"template.mpc was not found in the directory of the tool or in a local directory!");
+                WriteLine(" Solutions:");
+                WriteLine($"     Copy a .mpc file as {output}");
+                WriteLine($"OR   Copy a .mpc file in {Path.GetDirectoryName(output)}/{Path.GetFileName(output)}");
                 return false;
             }
             else
@@ -59,7 +72,7 @@ namespace LuaC
             }*/
                 if (!File.Exists(output))
                 {
-                    FileStream newFile = new FileStream(output, FileMode.Create, FileAccess.Write);
+                    FileStream newFile = new FileStream(output, FileMode.OpenOrCreate, FileAccess.Write);
                     //byte[] template = ReadResource("templateExportMission");
                     newFile.Write(Properties.Resources.templateMissionFile);
 
@@ -69,7 +82,7 @@ namespace LuaC
 
                 if (File.Exists(output))
                 {
-                    MissionScriptFile MissionPackage = new MissionScriptFile("template.mpc");
+                    MissionScriptFile MissionPackage = new MissionScriptFile(output);
                     // copy data from lua mission to current mission
                     MissionPackage.MissionData.LogicData.Actors.Definitions = luaMission.missionData.LogicData.Actors.Definitions;
                     MissionPackage.MissionData.LogicData.Nodes.Definitions = luaMission.missionData.LogicData.Nodes.Definitions;
@@ -84,10 +97,16 @@ namespace LuaC
                     if (MissionPackage.MissionSummary == null)
                         MissionPackage.MissionSummary = new MissionSummaryData();
                     MissionPackage.MissionSummary.StartPosition = luaMission.missionSummary.StartPosition;
-                    MissionPackage.MissionSummary.CityType = luaMission.missionSummary.GetCityTypeByName(luaMission.missionSummary.Level);
+                    MissionPackage.MissionSummary.CityType = MissionSummary.GetCityTypeByName(luaMission.missionSummary.Level);
                     MissionPackage.MissionSummary.MissionId = luaMission.missionSummary.MoodId;
 
-                    bool stat = MissionPackage.Save(output);
+                    if (buildInfo != null)
+                    {
+                       MissionPackage.BuildInfo = buildInfo;
+                    }
+
+                    bool stat = MissionPackage.Save();
+
                     MissionPackage.Dispose();
                     return stat;
                 }
@@ -98,8 +117,10 @@ namespace LuaC
             string outputFileName;
             string inputFileName;
 
-            Console.WriteLine(Title);
-            Console.WriteLine("");
+#if USE_TITLE
+            WriteLine(Title);
+            WriteLine("");
+#endif
             if (args.Length > 0)
             {
                 outputFileName = "mission.mpc"; // default
@@ -117,17 +138,21 @@ namespace LuaC
                         {
                             default:
                                 // oh no, not recognized command!!
-                                Console.WriteLine($"WARNING: Unknown command '{command}'");
+                                WriteLine($"WARNING: Unknown command '{command}'");
                                 continue;
                             case "dpl":
                             case "driver4":
                                 isDPL = true;
                                 continue;
+                            case "l":
+                            case "log":
+                                Log = true;
+                                continue;
                             case "output":
                             case "o":
                                 outputFileName = args[argId+1];
                                 if (outputFileName=="") {
-                                    Console.WriteLine(fatalErr+$"Output file can't be empty!");
+                                    WriteLine(fatalErr+$"Output file name can't be empty!");
                                     Environment.Exit(0);
                                     return;
                                 }
@@ -138,41 +163,67 @@ namespace LuaC
 
                 // now with all arguments set up, let's do our thing!
                 LuaMissionScript luaMission = new LuaMissionScript();
-                Console.WriteLine("Compiling script...");
+                WriteLine("1>------ Compilation started ------");
                 try
                 {
                     if (!isDPL)
                     {
-                        luaMission = Zartex.Main.importLuaFromFile(inputFileName);
+                        luaMission = LuaMissionScript.LoadScriptFromFile(inputFileName);
                     }
                     else
                     {
-                        luaMission = Zartex.Main.importLuaFromFileDPL(inputFileName);
+                        luaMission = LuaMissionScript.LoadScriptFromFile(inputFileName);
                     }
                 }
-                catch (ScriptRuntimeException ex)
+                catch (Exception ex)
                 {
-                    Console.WriteLine("LUA COMPILER ERROR:  ");
-                    Console.WriteLine(ex.DecoratedMessage);
-                    Console.WriteLine("\t" + ex.Source);
-                        Console.WriteLine("Press any key to continue...");
-                        Console.ReadKey(); // prevent console from closing up so we can see the error
+                    if (ex is ScriptRuntimeException)
+                    {
+                        WriteLine("!>Lua Runtime Error");
+                        WriteLine(((ScriptRuntimeException)ex).DecoratedMessage);
+                    }
+                    else if (ex is SyntaxErrorException)
+                    {
+                        WriteLine("!>Lua Syntax Error");
+                        WriteLine(((SyntaxErrorException)ex).DecoratedMessage);
+                    }
+                    else
+                    {
+                        WriteLine("!>Unhandled Exception");
+                        WriteLine(ex.Message);
+
+                    }
+                    WriteLine("1> Exception Source -> " + ex.Source);
+                    WriteLine("1> Fix your errors before you can compile!");
+                    WriteLine("========== Compilation failed ==========");
+                    return;
+                    //WriteLine("Press any key to continue...");
+                    //Console.ReadKey(); // prevent console from closing up so we can see the error
                 }
-                Console.WriteLine("Making .mpc file...");
-                if (ProcessCompilationForLuaMissionScript(luaMission, outputFileName)==true)
+                //WriteLine($"Outputing it to file {outputFileName}...");
+                bool compileStatus = ProcessCompilationForLuaMissionScript(luaMission, outputFileName);// $"The following mission script was compiled with LuaC\n\tSource file name: {inputFileName}\n\tDate: {DateTime.Now.ToString()}");
+                if (compileStatus == true)
                 {
-                    Console.WriteLine("Success!\noutputed to " + Path.GetFullPath(outputFileName));
+                    WriteLine($"1> {Path.GetFullPath(inputFileName)} -> {Path.GetFullPath(outputFileName)}");
+                    WriteLine("========== Compilation success =========="); //\noutputed to " + Path.GetFullPath(outputFileName));
                 }
                 else
                 {
-                    Console.WriteLine("Something went wrong, please try again later.");
+                    WriteLine("========== Compilation failed ==========");
                 }
-                Console.WriteLine("");
+                // output log
+                if (Log)
+                {
+                    TextWriter writer = File.CreateText(LogFileName+".log");
+                    writer.Write(consoleLog.ToString());
+                    writer.Flush();
+                    writer.Close();
+                }
             }
             else
             {
-                Console.WriteLine("Nothing inputed");
-                Console.WriteLine("Valid arguments list:");
+                WriteLine("Nothing inputed");
+                WriteLine("Valid arguments list:");
                 ShowAllArguments();
             }
         }

@@ -5,11 +5,11 @@ local Character = PACKAGE.InitMission.CreateCharacter(-2313.2590, 9.9802, 197.48
 local actorSetting = PACKAGE.InitMission.CreateActorSetting({Player,Character})
 PACKAGE.InitMission.actorSetup.Add(actorSetting)
 
-local LogicStart = PACKAGE.InitMission.LogicStart(0,"Driver: Parallel Lines Lua Mission")
+local LogicStart = PACKAGE.InitMission.LogicStart(0,"Driver: Parallel Lines Lua Test Mission (Init) - Start")
 LogicStart.wireCollection.Add(PACKAGE.InitMission.ActorCreation(Player))
 
 -- Main mission
-local mainMission = PACKAGE.AddMission(77,"mission77.mpc")
+local mainMission = PACKAGE.AddMission(77,"mainMission")
 
-local mainMission_LogicStart = PACKAGE.InitMission.LogicStart()
+local mainMission_LogicStart = mainMission.LogicStart(0,"Main Mission - Start")
 mainMission_LogicStart.wireCollection.Add(mainMission.FadeAway(1.5))

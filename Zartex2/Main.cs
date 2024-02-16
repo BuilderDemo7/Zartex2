@@ -3274,122 +3274,7 @@ namespace Zartex
         // LUA D3
         public static LuaMissionScript importLuaFromFile(string filepath)
         {
-            Script script = new Script();
-            UserData.RegisterAssembly();
-
-            LuaMissionScript LMS = new LuaMissionScript();
-            LMS.WorkingDirectory = Path.GetDirectoryName(filepath);
-            script.Globals["MISSION"] = LMS;
-
-            // enums and stuff
-            script.Globals["COLLECTABLE_PISTOL"] = CollectableType.Pistol;
-            script.Globals["COLLECTABLE_BERETTA"] = CollectableType.Beretta;
-            script.Globals["COLLECTABLE_SILENCED"] = CollectableType.Silenced;
-            script.Globals["COLLECTABLE_M4A1"] = CollectableType.M4A1;
-            script.Globals["COLLECTABLE_SHOTGUN"] = CollectableType.Shotgun;
-            script.Globals["COLLECTABLE_UZI"] = CollectableType.Uzi;
-            script.Globals["COLLECTABLE_SMG"] = CollectableType.SubMachineGun;
-            script.Globals["COLLECTABLE_MG"] = CollectableType.MachineGun;
-            script.Globals["COLLECTABLE_MEDKIT"] = CollectableType.Medkit;
-
-            // hmm.. I'm not sure if these really help
-            script.Globals["PERSONALITY_UNDEFINED"] = -1;
-            script.Globals["PERSONALITY_CIVILIANSTUCK"] = 0;
-            script.Globals["PERSONALITY_NORMAL"] = 1;
-            script.Globals["PERSONALITY_PATHANDVEHICLE"] = 2;
-            script.Globals["PERSONALITY_PATHFACE"] = 9;
-
-            script.Globals["VEHICLEFLAGS_SPAWNED_AND_UNLOCKED"] = 0x12030001;
-            script.Globals["VEHICLEFLAGS_UNSPAWNED_AND_UNLOCKED"] = 0x12030000;
-
-            script.Globals["CHARACTERFLAGS_UNSPAWNED"] = DynValue.NewNumber(131072);
-            script.Globals["CHARACTERFLAGS_SPAWNED"] = DynValue.NewNumber(131073);
-
-            script.Globals["SPECIALEFFECT_FAKE_EXPLOSION"] = 4;
-            script.Globals["SPECIALEFFECT_EXPLOSION"] = 1;
-
-            script.Globals["VehicleType"] = typeof(VehicleType);
-
-            script.Globals["CHEAT_INFINITEMASS"] = 1;
-
-            script.Globals["PROXIMITYCHECKTYPE_APROXIMATE"] = 1;
-            script.Globals["PROXIMITYCHECKTYPE_DISTANCE"] = 2;
-
-            script.Globals["CARGODOORSACTION_OPEN"] = 1;
-            script.Globals["CARGODOORSACTION_CLOSE"] = 2;
-
-            script.Globals["SKIN_TANNER"] = 0xBA125961;
-            script.Globals["SKIN_JONES"] = 0xE52A26EA;
-
-            script.Globals["SKIN_LOMAZ"] = 0x759C10B3;
-            script.Globals["SKIN_CALITA"] = 0xDCE0D782;
-            script.Globals["SKIN_BADHAND"] = 0xF52DB73B;
-            script.Globals["SKIN_JERICHO"] = 0x1517B105;
-
-            script.Globals["SKIN_BODYGUARD1"] = 0x1944FDE4;
-            script.Globals["SKIN_BODYGUARD2"] = 0x804DAC5E;
-
-            script.Globals["SKIN_BACCUS"] = 0xA8EAD1AE;
-            script.Globals["SKIN_TICO"] = 0x11C25CD5;
-
-            script.Globals["SKIN_SB_GOON1"] = 0x9E892CAC;
-            script.Globals["SKIN_SB_GOON2"] = 0x7807D16;
-
-            script.Globals["SKIN_THE_GATOR"] = 0x613C6BD2;
-
-            script.Globals["SKIN_GATOR_GOON1"] = 0xA99D8E66;
-            script.Globals["SKIN_GATOR_GOON2"] = 0x3094DFDC;
-            script.Globals["SKIN_GATOR_GOON3"] = 0x4793EF4A;
-
-            script.Globals["SKIN_JERICHO_GOON1"] = 0x135E6F23;
-            script.Globals["SKIN_JERICHO_GOON2"] = 0x8A573E99;
-            script.Globals["SKIN_JERICHO_GOON3"] = 0xFD500E0F;
-
-            script.Globals["SKIN_TIMMY"] = 0x10B0D246;
-
-            script.Globals["SKIN_TURKISH_UNDERCOVER"] = 0xAC1CD5A4;
-            script.Globals["SKIN_FRENCH_UNDERCOVER"] = 0x9B548DB;
-
-            script.Globals["SKIN_MIAMICOP1"] = 0xEC1491ED; // chief
-            script.Globals["SKIN_MIAMICOP2"] = 0x751DC057;
-            script.Globals["SKIN_MIAMICOP3"] = 0xEB7955F4;
-            script.Globals["SKIN_MIAMICOP4"] = 0xCAD3FF7B; // black cop
-            script.Globals["SKIN_NICECOP1"] = 0x8C95F722;
-            script.Globals["SKIN_NICECOP2"] = 0x65F65217;
-
-            script.Globals["SKIN_MIAMI_WMWSBP"] = 0x54B76AD8;    // White Male: wearing White Shirt and Black Pants 
-            script.Globals["SKIN_MIAMI_WOMYBHJP"] = 0xCDBE3B62;  // White Old Male: Yellow Brown Hair and wearing Jeans Pants
-            script.Globals["SKIN_MIAMI_BMWSBP"] = 0xBAB90BF4;    // Black Male: wearing White Shirt and Black Pants
-            script.Globals["SKIN_MIAMI_BWMTTBS"] = 0x24DD9E57;   // Bald White Male: wearing Tank Top and Brown Shorts
-            script.Globals["SKIN_MIAMI_WMPSWP"] = 0x53DAAEC1;    // White Male: wearing Pink Suit and White Pants
-            script.Globals["SKIN_MIAMI_WFWD"] = 0x5A6CE2EA;      // White Female: wearing White Dress
-            script.Globals["SKIN_MIAMI_WMBSBS"] = 0xD3C8CE3A;    // White Male: wearing Black Sweater and Black Jeans
-            script.Globals["SKIN_MIAMI_BFBSBP"] = 0xA4CFFEAC;    // Black Female: wearing Brown Sweater and Black Pants
-            script.Globals["SKIN_MIAMI_WFBSBP"] = 0x3470E33D;    // White Female: wearing Black Sweater and Black Pants
-
-            //script.Globals["SKIN_MIAMI_MARATHONIST_WOMAN"] = DynValue.NewNumber(0x3AAB6B0F);
-            //script.Globals["SKIN_MIAMI_BLACK_WOMAN"] = DynValue.NewNumber(0xCDBE3B62);
-            //script.Globals["SKIN_MIAMI_BLACK_WOMAN"] = DynValue.NewNumber(0xD3C8CE3A);
-
-            // I fix it later :)
-            // TODO: Fix skin IDs (mission57.dam)
-            /*
-            script.Globals["SKIN_NICE_WHITESHIRT_MAN"] = 0xBF80D1DB;
-            script.Globals["SKIN_NICE_BLACKSHIRT_MAN"] = 0x518EB0F7;
-            script.Globals["SKIN_NICE_TANKTOP_MAN"] = 0xCFEA2554;
-            script.Globals["SKIN_NICE_BUSY_WOMAN"] = 0x21E44478;
-            script.Globals["SKIN_NICE_YOUNG_WOMAN"] = 0xA69BE09A; 
-            script.Globals["SKIN_NICE_BIKINI_WOMAN"] = 0xC65C697F;
-            script.Globals["SKIN_NICE_BUSY_MAN"] = 0x3F92B120;
-            script.Globals["SKIN_NICE_SWEATER_WOMAN"] = 0xD6F11415;
-            */
-
-            //script.DoString("local logicStart = MISSION.logicStart()"); // logic start global variable
-
-            DynValue res = script.DoFile(filepath);
-
-            //script.DoString("LogicStart()"); // calls the logic start
-            return LMS;
+            return LuaMissionScript.LoadScriptFromFile(filepath);
         }
 
         // LUA DPL
@@ -3400,7 +3285,7 @@ namespace Zartex
 
             LuaMissionPackage LMS = new LuaMissionPackage(); //new LuaMissionScriptDPL();
             script.Globals["PACKAGE"] = LMS;
-            script.Globals["MISSION"] = LMS.InitMission; // classic mode?
+            script.Globals["INITMISSION"] = LMS.InitMission; // classic mode?
 
             //script.DoString("local logicStart = MISSION.logicStart()"); // logic start global variable
 
@@ -3523,12 +3408,13 @@ namespace Zartex
 
                 // HARDCODED S***!!!
                 MissionPackage.Children = luaMission.Children;
+                /*
                 MissionPackage.MissionData = luaMission.InitMission.missionData;
                 MissionPackage.MissionData.LogicData = luaMission.InitMission.missionData.LogicData;
                 MissionPackage.MissionData.LogicData.Spooler = new DSCript.Spooling.SpoolablePackage()
                 {
                     Context = (int)ChunkType.LogicExportData,
-                    Description = "Logic export data"
+                    Description = "Logic Export Data"
                 };
                 MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.LogicData.Spooler);
 
@@ -3536,7 +3422,7 @@ namespace Zartex
                 MissionPackage.MissionData.LogicData.WireCollection.Spooler = new DSCript.Spooling.SpoolableBuffer()
                 {
                     Context = (int)ChunkType.LogicExportWireCollections,
-                    Description = "Wire collections"
+                    Description = "Exported Wire Collections"
                 };
                 MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.LogicData.WireCollection.Spooler);
 
@@ -3578,6 +3464,7 @@ namespace Zartex
                     Description = "Exported mission objects"
                 };
                 MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.Objects.Spooler);
+                */
 
                 MissionPackage.MissionIndex = 0;
                 MissionPackage.Missions = new List<ExportedMission>();
