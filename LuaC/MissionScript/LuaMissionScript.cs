@@ -400,6 +400,8 @@ namespace Zartex
         public float X { get { return this.StartPosition.X; } set { this.StartPosition = new Vector2(value, this.StartPosition.Y); } }
         public float Y { get { return this.StartPosition.Y; } set { this.StartPosition = new Vector2(this.StartPosition.X, value); } }
 
+        public SpoolableBuffer Spooler { get { return base.Spooler; } set { base.Spooler = value; } }
+
         public static string GetCityNameByType(MissionCityType cityType)
         {
             switch (cityType)
@@ -525,6 +527,9 @@ namespace Zartex
             script.Globals["CARGODOORSACTION_OPEN"] = 1;
             script.Globals["CARGODOORSACTION_CLOSE"] = 2;
 
+            // temporary
+            // CharacterControl.pProperty: 18 = teleport?
+
             // for AIPath actor
             script.Globals["PATHFLAGS_STOP_WHEN_DONE"] = 65536;
             script.Globals["PATHFLAGS_CONTINUE_WHEN_DONE"] = 1;
@@ -543,6 +548,8 @@ namespace Zartex
 
             script.Globals["COUNTERCONDITION_SMALLERTHAN"] = 5;
             script.Globals["COUNTERCONDITION_BIGGERTHAN"] = 4;
+
+            script.Globals["COLLISIONWATCH_FLAGS_TOUCH"] = 1;
 
             // Messages display types
             script.Globals["DISPLAYMESSAGE_CENTER_UP"] = 0x010000;
@@ -563,15 +570,18 @@ namespace Zartex
             script.Globals["SKIN_BACCUS"] = 0xA8EAD1AE;
             script.Globals["SKIN_TICO"] = 0x11C25CD5;
 
+            // South beach goons
             script.Globals["SKIN_SB_GOON1"] = 0x9E892CAC;
             script.Globals["SKIN_SB_GOON2"] = 0x7807D16;
 
             script.Globals["SKIN_THE_GATOR"] = 0x613C6BD2;
 
+            // The Gator's goons
             script.Globals["SKIN_GATOR_GOON1"] = 0xA99D8E66;
             script.Globals["SKIN_GATOR_GOON2"] = 0x3094DFDC;
             script.Globals["SKIN_GATOR_GOON3"] = 0x4793EF4A;
 
+            // Jericho's goons (from Istanbul)
             script.Globals["SKIN_JERICHO_GOON1"] = 0x135E6F23;
             script.Globals["SKIN_JERICHO_GOON2"] = 0x8A573E99;
             script.Globals["SKIN_JERICHO_GOON3"] = 0xFD500E0F;
@@ -1473,6 +1483,97 @@ namespace Zartex
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
+        public Node RearVehicleShooting(Actor vehicle, Actor player, int weapon1, int weapon2, int vehicleType = 2, string note = "", int r = 255, int g = 190, int b = 122)
+        {
+            if (vehicle == null)
+                throw new ScriptRuntimeException("Bad Argument #1 - Actor of type Vehicle expected, got nil");
+            if (player == null)
+                throw new ScriptRuntimeException("Bad Argument #2 - Actor of type Character expected, got nil");
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 105,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+
+                        new ActorProperty(vehicle.index) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pVehicle")
+                        },
+                        new ActorProperty(player.index) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pPlayer")
+                        },
+
+                        new EnumProperty(weapon1) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWeapon1")
+                        },
+                        new EnumProperty(weapon2) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWeapon2")
+                        },
+
+                        new EnumProperty(vehicleType) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pVehicleType")
+                        }
+                    }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
+        public Node CollisionWatch(Actor actor, Actor secondActor = null, int impactForce = 500, int flags = 1, string note = "", int r = 255, int g = 190, int b = 122)
+        {
+            if (actor == null)
+                throw new ScriptRuntimeException("Bad Argument #1 - Actor expected, got nil");
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 22,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+
+                        new ActorProperty(actor) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pActor")
+                        },
+                        new ActorProperty(secondActor == null ? -1 : secondActor.index) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pSecondActor")
+                        },
+
+                        new FloatProperty(impactForce) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pImpactForce")
+                        },
+
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pFlags")
+                        }
+                    }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
         public Node VehicleGunnerControl(Actor player, Actor passenger, int weapon, int numberOfBullets, bool alwaysOverlay = false, string note = "", int r = 0, int g = 200, int b = 122)
         {
             short stringId = 0;
@@ -1892,14 +1993,39 @@ namespace Zartex
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
-        public Node SetCharacterFelonyTo(Actor character, float felony, int flags = 0, string note = "", int r = 200, int g = 255, int b = 100)
+        public Node SetCharacterFelonyTo(Actor character, float felony, int flags = 0, string note = "Character.SetFelonyTo()", int r = 200, int g = 255, int b = 100)
         {
             return CharacterControl(character, 6, felony, 0, -1, null, null, "", -1, "", 0, flags, note, r, g, b);
         }
 
-        public Node SetCharacterTakeHealth(Actor character, float amount, int flags = 0, string note = "", int r = 200, int g = 255, int b = 100)
+        public Node SetCharacterTakeHealth(Actor character, float amount, int flags = 0, string note = "Character.TakeHealth()", int r = 200, int g = 255, int b = 100)
         {
             return CharacterControl(character, 1, amount, 0, -1, null, null, "", -1, "", 0, flags, note, r, g, b);
+        }
+
+        public Node SetCharacterVulnerability(Actor character, float vulnerability, int flags = 0, string note = "Character.SetVulnerability()", int r = 200, int g = 255, int b = 100)
+        {
+            return CharacterControl(character, 7, vulnerability, 0, -1, null, null, "", -1, "", 0, flags, note, r, g, b);
+        }
+
+        public Node SetCharacterPositionTo(Actor character, float x, float y, float z, float angle = 0, int flags = 0, string note = "Character.SetPositionTo(float,float,float,float)", int r = 200, int g = 255, int b = 100)
+        {
+            var a = (Math.PI / 180) * angle; // convert degrees to radians
+            Vector3 fwd = new Vector3(
+                (float)(Math.Cos(0) * Math.Cos(a)), // x
+
+                1, //(float)-Math.Sin(angle), // altitude
+
+                (float)(Math.Cos(0) * Math.Sin(a)) // z
+            );
+
+            Actor marker = Marker(x, y, z, fwd.X, fwd.Y, fwd.Z);
+            return CharacterControl(character, 18, 0, 0, -1, null, marker, "", -1, "", 0, flags, note, r, g, b);
+        }
+
+        public Node SetCharacterPositionTo(Actor character, Actor actor, int flags = 0, string note = "Character.SetPositionTo(Actor)", int r = 200, int g = 255, int b = 100)
+        {
+            return CharacterControl(character, 18, 0, 0, -1, null, actor, "", -1, "", 0, flags, note, r, g, b);
         }
 
         public Node SetCharacterStuckInVehicle(Actor character, int flags = 0, string note = "SetCharacterStuckInVehicle()", int r = 200, int g = 255, int b = 100)
@@ -2535,6 +2661,30 @@ namespace Zartex
             return new Actor(missionData.LogicData.Actors.Definitions[idx], idx);
         }
 
+        public Actor Marker(float x1, float y1, float z1, float x2 = 1, float y2 = 0, float z2 = 0, string note = "", int r = 100, int g = 128, int b = 255)
+        {
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            missionData.LogicData.Actors.Definitions.Add(new ActorDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 105,
+                StringId = stringId,
+                ObjectId = missionData.Objects.Objects.Count,
+                Flags = 0x72D5,
+                Properties = new List<NodeProperty>
+                {
+                    // yes, nothing :)
+                }
+            });
+            missionData.Objects.Objects.Add(new MarkerObject() { Position = new Vector3((float)x1, (float)y1, (float)z1), V1 = new Vector3((float)x2, (float)y2, (float)z2) });
+
+            int idx = missionData.LogicData.Actors.Definitions.Count - 1;
+            return new Actor(missionData.LogicData.Actors.Definitions[idx], idx);
+        }
+
         public Actor CreateArea(float x, float y, float z, float areaX, float areaY, float areaZ, float areaW, float w = 1.0f, Actor attachedTo = null, float radius = 0, int flags = 1, string note = "", int r = 100, int g = 128, int b = 255)
         {
             short stringId = 0;
@@ -2587,6 +2737,7 @@ namespace Zartex
             return new Actor(missionData.LogicData.Actors.Definitions[idx], idx);
         }
 
+        // AnimProp
         public Actor GetAnimatedObjectAt(float x, float y, float z, int type = 0, string note = "", int r = 200, int g = 128, int b = 128)
         {
             short stringId = 0;
@@ -2900,11 +3051,26 @@ namespace Zartex
         }
 
         // chaserType
-        // 0 = chases the actor but uses patrolling cop icon
-        // 1 (or not 0) = chases the actor but uses red alerted cop icon
+        // 0 (default) = chases the actor but uses patrolling cop icon
+        // 1 = chases the actor but uses red alerted cop icon
+        // 2 = chases the actor but uses red alerted cop icon and goes faster and ram the target
         public Node CharacterChaseActor(Actor character, Actor actor, float driveSpeed, int chaserType = 0, string note = "CharacterDriveToActor", int r = 128, int g = 0, int b = 255)
         {
-            return CharacterDriveFollowingActor(character, actor, driveSpeed, 2, chaserType == 0 ? 25690112 : 8912896, note, r, g, b);
+            int flags = 25690112;
+            switch (chaserType)
+            {
+                case 0:
+                default:
+                    flags = 25690112;
+                    break;
+                case 1:
+                    flags = 8912896;
+                    break;
+                case 2:
+                    flags = 9961472;
+                    break;
+            }
+            return CharacterDriveFollowingActor(character, actor, driveSpeed, 2, flags, note, r, g, b);
         }
 
         public Actor AITarget(Actor character, float x, float y, float z, float walkSpeed, float driveSpeed, int desiredTransport, int flags = 0, string note = "", int r = 128, int g = 0, int b = 255)
@@ -3615,10 +3781,6 @@ namespace Zartex
         public List<LuaMissionScriptDPL> Missions = new List<LuaMissionScriptDPL>();
         public List<SpoolablePackage> MissionSpoolerPackages = new List<SpoolablePackage>();
 
-        public bool IsLoaded { get; set; }
-
-        public string FileName { get; set; }
-
         public SpoolablePackage InitSpooler = new SpoolablePackage()
         {
             Context = (int)ChunkType.SpoolSystemInitChunker,
@@ -3638,40 +3800,128 @@ namespace Zartex
             }
         };
 
-        public LuaMissionScriptDPL AddMission(short subMissionId, string name = null)
+        public LuaMissionScriptDPL CreateMission(string packageName = null, short id = 5, float x = 0, float y = 0, int flags = 0x01010000)
         {
             LuaMissionScriptDPL mission = new LuaMissionScriptDPL();
             // EPMR
-            SpoolablePackage package = new SpoolablePackage()
+            mission.Spooler = new SpoolablePackage()
             {
                 Context = (int)ChunkType.ExportedMissionRoot,
             };
-            if (name != null)
-                package.Description = name;
-
-            // SSLP
-            MissionsLookup.Lookups.Add(new LookupEntry((short)subMissionId, MissionSpoolerPackages.Count));
-
+            if (packageName != null)
+                mission.Spooler.Description = packageName;
             // EM__
             mission.missionData.Spooler = new SpoolablePackage()
             {
                 Context = (int)ChunkType.ExportedMissionChunk,
-                Description = "Exported mission"
+                Description = "Exported Mission"
             };
+            mission.missionSummary.Spooler = new SpoolableBuffer()
+            {
+                Context = (int)ChunkType.MissionSummary,
+                Description = "Mission Summary"
+            };
+            mission.missionSummary.Spooler.GetMemoryStream().Position = 0;
+            mission.missionSummary.Spooler.Write((byte)0x01);
+            mission.missionSummary.Spooler.Write(new byte[7]);
+            mission.missionSummary.Spooler.Write((byte)0x01);
+            mission.missionSummary.Spooler.Write(new byte[3]);
+            mission.missionSummary.Spooler.Write(id);
+            mission.missionSummary.Spooler.Write((ushort)0xCCCC);
+            mission.missionSummary.Spooler.Write(x);
+            mission.missionSummary.Spooler.Write(y);
+            mission.missionSummary.Spooler.Write(flags);
             mission.missionData.Objects.Spooler = new SpoolableBuffer()
             {
                 Context = (int)ChunkType.ExportedMissionObjects,
-                Description = "Exported mission objects"
+                Description = "Exported Mission Objects"
             };
-            package.Children.Add(mission.missionData.Spooler as SpoolablePackage);
-            MissionSpoolerPackages.Add(package);
+            mission.missionData.LogicData.Spooler = new DSCript.Spooling.SpoolablePackage()
+            {
+                Context = (int)ChunkType.LogicExportData,
+                Description = "Logic Export Data"
+            };
+            mission.missionData.Spooler.Children.Add(mission.missionData.LogicData.Spooler);
 
-            Children.Add(package);
+            mission.missionData.LogicData.Actors.Spooler = new DSCript.Spooling.SpoolablePackage()
+            {
+                Context = (int)ChunkType.LogicExportActorsChunk,
+                Description = "Logic Export Data"
+            };
+            mission.missionData.Spooler.Children.Add(mission.missionData.LogicData.Spooler);
+
+            mission.missionData.LogicData.WireCollection = new WireCollectionData();
+            mission.missionData.LogicData.WireCollection.Spooler = new DSCript.Spooling.SpoolableBuffer()
+            {
+                Context = (int)ChunkType.LogicExportWireCollections,
+                Description = "Exported Wire Collections"
+            };
+            mission.missionData.Spooler.Children.Add(mission.missionData.LogicData.WireCollection.Spooler);
+
+            mission.missionData.LogicData.StringCollection.Spooler = new DSCript.Spooling.SpoolableBuffer()
+            {
+                Context = (int)ChunkType.LogicExportStringCollection,
+                Description = "String Collection"
+            };
+            mission.missionData.Spooler.Children.Add(mission.missionData.LogicData.StringCollection.Spooler);
+
+            mission.missionData.LogicData.SoundBankTable.Spooler = new DSCript.Spooling.SpoolableBuffer()
+            {
+                Context = (int)ChunkType.LogicExportSoundBank,
+                Description = "Sound Bank Table"
+            };
+            mission.missionData.Spooler.Children.Add(mission.missionData.LogicData.SoundBankTable.Spooler);
+
+            mission.missionData.LogicData.Actors = new LogicDataCollection<ActorDefinition>();
+            mission.missionData.LogicData.Actors.Spooler = new DSCript.Spooling.SpoolablePackage()
+            {
+                Context = (int)ChunkType.LogicExportActorsChunk,
+                Description = "Actors Definitions table"
+            };
+            mission.missionData.Spooler.Children.Add(mission.missionData.LogicData.Actors.Spooler);
+
+            mission.missionData.LogicData.Nodes = new LogicDataCollection<NodeDefinition>();
+            mission.missionData.LogicData.Nodes.Spooler = new DSCript.Spooling.SpoolablePackage()
+            {
+                Context = (int)ChunkType.LogicExportNodesChunk,
+                Description = "Logic Definitions Table"
+            };
+            mission.missionData.LogicData.Spooler.Children.Add(mission.missionData.LogicData.Nodes.Spooler);
+            mission.missionData.LogicData.Nodes.Definitions = new List<NodeDefinition>();
+
+            mission.missionData.Spooler.Children.Add(new DSCript.Spooling.SpoolablePackage()
+            {
+                Context = (int)ChunkType.LogicExportPropertiesTable,
+                Description = "Logic Properties Table"
+            });
+
+            mission.missionData.Objects = new ExportedMissionObjects();
+            mission.missionData.Objects.Spooler = new DSCript.Spooling.SpoolableBuffer()
+            {
+                Context = (int)ChunkType.ExportedMissionObjects,
+                Description = "Exported Mission Objects"
+            };
+            mission.missionData.Spooler.Children.Add(mission.missionData.Objects.Spooler);
+            mission.missionData.Objects.Objects = new List<MissionObject>();
+            ((SpoolablePackage)mission.Spooler).Children.Add(mission.missionData.Spooler as SpoolablePackage);
+
+
+            Children.Add(mission.Spooler as SpoolablePackage);
+
             return mission;
+        }
+
+        public void AddMission(LuaMissionScriptDPL mission, short subMissionId, string name = null)
+        {
+            // SSLP
+            MissionsLookup.Lookups.Add(new LookupEntry((short)subMissionId, MissionSpoolerPackages.Count));
+            MissionSpoolerPackages.Add(mission.Spooler as SpoolablePackage);
         }
 
         public LuaMissionPackage() : base()
         {
+            InitMission = CreateMission("Initial Mission", 5, 0, 0, 0);
+
             Children.Add(InitSpooler);
             InitMission.missionData.Spooler = new SpoolablePackage()
             {
@@ -3698,6 +3948,8 @@ namespace Zartex
         public LuaMissionScriptDPL() : base()
         {
         }
+
+        public Spooler Spooler { get; set; }
 
         public Node LogicStart(int flags = 0, string note = "", int r = 0, int g = 200, int b = 122)
         {
