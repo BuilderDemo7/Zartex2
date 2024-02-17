@@ -518,6 +518,8 @@ namespace Zartex
 
             // for CheatControl node
             script.Globals["CHEAT_INFINITEMASS"] = 1;
+            script.Globals["CHEAT_18WHEELER_MODE"] = 2;
+            script.Globals["CHEAT_FUGITIVE_MODE"] = 3;
 
             // for ProximityCheck node
             script.Globals["PROXIMITYCHECKTYPE_APROXIMATE"] = 1;
@@ -2737,7 +2739,7 @@ namespace Zartex
             return new Actor(missionData.LogicData.Actors.Definitions[idx], idx);
         }
 
-        // AnimProp
+        // AnimProp, animated prop
         public Actor GetAnimatedObjectAt(float x, float y, float z, int type = 0, string note = "", int r = 200, int g = 128, int b = 128)
         {
             short stringId = 0;
@@ -2747,7 +2749,7 @@ namespace Zartex
             missionData.LogicData.Actors.Definitions.Add(new ActorDefinition()
             {
                 Color = new NodeColor(r, g, b, 255),
-                TypeId = 4,
+                TypeId = 104,
                 StringId = stringId,
                 ObjectId = missionData.Objects.Objects.Count,
                 Flags = 0x72D5,
