@@ -51,10 +51,9 @@ ctd0_t.wireCollection.Add(IGCS,2) -- disable in-game cutscene
 LogicStart.wireCollection.Add(ctd3_t)
 
 -- Failed sequences
-local OutOfTime = MISSION.OverlayClockWatch(mainInfo.WinTime)
-OutOfTime.wireCollection.Add(MISSION.FailMission(12,5.0))
-OutOfTime.wireCollection.Add(MISSION.CameraSelect(gPlayer,13))
-ctd0_t.wireCollection.Add(OutOfTime)
+local MissionComp = MISSION.OverlayClockWatch(mainInfo.WinTime)
+MissionComp.wireCollection.Add(MISSION.MissionComplete(false))
+ctd0_t.wireCollection.Add(MissionComp)
 -- Classic, "You wrecked your vehicle"
 local vehicleWrecked = MISSION.VehicleWrecked(gCar)
 vehicleWrecked.wireCollection.Add(MISSION.FailMission(5,5.0))
