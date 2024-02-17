@@ -14,7 +14,7 @@ local mainInfo = {
 }
 
 local gCar = MISSION.CreateVehicle(mainInfo.startPosition[1],mainInfo.startPosition[2],mainInfo.startPosition[3], mainInfo.startPosition[4], mainInfo.vehicleId, mainInfo.vehicleColorId, "gCar", 302186497, 0, 1)
-local gPlayer = MISSION.CreateCharacterInVehicle(gCar,1, "Player", -1, -1, 1.0, 0.0,  0,  0.0,   0.35, -0.05, 0.1,  1)
+local gPlayer = MISSION.CreateCharacterInVehicle(gCar,SKIN_TANNER,1, "Player", -1, -1, 1.0, 0.0,  0,  0.0,   0.35, -0.05, 0.1,  1)
 MISSION.missionSummary.Level = mainInfo.city
 MISSION.missionSummary.MoodId = mainInfo.MoodId
 
