@@ -137,7 +137,7 @@ namespace Zartex._3D
                         // camera
                         case 9:
                             var cameraObject = (CameraObject)missionObject;
-                            return new Vector3D(cameraObject.V3.Y, cameraObject.V3.W, cameraObject.V3.Z);
+                            return new Vector3D(cameraObject.Position.X, cameraObject.Position.Z, cameraObject.Position.Y);
                         // objective icon
                         case 5:
                             var objectiveObject = (ObjectiveIconObject)missionObject;
@@ -212,7 +212,7 @@ namespace Zartex._3D
                         // camera
                         case 9:
                             var cameraObject = (CameraObject)missionObject;
-                            return new Vector3D(cameraObject.V1.X, cameraObject.V1.Z, cameraObject.V1.Y);
+                            return new Vector3D(cameraObject.Position.X, cameraObject.Position.Z, cameraObject.Position.Y);
                     }
                 }
             }

@@ -20,8 +20,9 @@ namespace Zartex
         }
 
         public Vector3 Position { get; set; }
-        public Vector2 V1 { get; set; }
-        public Vector2 V2 { get; set; }
+        //public Vector2 V1 { get; set; }
+        //public Vector2 V2 { get; set; }
+        public Vector4 Direction { get; set; }
 
         [TypeConverter(typeof(HexStringConverter))]
         public int UID { get; set; }
@@ -29,8 +30,9 @@ namespace Zartex
         protected override void LoadData(Stream stream)
         {
             Position = stream.Read<Vector3>();
-            V1 = stream.Read<Vector2>();
-            V2 = stream.Read<Vector2>();
+            Direction = stream.Read<Vector4>();
+            //V1 = stream.Read<Vector2>();
+            //V2 = stream.Read<Vector2>();
 
             UID = stream.ReadInt32();
         }
@@ -38,8 +40,9 @@ namespace Zartex
         protected override void SaveData(Stream stream)
         {
             stream.Write(Position);
-            stream.Write(V1);
-            stream.Write(V2);
+            //stream.Write(V1);
+            //stream.Write(V2);
+            stream.Write(Direction);
             stream.Write(UID);
         }
     }

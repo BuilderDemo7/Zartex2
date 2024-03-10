@@ -140,6 +140,7 @@
             this.getPlayerPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Content = new System.Windows.Forms.Panel();
             this.LeftMenu = new System.Windows.Forms.Panel();
+            this.toolSelectMission = new System.Windows.Forms.Button();
             this.lbl__EM = new System.Windows.Forms.Label();
             this.lblLELD = new System.Windows.Forms.Label();
             this.btnLECO = new System.Windows.Forms.Button();
@@ -152,7 +153,6 @@
             this.btnLESC = new System.Windows.Forms.Button();
             this.btnEMPR = new System.Windows.Forms.Button();
             this.btnEMOB = new System.Windows.Forms.Button();
-            this.toolSelectMission = new System.Windows.Forms.Button();
             this.MenuPanel.SuspendLayout();
             this.MenuBar.SuspendLayout();
             this.LeftMenu.SuspendLayout();
@@ -204,14 +204,14 @@
             // mnFile_New
             // 
             this.mnFile_New.Name = "mnFile_New";
-            this.mnFile_New.Size = new System.Drawing.Size(169, 22);
+            this.mnFile_New.Size = new System.Drawing.Size(180, 22);
             this.mnFile_New.Text = "New";
             this.mnFile_New.Click += new System.EventHandler(this.mnFile_New_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(166, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
             // 
             // mnFile_Open
             // 
@@ -224,7 +224,7 @@
             this.toolStripSeparator12,
             this.driverParallelLinesToolStripMenuItem});
             this.mnFile_Open.Name = "mnFile_Open";
-            this.mnFile_Open.Size = new System.Drawing.Size(169, 22);
+            this.mnFile_Open.Size = new System.Drawing.Size(180, 22);
             this.mnFile_Open.Text = "Open";
             // 
             // mnLoadFile
@@ -273,7 +273,7 @@
             // 
             this.mnFile_Save.Enabled = false;
             this.mnFile_Save.Name = "mnFile_Save";
-            this.mnFile_Save.Size = new System.Drawing.Size(169, 22);
+            this.mnFile_Save.Size = new System.Drawing.Size(180, 22);
             this.mnFile_Save.Text = "Save";
             this.mnFile_Save.Click += new System.EventHandler(this.MenuSaveFile);
             // 
@@ -281,14 +281,14 @@
             // 
             this.mnFile_SaveAs.Enabled = false;
             this.mnFile_SaveAs.Name = "mnFile_SaveAs";
-            this.mnFile_SaveAs.Size = new System.Drawing.Size(169, 22);
+            this.mnFile_SaveAs.Size = new System.Drawing.Size(180, 22);
             this.mnFile_SaveAs.Text = "Save As";
             this.mnFile_SaveAs.Click += new System.EventHandler(this.MenuSaveFileAs);
             // 
             // toolStripSeparator15
             // 
             this.toolStripSeparator15.Name = "toolStripSeparator15";
-            this.toolStripSeparator15.Size = new System.Drawing.Size(166, 6);
+            this.toolStripSeparator15.Size = new System.Drawing.Size(177, 6);
             // 
             // importLuaScript
             // 
@@ -297,7 +297,7 @@
             this.driverPLLuaToolStripMenuItem});
             this.importLuaScript.Enabled = false;
             this.importLuaScript.Name = "importLuaScript";
-            this.importLuaScript.Size = new System.Drawing.Size(169, 22);
+            this.importLuaScript.Size = new System.Drawing.Size(180, 22);
             this.importLuaScript.Text = "Import Lua Script";
             // 
             // driv3rLuaToolStripMenuItem
@@ -318,7 +318,7 @@
             // 
             this.importMPCBTN.Enabled = false;
             this.importMPCBTN.Name = "importMPCBTN";
-            this.importMPCBTN.Size = new System.Drawing.Size(169, 22);
+            this.importMPCBTN.Size = new System.Drawing.Size(180, 22);
             this.importMPCBTN.Text = "Import MPC File";
             this.importMPCBTN.Click += new System.EventHandler(this.importMPCBTN_Click);
             // 
@@ -326,19 +326,19 @@
             // 
             this.exportAsBTN.Enabled = false;
             this.exportAsBTN.Name = "exportAsBTN";
-            this.exportAsBTN.Size = new System.Drawing.Size(169, 22);
+            this.exportAsBTN.Size = new System.Drawing.Size(180, 22);
             this.exportAsBTN.Text = "Export as MPC file";
             this.exportAsBTN.Click += new System.EventHandler(this.exportAsBTN_Click);
             // 
             // mnSep1
             // 
             this.mnSep1.Name = "mnSep1";
-            this.mnSep1.Size = new System.Drawing.Size(166, 6);
+            this.mnSep1.Size = new System.Drawing.Size(177, 6);
             // 
             // mnFile_Exit
             // 
             this.mnFile_Exit.Name = "mnFile_Exit";
-            this.mnFile_Exit.Size = new System.Drawing.Size(169, 22);
+            this.mnFile_Exit.Size = new System.Drawing.Size(180, 22);
             this.mnFile_Exit.Text = "Exit";
             // 
             // editToolStripMenuItem
@@ -360,27 +360,27 @@
             this.driToolStripMenuItem,
             this.driv3rToolStripMenuItem});
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(97, 22);
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addToolStripMenuItem.Text = "Add";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(179, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem2.Text = "Wire Node";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.wireNodeToolStripMenuItem_Click);
             // 
             // stringToolStripMenuItem
             // 
             this.stringToolStripMenuItem.Name = "stringToolStripMenuItem";
-            this.stringToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.stringToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.stringToolStripMenuItem.Text = "String";
             this.stringToolStripMenuItem.Click += new System.EventHandler(this.stringToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(176, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
             // 
             // driToolStripMenuItem
             // 
@@ -391,7 +391,7 @@
             this.toolStripSeparator18,
             this.toolStripMenuItem3});
             this.driToolStripMenuItem.Name = "driToolStripMenuItem";
-            this.driToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.driToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.driToolStripMenuItem.Text = "Driver: Parallel Lines";
             // 
             // actorToolStripMenuItem
@@ -545,7 +545,7 @@
             this.toolStripSeparator14,
             this.appendBankTableToolStripMenuItem});
             this.driv3rToolStripMenuItem.Name = "driv3rToolStripMenuItem";
-            this.driv3rToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.driv3rToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.driv3rToolStripMenuItem.Text = "Driv3r";
             // 
             // objectToolStripMenuItem
@@ -912,12 +912,12 @@
             // toolStripSeparator13
             // 
             this.toolStripSeparator13.Name = "toolStripSeparator13";
-            this.toolStripSeparator13.Size = new System.Drawing.Size(94, 6);
+            this.toolStripSeparator13.Size = new System.Drawing.Size(177, 6);
             // 
             // findToolStripMenuItem
             // 
             this.findToolStripMenuItem.Name = "findToolStripMenuItem";
-            this.findToolStripMenuItem.Size = new System.Drawing.Size(97, 22);
+            this.findToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.findToolStripMenuItem.Text = "Find";
             this.findToolStripMenuItem.Click += new System.EventHandler(this.findToolStripMenuItem_Click);
             // 
@@ -971,8 +971,9 @@
             // getPlayerPositionToolStripMenuItem
             // 
             this.getPlayerPositionToolStripMenuItem.Name = "getPlayerPositionToolStripMenuItem";
-            this.getPlayerPositionToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.getPlayerPositionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.getPlayerPositionToolStripMenuItem.Text = "Get Player Position";
+            this.getPlayerPositionToolStripMenuItem.ToolTipText = "Shortcut: Ctrl+E";
             this.getPlayerPositionToolStripMenuItem.Click += new System.EventHandler(this.getPlayerPositionToolStripMenuItem_Click);
             // 
             // Content
@@ -1010,6 +1011,17 @@
             this.LeftMenu.Name = "LeftMenu";
             this.LeftMenu.Size = new System.Drawing.Size(156, 688);
             this.LeftMenu.TabIndex = 2;
+            // 
+            // toolSelectMission
+            // 
+            this.toolSelectMission.Enabled = false;
+            this.toolSelectMission.Location = new System.Drawing.Point(3, 63);
+            this.toolSelectMission.Name = "toolSelectMission";
+            this.toolSelectMission.Size = new System.Drawing.Size(150, 28);
+            this.toolSelectMission.TabIndex = 14;
+            this.toolSelectMission.Text = "Select Mission";
+            this.toolSelectMission.UseVisualStyleBackColor = true;
+            this.toolSelectMission.Click += new System.EventHandler(this.toolSelectMission_Click);
             // 
             // lbl__EM
             // 
@@ -1164,17 +1176,6 @@
             this.btnEMOB.Text = "Objects";
             this.btnEMOB.UseVisualStyleBackColor = true;
             // 
-            // toolSelectMission
-            // 
-            this.toolSelectMission.Enabled = false;
-            this.toolSelectMission.Location = new System.Drawing.Point(3, 63);
-            this.toolSelectMission.Name = "toolSelectMission";
-            this.toolSelectMission.Size = new System.Drawing.Size(150, 28);
-            this.toolSelectMission.TabIndex = 14;
-            this.toolSelectMission.Text = "Select Mission";
-            this.toolSelectMission.UseVisualStyleBackColor = true;
-            this.toolSelectMission.Click += new System.EventHandler(this.toolSelectMission_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1190,6 +1191,7 @@
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Zartex 2.0 Mission Editor";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Main_KeyDown);
             this.MenuPanel.ResumeLayout(false);
             this.MenuPanel.PerformLayout();
             this.MenuBar.ResumeLayout(false);

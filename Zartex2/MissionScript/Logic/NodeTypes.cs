@@ -75,6 +75,7 @@ namespace Zartex
             { 128, "PedestrianDensityControl" },
             { 129, "AwardWeaponToPlayer" },
 
+            { 130, "TruckDeliveryControl" },
             { 131, "SkipCutscene" },
             { 132, "ConeDataControl" },
             { 133, "InterestActorControl" },

@@ -3251,9 +3251,9 @@ namespace Zartex
 
             // set default matrix (looking forward)
             CameraObject camObj = (CameraObject)MissionPackage.MissionData.Objects.Objects[cam.ObjectId];
-            camObj.V1 = new Vector4(1, 0, 0, 0);
-            camObj.V2 = new Vector4(-1, 0, 0, 0);
-            camObj.V3 = new Vector4(-1, 0, 0, 0);
+            //camObj.V1 = new Vector4(1, 0, 0, 0);
+            //camObj.V2 = new Vector4(-1, 0, 0, 0);
+            //camObj.V3 = new Vector4(-1, 0, 0, 0);
 
             logicAddToWireCollectionByUser(MissionPackage.MissionData.LogicData.Nodes.Definitions.Count - 1);
             GenerateLogicNodes();
@@ -3397,10 +3397,26 @@ namespace Zartex
                 {
                     luaMission = importLuaFromFileDPL(luaFileDialog.FileName);
                 }
-                catch (ScriptRuntimeException ex)
+                catch (Exception ex)
                 {
-                    Console.WriteLine(ex.DecoratedMessage);
-                    MessageBox.Show(ex.DecoratedMessage, "Import Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (ex is ScriptRuntimeException)
+                    {
+                        ScriptRuntimeException r = ex as ScriptRuntimeException;
+                        MessageBox.Show(r.DecoratedMessage, "Lua Runtime Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else if (ex is MoonSharp.Interpreter.SyntaxErrorException)
+                    {
+                        MoonSharp.Interpreter.SyntaxErrorException s = ex as MoonSharp.Interpreter.SyntaxErrorException;
+                        MessageBox.Show(s.DecoratedMessage, "Lua Syntax Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        var st = new StackTrace(ex, true);
+                        var frame = st.GetFrame(0);
+                        var line = frame.GetFileLineNumber();
+
+                        MessageBox.Show(ex.Message + $"\n\n{frame.GetFileName()} - {line}:{frame.GetFileColumnNumber()}", "Unhandled Exception Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                     return;
                 }
 
@@ -3464,20 +3480,36 @@ namespace Zartex
                     Description = "Exported mission objects"
                 };
                 MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.Objects.Spooler);
-                */
-
+                
                 MissionPackage.MissionIndex = 0;
                 MissionPackage.Missions = new List<ExportedMission>();
 
                 // of course add the init mission
                 MissionPackage.Missions.Add(luaMission.InitMission.missionData);
                 // converting list of missions to list of exported missions
+                int id = 0;
                 foreach (LuaMissionScriptDPL mission in luaMission.Missions)
                 {
                     MissionPackage.Missions.Add(mission.missionData);
+                    Debug.WriteLine($"Add -> {mission.Spooler.Description} ({id})");
+                    id++;
                 }
+                */
 
-                MessageBox.Show("Success loading Lua mission script file!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //MissionPackage.Missions[0] = luaMission.InitMission.missionData;
+
+                SaveFileDialog saveFileDialog = new SaveFileDialog()
+                {
+                    Title = "Save compiled Lua mission script (DPL) to",
+                    Filter = "Mission Package|*.sp"
+                };
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    luaMission.Save(saveFileDialog.FileName);
+                    
+                    LoadScriptFile(saveFileDialog.FileName, true, 0);
+                    MessageBox.Show("Success loading Lua mission script file!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
         }
 
@@ -4387,6 +4419,19 @@ namespace Zartex
                 prompt.Close();
                 GenerateLogicNodes();
 
+            }
+        }
+
+        private void Main_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.E:
+                    if (e.Modifiers == Keys.Control)
+                    {
+                        getPlayerPositionToolStripMenuItem_Click(null, null);
+                    }
+                    break;
             }
         }
     }
