@@ -152,5 +152,11 @@ namespace Zartex
             DefinitionsTable.SetBuffer(dBuffer);
             PropertiesTable.SetBuffer(pBuffer);
         }
+
+        public LogicDataCollection()
+        {
+            DefinitionsTable = new SpoolableBuffer();
+            PropertiesTable = new SpoolableBuffer();
+        }
     }
 }
