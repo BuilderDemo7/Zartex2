@@ -2229,7 +2229,7 @@ namespace Zartex
             return CharacterControl(character, 18, 0, 0, -1, vehicle, marker, "", -1, "", 0, flags, note, r, g, b);
         }
 
-        public Node SetCharacterPositionTo(Actor character, Actor actor, Actor vehicle, int flags = 0, string note = "Character.SetPositionTo(Actor)", int r = 200, int g = 255, int b = 100)
+        public Node SetCharacterPositionTo(Actor character, Actor actor, Actor vehicle = null, int flags = 0, string note = "Character.SetPositionTo(Actor)", int r = 200, int g = 255, int b = 100)
         {
             return CharacterControl(character, 18, 0, 0, -1, vehicle, actor, "", -1, "", 0, flags, note, r, g, b);
         }	
