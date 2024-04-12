@@ -152,7 +152,7 @@ namespace Zartex
 
 
             importMPCBTN.Enabled = true;
-            importLuaScript.Enabled = true;
+            driv3rLuaToolStripMenuItem.Enabled = true;
 
             exportAsBTN.Enabled = true;
         }
@@ -3423,7 +3423,7 @@ namespace Zartex
                 // copy data from lua mission to current mission
 
                 // HARDCODED S***!!!
-                MissionPackage.Children = luaMission.Children;
+                //MissionPackage.Children = luaMission.Children;
                 /*
                 MissionPackage.MissionData = luaMission.InitMission.missionData;
                 MissionPackage.MissionData.LogicData = luaMission.InitMission.missionData.LogicData;
@@ -3505,9 +3505,13 @@ namespace Zartex
                 };
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
+                    if (MissionPackage != null)
+                       MissionPackage.Dispose(); // dispose the old one
                     luaMission.Save(saveFileDialog.FileName);
-                    
+
+                    luaMission.Dispose();
                     LoadScriptFile(saveFileDialog.FileName, true, 0);
+
                     MessageBox.Show("Success loading Lua mission script file!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
