@@ -19,8 +19,8 @@ namespace Zartex
             set { base.Spooler = value; }
         }
 
-        protected SpoolableBuffer DefinitionsTable { get; set; }
-        protected SpoolableBuffer PropertiesTable { get; set; }
+        public SpoolableBuffer DefinitionsTable { get; set; }
+        public SpoolableBuffer PropertiesTable { get; set; }
 
         private List<T> _definitions;
         

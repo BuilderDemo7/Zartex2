@@ -82,15 +82,12 @@ namespace Zartex
             // driver parallel lines types
             case 23: return typeof(MatrixProperty);
                 // new types reserves
-                case 24: return typeof(UnknownTypeProperty);
                 case 25: return typeof(PathProperty);
-                case 26: return typeof(UnknownTypeProperty);
-                case 27: return typeof(UnknownTypeProperty);
                 case 28: return typeof(ObjectTypeProperty);
                 case 29: return typeof(VehicleTintProperty);
                 case 30: return typeof(AnimationTypeProperty);
-                case 31: return typeof(UnknownTypeProperty);
-                case 32: return typeof(UnknownTypeProperty);
+                case 32: return typeof(AssetDensities);
+                default: return typeof(UnknownTypeProperty);
             }
 
             // nothing found :(
@@ -389,6 +386,61 @@ namespace Zartex
         public AnimationTypeProperty(int anim) : base(anim) { }
     }
 
+    public sealed class AssetDensities : NodeProperty
+    {
+        public override int TypeId
+        {
+            get { return 32; }
+        }
+
+        public override int Size
+        {
+            get { return 4+((Assets.Count*4)+(Densities.Count*4)); }
+        }
+
+        public List<int> Assets { get; set; }
+        public List<float> Densities { get; set; }
+
+        public override string ToString()
+        {
+            return $"[{Assets[0]}, {Assets[1]}, {Assets[2]}, ...]";
+        }
+
+        public override void LoadData(Stream stream)
+        {
+            var size = stream.ReadInt32();
+            var count = stream.ReadInt32();
+
+            Assets = new List<int>(count);
+            Densities = new List<float>(count);
+            for (int id = 0; id<count; id++)
+            {
+                Assets.Add(stream.ReadInt32());
+            }
+            for (int id = 0; id < count; id++)
+            {
+                Densities.Add(stream.ReadSingle());
+            }
+        }
+
+        public override void SaveData(Stream stream)
+        {
+            stream.Write(Size);
+            stream.Write(Assets.Count);
+            if (Assets.Count != Densities.Count)
+                throw new InvalidOperationException("count of Densities does not match with the count of Assets!");
+
+            foreach(int asset in Assets)
+            {
+                stream.Write(asset);
+            }
+            foreach (float density in Densities)
+            {
+                stream.Write(density);
+            }
+        }
+    }
+
     public sealed class MatrixProperty : NodeProperty
     {
         public override int TypeId
@@ -404,7 +456,7 @@ namespace Zartex
         float deg = (180 / (float)Math.PI);
 
         [Category("Direction")]
-        public new Vector4 Left { get; set; }
+        public new Vector4 Right { get; set; }
         [Category("Direction")]
         public new Vector4 Up { get; set; }
         [Category("Direction")]
@@ -421,7 +473,7 @@ namespace Zartex
             {
                 var rad = (float)(Math.PI / 180);
                 var a = rad * value; // convert degrees to radians (yaw)
-                var a2 = rad * (value - 90); // convert degrees to radians (yaw - 90 deg.)
+                var a2 = rad * (value + 90); // convert degrees to radians (yaw + 90 deg.)
                 var a3 = rad * -90; // convert degrees to radians (pitch)
                                     // forward
                 Forward = new Vector4(
@@ -431,8 +483,8 @@ namespace Zartex
 
                     (float)(Math.Cos(0) * Math.Sin(a)), 0 // z
                 );
-                // left
-                Left = new Vector4(
+                // right
+                Right = new Vector4(
                     (float)(Math.Cos(0) * Math.Cos(a2)), // x
 
                     0, //(float)-Math.Sin(angle), // altitude
@@ -469,26 +521,26 @@ namespace Zartex
             if (size != Size)
                 throw new InvalidOperationException("Invalid matrix property!");
 
-            Forward = stream.Read<Vector4>();
+            Right = stream.Read<Vector4>();
             Up = stream.Read<Vector4>();
-            Left = stream.Read<Vector4>();
+            Forward = stream.Read<Vector4>();
             Value = stream.Read<Vector4>(); // reads position
         }
 
         public override void SaveData(Stream stream)
         {
             stream.Write(Size);
-            stream.Write(Forward);
+            stream.Write(Right);
             stream.Write(Up);
-            stream.Write(Left);
+            stream.Write(Forward);
             stream.Write(Value);
         }
 
         public MatrixProperty() { }
-        public MatrixProperty(Vector4 position, Vector4 left, Vector4 up, Vector4 forward)
+        public MatrixProperty(Vector4 position, Vector4 right, Vector4 up, Vector4 forward)
         {
             Value = position;
-            Left = left;
+            Right = right;
             Up = up;
             Forward = forward;
         }
