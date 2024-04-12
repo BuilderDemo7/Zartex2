@@ -27,7 +27,7 @@ namespace Zartex
 
         public ActorSetTableData ActorSetTable { get; set; } // old class: SpoolableBuffer
         public WireCollectionData WireCollection { get; set; }
-        public SpoolableBuffer ScriptCounters { get; set; }
+        public ScriptCountersData ScriptCounters { get; set; }
         
         protected override void Load()
         {
@@ -44,7 +44,7 @@ namespace Zartex
             ActorSetTable = Spooler.GetFirstChild(ChunkType.LogicExportActorSetTable).AsResource<ActorSetTableData>(true);
 
             WireCollection = Spooler.GetFirstChild(ChunkType.LogicExportWireCollections).AsResource<WireCollectionData>(true);
-            ScriptCounters = Spooler.GetFirstChild(ChunkType.LogicExportScriptCounters) as SpoolableBuffer;
+            ScriptCounters = Spooler.GetFirstChild(ChunkType.LogicExportScriptCounters).AsResource<ScriptCountersData>(true);
         }
 
         protected override void Save()
@@ -59,6 +59,7 @@ namespace Zartex
             SpoolableResourceFactory.Save(Nodes);
             SpoolableResourceFactory.Save(ActorSetTable);
             SpoolableResourceFactory.Save(WireCollection);
+            SpoolableResourceFactory.Save(ScriptCounters);
         }
     }
 }

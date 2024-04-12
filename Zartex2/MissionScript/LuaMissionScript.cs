@@ -11,6 +11,8 @@ using DSCript.Spooling;
 using MoonSharp;
 using MoonSharp.Interpreter;
 
+using Zartex;
+
 namespace Zartex
 {
     [MoonSharpUserData]
@@ -392,6 +394,11 @@ namespace Zartex
         public ActorSetup() { Table = new List<ActorSet>(); }
     }
     [MoonSharpUserData]
+    public class ActorCollection
+    {
+        public List<int> Collection { get; set; }
+    }
+    [MoonSharpUserData]
     public class MissionSummary : MissionSummaryData
     {
         public short MoodId { get { return this.MissionId; } set { this.MissionId = value; } }
@@ -698,8 +705,8 @@ namespace Zartex
             missionData.LogicData.SoundBankTable.Table = new List<int>();
 
             // script counters
-            missionData.LogicData.ScriptCounters = new SpoolableBuffer();
-            missionData.LogicData.ScriptCounters.SetBuffer(new byte[4]);
+            missionData.LogicData.ScriptCounters = new ScriptCountersData();
+            missionData.LogicData.ScriptCounters.Counters = new List<int>();
 
             /*
             // logic start
@@ -883,7 +890,7 @@ namespace Zartex
                 {
                     if (externalMission.MissionData.LogicData.ScriptCounters!=null)
                     {
-                        missionData.LogicData.ScriptCounters.SetBuffer(externalMission.MissionData.LogicData.ScriptCounters.GetBuffer());
+                    missionData.LogicData.ScriptCounters.Counters = externalMission.MissionData.LogicData.ScriptCounters.Counters;
                     }
                     missionData.LogicData.Nodes.Definitions = externalMission.MissionData.LogicData.Nodes.Definitions;
                     missionData.LogicData.Actors.Definitions = externalMission.MissionData.LogicData.Actors.Definitions;
@@ -1296,26 +1303,26 @@ namespace Zartex
                         },
 
                         // type, tint
-                        new IntegerProperty(pWireCollection) {
+                        new IntegerProperty(type) {
                             StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pType")
                         },
-                        new IntegerProperty(pWireCollection) {
+                        new IntegerProperty(tintValue) {
                             StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pTintValue")
                         },
 
                         // g,y,r
-                        new FloatProperty(pWireCollection) {
+                        new FloatProperty(greenRadius) {
                             StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pGreenRadius")
                         },
-                        new FloatProperty(pWireCollection) {
+                        new FloatProperty(yellowRadius) {
                             StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pYellowRadius")
                         },
-                        new FloatProperty(pWireCollection) {
+                        new FloatProperty(redRadius) {
                             StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pRedRadius")
                         },
 
                         // flags
-                        new FlagsProperty(2) {
+                        new FlagsProperty(flags) {
                             StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pFlags")
                         }
                     }
@@ -2886,7 +2893,7 @@ namespace Zartex
             return new Actor(missionData.LogicData.Actors.Definitions[idx], idx);
         }
 
-        public Actor CreateArea(float x, float y, float z,  float areaX, float areaY, float areaZ, float areaW,   float w = 1.0f, Actor attachedTo = null, float radius = 0, int flags = 1, string note = "", int r = 100, int g = 128, int b = 255)
+        public Actor CreateArea(float x, float y, float z,  float areaX, float areaY, float areaZ, float areaW = 1.0f,   float w = 1.0f, Actor attachedTo = null, float radius = 0, int flags = 1, string note = "", int r = 100, int g = 128, int b = 255)
         {
             short stringId = 0;
             if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
@@ -3240,10 +3247,12 @@ namespace Zartex
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
-        public Node CharacterDriveTo(Actor character, float x, float y, float z, float driveSpeed, int desiredTransport = 2, int flags = 0, string note = "CharacterDriveTo", int r = 128, int g = 0, int b = 255)
+        public Node CharacterDriveTo(Actor character, float x, float y, float z, float driveSpeed, int desiredTransport = 2, Actor attachTo = null, int flags = 0, string note = "CharacterDriveTo", int r = 128, int g = 0, int b = 255)
         {
             if (character.TheActor.TypeId != 2)
-                throw new ScriptRuntimeException("Inputed actor is not a Character type actor");
+                throw new ScriptRuntimeException("Bad argument #1 - The inputed actor is not a Character type actor");
+            if (character == null)
+                throw new ScriptRuntimeException("Bad argument #1 - Actor expected got nil");
             short stringId = 0;
             if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
             else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
@@ -3264,7 +3273,7 @@ namespace Zartex
                         new ActorProperty(character.index) {
                             StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pCharacter")
                         },            // pCharacter
-                        new ActorProperty(-1) {
+                        new ActorProperty(attachTo == null ? -1 : character.index) {
                             StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pAttachTo")
                         },           // pAttachTo
                         new FloatProperty(1f) {
@@ -3287,6 +3296,60 @@ namespace Zartex
             int idx = missionData.LogicData.Actors.Definitions.Count - 1;
             return ActorCreation(new Actor(missionData.LogicData.Actors.Definitions[idx], idx));
         }
+		
+        public Node CharacterDriveAroundArea(Actor character, Actor area, float driveSpeed, int desiredTransport = 2, int flags = 0, string note = "CharacterDriveTo", int r = 128, int g = 0, int b = 255)
+        {
+            if (character.TheActor.TypeId != 2)
+                throw new ScriptRuntimeException("Bad argument #1 - The inputed actor is not a Character type actor");
+            if (character == null)
+                throw new ScriptRuntimeException("Bad argument #1 - Actor expected got nil");
+            if (area.TheActor.TypeId != 4)
+                throw new ScriptRuntimeException("Bad argument #2 - The inputed actor is not a Area type actor");
+            if (area == null)
+                throw new ScriptRuntimeException("Bad argument #2 - Actor expected got nil");
+            if (driveSpeed == null)
+                throw new ScriptRuntimeException("Bad argument #3 - Number expected got nil");	
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            // ai target
+            missionData.LogicData.Actors.Definitions.Add(new ActorDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 7,
+                StringId = stringId,
+                ObjectId = area.TheActor.ObjectId,
+                Properties = new List<NodeProperty>
+                    {
+                        new ActorProperty(character.index) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pCharacter")
+                        },            // pCharacter
+                        new ActorProperty(-1) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pAttachTo")
+                        },           // pAttachTo
+                        new FloatProperty(1f) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWalkSpeed")
+                        },           // pWalkSpeed
+                        new FloatProperty(driveSpeed) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pVehicleSpeed")
+                        },           // pVehicleSpeed
+                        new EnumProperty(desiredTransport) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pDesiredTransport")
+                        },             // pDesiredTransport
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pFlags")
+                        }             // pFlags 
+                    }
+            });
+            
+			int idx = missionData.LogicData.Actors.Definitions.Count - 1;
+            return ActorCreation(new Actor(missionData.LogicData.Actors.Definitions[idx], idx));
+        }		
 
         // chaserType
         // 0 (default) = chases the actor but uses patrolling cop icon
@@ -3453,10 +3516,10 @@ namespace Zartex
         // follows the actor
         public Node CharacterDriveFollowingActor(Actor character, Actor actor, float driveSpeed, int desiredTransport = 2, int flags = 0, string note = "CharacterDriveFollowingActor", int r = 128, int g = 0, int b = 255)
         {
-            Node driveTo = CharacterDriveTo(character, 0, 0, 0, driveSpeed, desiredTransport, flags, note, r, g, b);
-            var idx = driveTo.TheNode.Properties[1].Value;
-            Actor aiTarget = new Actor(missionData.LogicData.Actors.Definitions[(int)idx], (int)idx);
-            aiTarget.TheActor.Properties[1].Value = actor.index;
+            Node driveTo = CharacterDriveTo(character, 0, 0, 0, driveSpeed, desiredTransport, actor, flags, note, r, g, b);
+            //var idx = driveTo.TheNode.Properties[1].Value;
+            //Actor aiTarget = new Actor(missionData.LogicData.Actors.Definitions[(int)idx], (int)idx);
+            //aiTarget.TheActor.Properties[1].Value = actor.index;
 
             return driveTo;
         }
@@ -4045,7 +4108,7 @@ namespace Zartex
 
         public SpoolablePackage InitSpooler { get; set; }
 
-        public static SpoolerAlignment MissionsSpoolerAlignment = SpoolerAlignment.Align16;
+        public static SpoolerAlignment MissionsSpoolerAlignment = SpoolerAlignment.Align2048;
         public static SpoolerAlignment ExportedMissionRootSpoolerAlignment = SpoolerAlignment.Align256;
 
         public SpoolSystemLookup MissionsLookup = new SpoolSystemLookup()
@@ -4087,18 +4150,80 @@ namespace Zartex
                 Description = "Mission Summary",
                 Alignment = MissionsSpoolerAlignment
             };
-            mission.missionSummary.Spooler.GetMemoryStream().Position = 0;
+            
+			mission.missionSummary.Spooler.GetMemoryStream().Position = 0;
             mission.missionSummary.Spooler.SetBuffer(new byte[0x1C]);
 
-            mission.missionSummary.Spooler.Write((byte)0x01);
-            mission.missionSummary.Spooler.Write(new byte[7]);
-            mission.missionSummary.Spooler.Write((byte)0x01);
-            mission.missionSummary.Spooler.Write(new byte[3]);
-            mission.missionSummary.Spooler.Write(id);
-            mission.missionSummary.Spooler.Write((ushort)0xCCCC);
-            mission.missionSummary.Spooler.Write(x);
-            mission.missionSummary.Spooler.Write(y);
-            mission.missionSummary.Spooler.Write(flags);
+                using (var stream = new MemoryStream(new byte[0x1C]))
+                {
+                    stream.Write((byte)0x01);
+                    stream.Write(new byte[7]);
+                    stream.Write((byte)0x01);
+                    stream.Write(new byte[3]);
+                    stream.Write(id);
+                    stream.Write((ushort)0xFFFF);
+                    stream.Write(x);
+                    stream.Write(y);
+                    stream.Write((int)flags);
+                    mission.missionSummary.Spooler.SetBuffer(stream.ToArray());
+                }
+
+            // Another one because the game for some reason needs it
+            var emms = new SpoolableBuffer()
+            {
+                Context = (int)ChunkType.MissionSummary,
+                Description = "Mission Summary",
+                Alignment = MissionsSpoolerAlignment
+            };
+
+            emms.GetMemoryStream().Position = 0;
+            emms.SetBuffer(new byte[0x1C]);
+
+            using (var stream = new MemoryStream(new byte[0x1C]))
+            {
+                stream.Write((byte)0x01);
+                stream.Write(new byte[7]);
+                stream.Write((byte)0x01);
+                stream.Write(new byte[3]);
+                stream.Write(id);
+                stream.Write((ushort)0xFFFF);
+                stream.Write(x);
+                stream.Write(y);
+                stream.Write((int)flags);
+                emms.SetBuffer(stream.ToArray());
+            }
+
+            SpoolablePackage missionPackageSp = (SpoolablePackage)mission.Spooler;
+            try
+            {
+                missionPackageSp.Children.Add(mission.missionSummary.Spooler);
+            }
+            catch (Exception e) { }
+            SpoolablePackage missionDataSp = (SpoolablePackage)mission.missionData.Spooler;
+            try
+            {
+                missionDataSp.Children.Add(emms);
+            }
+            catch (Exception e) { }
+
+            mission.missionData.Objects = new ExportedMissionObjects();
+            mission.missionData.Objects.Spooler = new DSCript.Spooling.SpoolableBuffer()
+            {
+                Context = (int)ChunkType.ExportedMissionObjects,
+                Description = "Exported Mission Objects",
+                Alignment = MissionsSpoolerAlignment
+            };
+            mission.missionData.Spooler.Children.Add(mission.missionData.Objects.Spooler);
+            mission.missionData.Objects.Objects = new List<MissionObject>();
+
+            mission.missionData.PropHandles = new DSCript.Spooling.SpoolableBuffer()
+            {
+                Context = (int)ChunkType.ExportedMissionPropHandles,
+                Description = "Exported Mission Prop Handles",
+                Alignment = MissionsSpoolerAlignment
+            };
+            mission.missionData.PropHandles.SetBuffer(new byte[24]);
+            mission.missionData.Spooler.Children.Add(mission.missionData.PropHandles);
 
             mission.missionData.LogicData.Spooler = new DSCript.Spooling.SpoolablePackage()
             {
@@ -4116,7 +4241,6 @@ namespace Zartex
                 Description = "Exported Wire Collections",
                 Alignment = MissionsSpoolerAlignment
             };
-            mission.missionData.LogicData.Spooler.Children.Add(mission.missionData.LogicData.WireCollection.Spooler);
 
             mission.missionData.LogicData.StringCollection.Spooler = new DSCript.Spooling.SpoolableBuffer()
             {
@@ -4124,7 +4248,7 @@ namespace Zartex
                 Description = "String Collection",
                 Alignment = MissionsSpoolerAlignment
             };
-            mission.missionData.LogicData.Spooler.Children.Add(mission.missionData.LogicData.StringCollection.Spooler);
+            mission.missionData.LogicData.StringCollection.Spooler.SetBuffer(new byte[4]);
 
             mission.missionData.LogicData.SoundBankTable = new SoundBankTableData();
             mission.missionData.LogicData.SoundBankTable.Table = new List<int>();
@@ -4134,35 +4258,96 @@ namespace Zartex
                 Description = "Sound Bank Table",
                 Alignment = MissionsSpoolerAlignment
             };
-            mission.missionData.LogicData.Spooler.Children.Add(mission.missionData.LogicData.SoundBankTable.Spooler);
+            mission.missionData.LogicData.SoundBankTable.Spooler.SetBuffer(new byte[4]);
+
+            // unknown logic exports; required to each mission maybe?
+            var LEPS = new SpoolableBuffer()
+            {
+                Context = (int)ChunkType.UnknownLogicExportLEPS,
+                Description = "Unknown (LEPS)",
+                Alignment = MissionsSpoolerAlignment
+            };
+            LEPS.SetBuffer(new byte[4]);
+            mission.missionData.LogicData.ScriptCounters.Spooler = new SpoolableBuffer()
+            {
+                Context = (int)ChunkType.LogicExportScriptCounters,
+                Description = "Logic Script Counters Export",
+                Alignment = MissionsSpoolerAlignment
+            };
+            mission.missionData.LogicData.ScriptCounters.Spooler.SetBuffer(new byte[4]);
+            var LENE = new SpoolableBuffer()
+            {
+                Context = (int)ChunkType.UnknownLogicExportLENE,
+                Description = "Unknown (LENE)",
+                Alignment = MissionsSpoolerAlignment
+            };
+            LENE.SetBuffer(new byte[4]);
+            var FING = new SpoolableBuffer()
+            {
+                Context = (int)ChunkType.UnknownLogicExportFING,
+                Description = "Unknown (FING)",
+                Alignment = MissionsSpoolerAlignment
+            };
+            FING.SetBuffer(new byte[0x32]);
+            var LEAT = new SpoolableBuffer()
+            {
+                Context = (int)ChunkType.UnknownLogicExportLEAT,
+                Description = "Unknown (LEAT)",
+                Alignment = MissionsSpoolerAlignment
+            };
+            if (id!=5) 
+                LEAT.SetBuffer(new byte[6]);
+            else
+                LEAT.SetBuffer(new byte[4]);
 
             mission.missionData.LogicData.Actors = new LogicDataCollection<ActorDefinition>();
             mission.missionData.LogicData.Actors.Definitions = new List<ActorDefinition>();
             mission.missionData.LogicData.Actors.Spooler = new DSCript.Spooling.SpoolablePackage()
             {
                 Context = (int)ChunkType.LogicExportActorsChunk,
-                Description = "Actors Definitions table",
+                Description = "Logic Export Actors Chunk",
                 Alignment = MissionsSpoolerAlignment
             };
-            mission.missionData.LogicData.Spooler.Children.Add(mission.missionData.LogicData.Actors.Spooler);
+            mission.missionData.LogicData.Actors.DefinitionsTable = new DSCript.Spooling.SpoolableBuffer()
+            {
+                Context = (int)ChunkType.LogicExportActorDefinitions,
+                Description = "Logic Actors Definitions Table",
+                Alignment = MissionsSpoolerAlignment
+            };
+            mission.missionData.LogicData.Actors.Spooler.Children.Add(mission.missionData.LogicData.Actors.DefinitionsTable);
+
+            mission.missionData.LogicData.Actors.PropertiesTable = new DSCript.Spooling.SpoolableBuffer()
+            {
+                Context = (int)ChunkType.LogicExportPropertiesTable,
+                Description = "Logic Actors Properties Table",
+                Alignment = MissionsSpoolerAlignment
+            };
+            mission.missionData.LogicData.Actors.Spooler.Children.Add(mission.missionData.LogicData.Actors.PropertiesTable);
 
             mission.missionData.LogicData.Nodes = new LogicDataCollection<NodeDefinition>();
             mission.missionData.LogicData.Nodes.Definitions = new List<NodeDefinition>();
             mission.missionData.LogicData.Nodes.Spooler = new DSCript.Spooling.SpoolablePackage()
             {
                 Context = (int)ChunkType.LogicExportNodesChunk,
-                Description = "Logic Definitions Table",
+                Description = "Logic Export Nodes Chunk",
                 Alignment = MissionsSpoolerAlignment
             };
-            mission.missionData.LogicData.Spooler.Children.Add(mission.missionData.LogicData.Nodes.Spooler);
-            mission.missionData.LogicData.Nodes.Definitions = new List<NodeDefinition>();
+            mission.missionData.LogicData.Nodes.DefinitionsTable = new DSCript.Spooling.SpoolableBuffer()
+            {
+                Context = (int)ChunkType.LogicExportNodeDefinitionsTable,
+                Description = "Logic Nodes Definitions Table",
+                Alignment = MissionsSpoolerAlignment
+            };
+            mission.missionData.LogicData.Nodes.Spooler.Children.Add(mission.missionData.LogicData.Nodes.DefinitionsTable);
 
-            mission.missionData.LogicData.Spooler.Children.Add(new DSCript.Spooling.SpoolablePackage()
+            mission.missionData.LogicData.Nodes.PropertiesTable = new DSCript.Spooling.SpoolableBuffer()
             {
                 Context = (int)ChunkType.LogicExportPropertiesTable,
-                Description = "Logic Properties Table",
+                Description = "Logic Nodes Properties Table",
                 Alignment = MissionsSpoolerAlignment
-            });
+            };
+            mission.missionData.LogicData.Nodes.Spooler.Children.Add(mission.missionData.LogicData.Nodes.PropertiesTable);
+
 
             mission.missionData.LogicData.ActorSetTable = new ActorSetTableData();
             mission.missionData.LogicData.ActorSetTable.Table = new List<ActorSet>();
@@ -4172,17 +4357,37 @@ namespace Zartex
                 Description = "Actors Set Table",
                 Alignment = MissionsSpoolerAlignment
             };
-            mission.missionData.LogicData.Spooler.Children.Add(mission.missionData.LogicData.ActorSetTable.Spooler);
 
-            mission.missionData.Objects = new ExportedMissionObjects();
-            mission.missionData.Objects.Spooler = new DSCript.Spooling.SpoolableBuffer()
-            {
-                Context = (int)ChunkType.ExportedMissionObjects,
-                Description = "Exported Mission Objects",
-                Alignment = MissionsSpoolerAlignment
-            };
-            mission.missionData.Spooler.Children.Add(mission.missionData.Objects.Spooler);
-            mission.missionData.Objects.Objects = new List<MissionObject>();
+            // add other stuff too
+            mission.missionData.LogicData.Spooler.Children.Add(mission.missionData.LogicData.StringCollection.Spooler);
+            mission.missionData.LogicData.Spooler.Children.Add(mission.missionData.LogicData.SoundBankTable.Spooler);
+
+            mission.missionData.LogicData.Spooler.Children.Add(LEPS);
+
+            mission.missionData.LogicData.Spooler.Children.Add(mission.missionData.LogicData.Actors.Spooler);
+            mission.missionData.LogicData.Spooler.Children.Add(mission.missionData.LogicData.Nodes.Spooler);
+
+            mission.missionData.LogicData.Spooler.Children.Add(mission.missionData.LogicData.ActorSetTable.Spooler);
+            mission.missionData.LogicData.Spooler.Children.Add(mission.missionData.LogicData.WireCollection.Spooler);
+            mission.missionData.LogicData.Spooler.Children.Add(mission.missionData.LogicData.ScriptCounters.Spooler);
+            // unknown ones
+            mission.missionData.LogicData.Spooler.Children.Add(LENE);
+            mission.missionData.LogicData.Spooler.Children.Add(FING);
+            mission.missionData.LogicData.Spooler.Children.Add(LEAT);
+
+            // finger print stuff, probably important too...
+            FING.Write((short)id);
+            Random random = new Random();
+            byte[] randomHash = new byte[0x30];
+            random.NextBytes(randomHash);
+            FING.Write(randomHash);
+
+            if (id != 5)
+            { 
+                LEAT.Write((int)1);
+                LEAT.Write((short)4005);
+            }
+
             if (defineRoot)
               ((SpoolablePackage)mission.Spooler).Children.Add(mission.missionData.Spooler as SpoolablePackage);
 
@@ -4197,7 +4402,7 @@ namespace Zartex
         public void AddMission(LuaMissionScriptDPL mission,short subMissionId,string name = null)
         {
             // SSLP
-            MissionsLookup.Lookups.Add(new LookupEntry((short)subMissionId, MissionSpoolerPackages.Count));
+            MissionsLookup.Lookups.Add(new LookupEntry((short)subMissionId, MissionSpoolerPackages.Count+1));
             MissionSpoolerPackages.Add(mission.Spooler as SpoolablePackage);
 
             Children.Add(mission.Spooler);
@@ -4209,7 +4414,7 @@ namespace Zartex
             InitSpooler = new SpoolablePackage()
             {
                 Context = (int)ChunkType.SpoolSystemInitChunker,
-                //Description = "Initialize mission container",
+                Description = "Auto-exec Mission Container",
                 Alignment = MissionsSpoolerAlignment
             };
             Children.Add(InitSpooler);
@@ -4217,9 +4422,28 @@ namespace Zartex
             MissionsLookup.Spooler = new SpoolableBuffer()
             {
                 Context = (int)ChunkType.SpoolSystemLookup,
-                Alignment = MissionsSpoolerAlignment
+                Alignment = MissionsSpoolerAlignment,
+                Description = "Missions System Lookup"
             };
             InitSpooler.Children.Add(MissionsLookup.Spooler);
+
+            SpoolableBuffer MRRD = new SpoolableBuffer()
+            {
+                Context = 0x4452524D,
+                Description = "Placeholder MRRD",
+                Alignment = MissionsSpoolerAlignment
+            };
+            MRRD.SetBuffer(new byte[368]);
+
+            using (var mstream = new MemoryStream(new byte[368]))
+            {
+                mstream.Write((byte)91);
+                mstream.Write(new byte[365]);
+                mstream.Write((byte)1);
+                mstream.Write((byte)1);
+                MRRD.SetBuffer(mstream.ToArray());
+            }
+            InitSpooler.Children.Add(MRRD);
 
             //SpoolablePackage initMissionPackage = InitMission.Spooler as SpoolablePackage;
             //initMissionPackage.Children.Remove(InitMission.missionData.Spooler);
@@ -4231,11 +4455,18 @@ namespace Zartex
 
         protected override void OnFileSaveBegin()
         {
+            int missionId = 0;
             //SpoolableResourceFactory.Save(InitMission.missionData);
             foreach (LuaMissionScriptDPL mission in Missions)
             {
+                Debug.WriteLine($"(LUA) Exporting Mission {missionId}");
+                mission.missionData.LogicData.WireCollection.WireCollections = mission.wireCollection;
+                mission.missionData.LogicData.ActorSetTable.Table = mission.actorSetup.Table;
+                mission.missionData.LogicData.ScriptCounters.Counters = mission._scriptCountersData.Counters;
                 SpoolableResourceFactory.Save(mission.missionData);
-                Debug.WriteLine($"(LUA) {mission.missionData.LogicData.Actors.Definitions.Count} actors exported, {mission.missionData.LogicData.Nodes.Definitions.Count} logic nodes exported");
+                
+                Debug.WriteLine($"(LUA EXPORT) {mission.missionData.LogicData.Actors.Definitions.Count} actors exported, {mission.missionData.LogicData.Nodes.Definitions.Count} logic nodes exported and {mission.missionData.LogicData.WireCollection.WireCollections.Count} wire collections exported, {mission._scriptCountersData.Counters.Count} counters exported");
+                missionId++;
             }
             SpoolableResourceFactory.Save(MissionsLookup);
         }
@@ -4246,11 +4477,22 @@ namespace Zartex
     {
         public LuaMissionScriptDPL() : base()
         {
+            _scriptCountersData = new ScriptCountersData();
+            _scriptCountersData.Counters = new List<int>();
         }
 
+        public ScriptCountersData _scriptCountersData { get; set; }
         public Spooler Spooler { get; set; }
 
-        public Node LogicStart(int flags = 0, string note = "", int r = 255, int g = 0, int b = 0)
+        public void CountActor(Actor actor)
+        {
+            if (_scriptCountersData == null)
+                _scriptCountersData = new ScriptCountersData();
+
+            _scriptCountersData.Counters.Add(actor.index);
+        }
+
+        public Node LogicStart(int flags = 0, string note = "", int r = 0, int g = 200, int b = 122)
         {
             short stringId = 0;
             if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
@@ -4278,8 +4520,372 @@ namespace Zartex
             int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
+		
+        public Node JobComplete(int flags = 0, string note = "", int r = 255, int g = 0, int b = 0)
+        {
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
 
-        public Node ActorCreation(Actor actor, int activity = 1, int flags = 1, string note = "", int r = 0, int g = 200, int b = 122)
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 5,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }
+                }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }		
+
+        public Node DensityControl(float activeTrafficDensity, float parkedTrafficDensity, Table assetDensities, float litterDensity = 0.8f, int flags = 2, string note = "", int r = 0, int g = 200, int b = 122)
+        {
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            var ad = new AssetDensities() { StringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Asset Densities"), Assets = new List<int>(), Densities = new List<float>() };
+            for (int assetDensityId = 0; assetDensityId < assetDensities.Length + 1; assetDensityId++)
+            {
+                DynValue assetDensity = assetDensities.Get(assetDensityId);
+                if (assetDensity.IsNotNil())
+                {
+                    if (assetDensity.Table == null)
+                    {
+                        throw new ScriptRuntimeException($"Bad argument #3 - The table must be a table containing tables in (asset, density) format");
+                    }
+
+                    if (assetDensity.Table.Get(1).IsNotNil() & assetDensity.Table.Get(2).IsNotNil())
+                    {
+                        ad.Assets.Add((int)assetDensity.Table.Get(1).Number);
+                        ad.Densities.Add((float)assetDensity.Table.Get(2).Number);
+                    }
+                    else
+                    {
+                        throw new ScriptRuntimeException($"Bad argument #3 - Asset Densities table index {assetDensityId} has some invalid asset densities values (nil)");
+                    }
+                }
+            }
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 100,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new FloatProperty(activeTrafficDensity) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Active Traffic Density")
+                        },
+                        new FloatProperty(parkedTrafficDensity) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Parked Traffic Density")
+                        },
+                        new FloatProperty(litterDensity) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Litter Density")
+                        },
+                        ad,
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }
+                }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
+        public Node PedestrianDensityControl(float pedDensity, Table assetDensities, int flags = 2, string note = "", int r = 0, int g = 200, int b = 122)
+        {
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            var ad = new AssetDensities() { StringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Asset Densities"), Assets = new List<int>(), Densities = new List<float>() };
+            for (int assetDensityId = 0; assetDensityId < assetDensities.Length + 1; assetDensityId++)
+            {
+                DynValue assetDensity = assetDensities.Get(assetDensityId);
+                if (assetDensity.IsNotNil())
+                {
+                    if (assetDensity.Table == null)
+                    {
+                        throw new ScriptRuntimeException($"Bad argument #3 - The table must be a table containing tables in (asset, density) format");
+                    }
+
+                    if (assetDensity.Table.Get(1).IsNotNil() & assetDensity.Table.Get(2).IsNotNil())
+                    {
+                        ad.Assets.Add((int)assetDensity.Table.Get(1).Number);
+                        ad.Densities.Add((float)assetDensity.Table.Get(2).Number);
+                    }
+                    else
+                    {
+                        throw new ScriptRuntimeException($"Bad argument #3 - Asset Densities table index {assetDensityId} has some invalid asset densities values (nil)");
+                    }
+                }
+            }
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 105,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new FloatProperty(pedDensity) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Pedestrian Density")
+                        },
+                        ad,
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }
+                }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
+        public Node MarkerControl(Actor actor, int activity, int displayType, int minimapDisplayType, float R = 1, float G = 0.10f, float B = 0, float A = 0, int visibility = 1, int description = -1, int flags = 0, string note = "", int r = 0, int g = 200, int b = 122)
+        {
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 186,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new ActorProperty(actor) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Actor")
+                        },
+                        new EnumProperty(activity) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Activity")
+                        },
+                        new EnumProperty(displayType) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Display Type")
+                        },
+                        new EnumProperty(minimapDisplayType) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Minimap Display Type")
+                        },
+                        new Float3Property(new Vector4(R,G,B,A)) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Minimap Icon Colour")
+                        },
+                        new EnumProperty(visibility) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Visibility")
+                        },
+                        new LocalisedStringProperty(description) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Description")
+                        },
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }
+                }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
+        public Node ShowMarkerOnActor(Actor actor, int displayType, int minimapDisplayType, int description = -1, float R = 1, float G = 0.1f, float B = 0, float A = 0, int flags = 0, string note = "", int r = 0, int g = 200, int b = 122)
+        {
+            return MarkerControl(actor, 1, displayType, minimapDisplayType, R, G, B, A, 1, description, flags);
+        }
+
+        public Node HideMarkerOnActor(Actor actor, int flags = 0, string note = "", int r = 0, int g = 200, int b = 122)
+        {
+            return MarkerControl(actor, 2, 0, 2, 0, 0, 0, 0, 0, -1, 0);
+        }
+
+        public Node Wanderer(Actor wanderer, float speed, float acceleration, float traction = 1, float handOfTom = 1, int flags = 0, string note = "", int r = 255, int g = 255, int b = 0)
+        {
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 166,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new ActorProperty(wanderer) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Wanderer")
+                        },
+                        new FloatProperty(speed) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Speed")
+                        },
+                        new FloatProperty(acceleration) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Acceleration")
+                        },
+                        new FloatProperty(traction) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Traction")
+                        },
+                        new FloatProperty(traction) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Hand of Tom")
+                        },
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }
+                }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
+        public Node StartMission(int subMissionID, int status = 1, int flags = 0, string note = "", int r = 0, int g = 200, int b = 122)
+        {
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 148,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new IntegerProperty(subMissionID) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Sub Mission ID")
+                        },
+                        new EnumProperty(status) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Status")
+                        },
+
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }
+                }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
+        public Node MissionWatch(int subMissionID, int condition = 1, int flags = 0, string note = "", int r = 0, int g = 200, int b = 122)
+        {
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 147,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new IntegerProperty(subMissionID) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Sub Mission ID")
+                        },
+                        new EnumProperty(condition) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Condition")
+                        },
+
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }
+                }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
+        public Node GarageControl(int activity, int garage, int vehicleType = -1, int veditFlags = 16777216, int flags = 0, string note = "", int r = 0, int g = 200, int b = 122)
+        {
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 107,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new EnumProperty(activity) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Activity")
+                        },
+                        new EnumProperty(garage) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Garage")
+                        },
+                        new EnumProperty(vehicleType) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Vehicle Type")
+                        },
+                        new FlagsProperty(veditFlags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("V-Edit Flags")
+                        },
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }
+                }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
+        public Node GiveActorCreation(Actor actor, int activity = 1, int flags = 1, string note = "", int r = 0, int g = 200, int b = 122)
         {
             if (actor == null)
                 throw new ScriptRuntimeException("Bad argument #1 - Attempt to give creation to a nil value");
@@ -4294,7 +4900,7 @@ namespace Zartex
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
             {
                 Color = new NodeColor(r, g, b, 255),
-                TypeId = 1,
+                TypeId = 101,
                 StringId = stringId,
                 Properties = new List<NodeProperty>
                     {
@@ -4315,9 +4921,120 @@ namespace Zartex
             int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
+		
+		public Node MusicTrackControl(int track, int activity = 3, int flags = 1, string note = "", int r = 0, int g = 200, int b = 122)
+        {
+            if (track == null)
+                throw new ScriptRuntimeException("Bad argument #1 - Attempt to control a nil value track!");
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 216,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new EnumProperty(activity) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Activity")
+                        },
+						new IntegerProperty(track) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Track")
+                        },
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }
+                    }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
+        public Node CreationGroup(int actorSetID, int activity = 1, int flags = 0, string note = "", int r = 0, int g = 200, int b = 122)
+        {
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 37,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new IntegerProperty(actorSetID) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Actor Set ID")
+                        },
+                        new EnumProperty(activity) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Activity")
+                        },
+
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }
+                }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
+        public Node TimeControl(int activity, int hours, int minutes, int flags = 1,string note = "", int r = 0, int g = 200, int b = 122)
+        {
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 113,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+						new EnumProperty(activity) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Activity")
+                        },
+						new IntegerProperty(hours) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Hours")
+                        },
+                        new IntegerProperty(minutes) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Minutes")
+                        },
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }
+                    }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
 
         // LUA functions: MISSION.functionName(args)
-        public new Node Timer(float interval, int flags = 1,string note = "", int r = 0, int g = 200, int b = 122)
+        public Node SetTimer(float interval, int flags = 1,string note = "", int r = 0, int g = 200, int b = 122)
         {
             short stringId = 0;
             if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
@@ -4349,7 +5066,7 @@ namespace Zartex
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
-        public new Node Fade(int direction,float duration,int flags = 0, byte R = 0, byte G = 0, byte B = 0, byte A = 0, string note = "", int r = 0, int g = 200, int b = 122)
+        public Node FadeControl(int direction,float duration,int flags = 0, byte R = 0, byte G = 0, byte B = 0, byte A = 0, string note = "", int r = 0, int g = 200, int b = 122)
         {
             short stringId = 0;
             if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
@@ -4389,14 +5106,138 @@ namespace Zartex
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
-        public new Node FadeAway(float duration = 0.5f, int flags = 0, byte R = 0, byte G = 0, byte B = 0, byte A = 0, string note = "FadeOut()", int r = 0, int g = 200, int b = 122)
+        public Node SetFadeOut(float duration = 0.5f, int flags = 0, byte R = 0, byte G = 0, byte B = 0, byte A = 0, string note = "FadeOut()", int r = 0, int g = 200, int b = 122)
         {
-            return Fade(1, duration, flags, R, G, B, A, note, r, g, b);
+            return this.FadeControl(2, duration, flags, R, G, B, A, note, r, g, b);
         }
 
-        public new Node FadeOn(float duration = 0.5f, int flags = 0, byte R = 0, byte G = 0, byte B = 0, byte A = 0, string note = "FadeIn()", int r = 0, int g = 200, int b = 122)
+        public Node SetFadeIn(float duration = 0.5f, int flags = 0, byte R = 0, byte G = 0, byte B = 0, byte A = 0, string note = "FadeIn()", int r = 0, int g = 200, int b = 122)
         {
-            return Fade(2, duration, flags, R, G, B, A, note, r, g, b);
+            return this.FadeControl(1, duration, flags, R, G, B, A, note, r, g, b);
+        }
+		
+        public Node ProximityCheck(Actor actor1, Actor actor2, float threshold, int checkType, int flags = 5, string note = "", int r = 0, int g = 200, int b = 122)
+        {
+            if (actor1 == null)
+                throw new ScriptRuntimeException("Bad Argument #1 - Actor expected got nil");
+            if (actor2 == null)
+                throw new ScriptRuntimeException("Bad Argument #2 - Actor expected got nil");
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 30,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+                        new ActorProperty(actor1.index) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("First Actor")
+                        },
+                        new ActorProperty(actor2.index) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Second Actor")
+                        },
+                        new EnumProperty(checkType) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Check Type")
+                        },						
+                        new FloatProperty(threshold) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Threshold")
+                        },
+                        new FlagsProperty(flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pFlags")
+                        }
+                    }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }		
+
+        public Actor CreateMissionActor(float x, float y, float z, int subMissionID, int eventType, int potNumber = 0, int iconType = 12, string tempMissionName = "", string tempMissionDescription = "", string fileName = "", string FMVfileName = "", int flags = 1, string note = "", byte r = 0, byte g = 155, int b = 200)
+        {
+            var a = 0; // convert degrees to radians (yaw for forward)
+            var a2 = 0; // convert degrees to radians (yaw - 90 deg. for left)
+            var a3 = 0; // convert degrees to radians (pitch for up)
+            // forward
+            Vector4 fwd = new Vector4(
+                (float)(Math.Cos(0) * Math.Cos(a)), // x
+
+                0, //(float)-Math.Sin(angle), // altitude
+
+                (float)(Math.Cos(0) * Math.Sin(a)), 0 // z
+            );
+            // left
+            Vector4 l = new Vector4(
+                (float)(Math.Cos(0) * Math.Cos(a2)), // x
+
+                0, //(float)-Math.Sin(angle), // altitude
+
+                (float)(Math.Cos(0) * Math.Sin(a2)), 0 // z
+            );
+            // up
+            Vector4 up = new Vector4(
+                (float)(Math.Cos(a3) * Math.Cos(a)), // x
+
+                (float)-Math.Sin(a3), // altitude
+
+                (float)(Math.Cos(a3) * Math.Sin(a)), 0 // z
+            );
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+            missionData.LogicData.Actors.Definitions.Add(new ActorDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 106,
+                StringId = stringId,
+                ObjectId = -1,
+                Flags = 0x14B9,
+                Reserved = 0,
+                Properties = new List<NodeProperty>()
+                {
+                        new MatrixProperty(new Vector4(x,y,z,1),l,up,fwd) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Matrix")
+                        },
+                        new EnumProperty(subMissionID) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Sub Mission ID")
+                        },
+                        new StringProperty((short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(tempMissionName)) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Temp Mission Name")
+                        },
+                        new StringProperty((short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(tempMissionDescription)) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Temp Mission Description")
+                        },
+                        new StringProperty((short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(fileName)) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("FileName")
+                        },
+                        new EnumProperty(eventType) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Event Type")
+                        },
+                        new IntegerProperty(potNumber) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Pot Number")
+                        },
+                        new StringProperty((short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(FMVfileName)) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("FMV FileName")
+                        },
+                        new EnumProperty(iconType) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Icon Type")
+                        },
+                        new FlagsProperty((int)flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Flags")
+                        }           // pFlags
+                }
+            });
+
+            int idx = missionData.LogicData.Actors.Definitions.Count - 1;
+            return new Actor(missionData.LogicData.Actors.Definitions[idx], idx); // returns the actor
         }
 
         // NOTE: use flags 65537 to make this the player
@@ -4407,7 +5248,7 @@ namespace Zartex
                 flags = 65537;
             var rad = (float)(Math.PI / 180);
             var a = rad  * angle; // convert degrees to radians (yaw for forward)
-            var a2 = rad * (angle-90); // convert degrees to radians (yaw - 90 deg. for left)
+            var a2 = rad * (angle+90); // convert degrees to radians (yaw - 90 deg. for left)
             var a3 = rad * -90; // convert degrees to radians (pitch for up)
             // forward
             Vector4 fwd = new Vector4(
@@ -4446,7 +5287,7 @@ namespace Zartex
                 StringId = stringId,
                 ObjectId = -1,
                 Flags = 0x14B9,
-                Reserved = 0,
+                Reserved = 2974,
                 Properties = new List<NodeProperty>()
                 {
                         new MatrixProperty(new Vector4(x,y,z,1),l,up,fwd) {
@@ -4476,6 +5317,90 @@ namespace Zartex
                 }
             });
 
+            int idx = missionData.LogicData.Actors.Definitions.Count - 1;
+            return new Actor(missionData.LogicData.Actors.Definitions[idx], idx); // returns the actor
+        }
+
+        public Actor CreateVehicle(float x, float y, float z, float angle, int vehicleId, int colorId, float initialSpeed = 0, float initialFelony = 0, float bulletSoftness = 0.3333f, float explosionSoftness = 0.5f, float impactSoftness = 0.6667f, float impactFragility = 0.6667f, Actor attachedVehicle = null, string note = "", int flags = 302186497, float damage = 0, float softness = 1, float weight = 1f, float fragility = 1, int r = 0, int g = 200, int b = 122)
+        {
+            var rad = (float)(Math.PI / 180);
+            var a = rad * angle; // convert degrees to radians (yaw for forward)
+            var a2 = rad * (angle + 90); // convert degrees to radians (yaw - 90 deg. for left)
+            var a3 = rad * -90; // convert degrees to radians (pitch for up)
+            // forward
+            Vector4 fwd = new Vector4(
+                (float)(Math.Cos(0) * Math.Cos(a)), // x
+
+                0, //(float)-Math.Sin(angle), // altitude
+
+                (float)(Math.Cos(0) * Math.Sin(a)), 0 // z
+            );
+            // left
+            Vector4 l = new Vector4(
+                (float)(Math.Cos(0) * Math.Cos(a2)), // x
+
+                0, //(float)-Math.Sin(angle), // altitude
+
+                (float)(Math.Cos(0) * Math.Sin(a2)), 0 // z
+            );
+            // up
+            Vector4 up = new Vector4(
+                (float)(Math.Cos(a3) * Math.Cos(a)), // x
+
+                (float)-Math.Sin(a3), // altitude
+
+                (float)(Math.Cos(a3) * Math.Sin(a)), 0 // z
+            );
+            short stringId;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+            missionData.LogicData.Actors.Definitions.Add(new ActorDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 3,
+                StringId = stringId,
+                ObjectId = -1,
+                Properties = new List<NodeProperty>
+                    {
+                        new MatrixProperty(new Vector4(x,y,z,1),l,up,fwd) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Matrix")
+                        },         // pWeight
+                        new ObjectTypeProperty(vehicleId) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Vehicle Type")
+                        },         // pSoftness
+                        new FloatProperty(initialSpeed) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Initial Speed")
+                        },         // pIFragility
+                        new FloatProperty(initialFelony) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Initial Felony")
+                        },         // pIFragility
+                        new FloatProperty(impactSoftness) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Impact Softness")
+                        },         // pDemoOnlySoftness
+                        new FloatProperty(explosionSoftness) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Explosion Softness")
+                        },         // pDemoOnlySoftness
+                        new FloatProperty(explosionSoftness) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Bullet Softness")
+                        },         // pDemoOnlySoftness
+                        new FloatProperty(impactFragility) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Impact Fragility")
+                        },         // pDemoOnlySoftness
+                        new VehicleTintProperty((int)colorId) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Vehicle Tint")
+                        },          // pTintValue
+                        new IntegerProperty((int)colorId) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Tint Value")
+                        },          // pTintValue
+                        new ActorProperty(attachedVehicle == null ? -1 : attachedVehicle.index) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Attached Vehicle")
+                        },          // pTintValue
+                        new FlagsProperty((int)flags) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pFlags")
+                        }     // pFlags 
+                    }
+            });
+            
             int idx = missionData.LogicData.Actors.Definitions.Count - 1;
             return new Actor(missionData.LogicData.Actors.Definitions[idx], idx); // returns the actor
         }

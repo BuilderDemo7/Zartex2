@@ -12,6 +12,7 @@ namespace Zartex
     public class LookupEntry
     {
         public static int BufferSize = 6;
+
         public short Entry1; // sub mission ID
         public int Entry2; // mission ID (chunk ID)
 
