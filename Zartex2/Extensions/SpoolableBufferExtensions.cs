@@ -17,6 +17,7 @@ namespace Zartex
                 return br.ReadBytes((int)sb.GetMemoryStream().Length);
             }
         }
+
         public static void Write(this SpoolableBuffer sb, byte b)
         {
             sb.GetMemoryStream().Write(b);
