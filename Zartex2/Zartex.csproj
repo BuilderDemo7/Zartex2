@@ -99,6 +99,7 @@
     <Compile Include="Memory.cs" />
     <Compile Include="MissionScript\ActorSetTableData.cs" />
     <Compile Include="MissionScript\ExportedMissionObjects.cs" />
+    <Compile Include="MissionScript\Logic\ScriptCountersData.cs" />
     <Compile Include="MissionScript\Logic\NodeTypes.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>

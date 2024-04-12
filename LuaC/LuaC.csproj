@@ -50,12 +50,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\BinaryReaderExtensions.cs" />
+    <Compile Include="Extensions\SpoolableBufferExtensions.cs" />
     <Compile Include="MissionScript\ActorSetTableData.cs" />
     <Compile Include="MissionScript\ExportedMission.cs" />
     <Compile Include="MissionScript\ExportedMissionObjects.cs" />
     <Compile Include="MissionScript\LogicExportData.cs" />
     <Compile Include="MissionScript\Logic\ActorDefinition.cs" />
     <Compile Include="MissionScript\Logic\LogicDataCollection.cs" />
+    <Compile Include="MissionScript\Logic\ScriptCountersData.cs" />
     <Compile Include="MissionScript\Logic\NodeColor.cs" />
     <Compile Include="MissionScript\Logic\NodeDefinition.cs" />
     <Compile Include="MissionScript\Logic\NodeProperty.cs" />
