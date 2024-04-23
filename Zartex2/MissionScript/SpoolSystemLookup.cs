@@ -44,13 +44,14 @@ namespace Zartex
         {
             using (var f = Spooler.GetMemoryStream())
             {
-                ShortFlags = f.ReadInt16(BigEndianHack);
-                int count = f.ReadInt32(BigEndianHack);
-                Flags = f.ReadInt32(BigEndianHack);
-                SpoolFlags = f.ReadInt32(BigEndianHack);
-                Unk1 = f.ReadInt16(BigEndianHack);
-                Unk2 = f.ReadInt64(BigEndianHack);
-                Unk3 = f.ReadInt32(BigEndianHack);
+                StreamExtensions.UseBigEndian = BigEndianHack;
+                ShortFlags = f.ReadInt16();
+                int count = f.ReadInt32();
+                Flags = f.ReadInt32();
+                SpoolFlags = f.ReadInt32();
+                Unk1 = f.ReadInt16();
+                Unk2 = f.ReadInt64();
+                Unk3 = f.ReadInt32();
 
                 Lookups = new List<LookupEntry>();
                 for (int id = 0; id<count; id++)
