@@ -6,105 +6,10 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
-
-using DSCript;
 
 namespace DSCript.Models
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 2, Size = 4)]
-    public struct MaterialHandle : IComparable<MaterialHandle>, IEquatable<MaterialHandle>, IComparable<int>, IEquatable<int>
-    {
-        public ushort Handle;
-        public ushort UID;
-
-        public bool Equals(int other)
-        {
-            var hash = GetHashCode();
-
-            return (hash == other);
-        }
-
-        public bool Equals(MaterialHandle other)
-        {
-            return ((Handle == other.Handle) && (UID == other.UID));
-        }
-
-        public int CompareTo(int other)
-        {
-            var hash = GetHashCode();
-
-            return hash.CompareTo(other);
-        }
-
-        public int CompareTo(MaterialHandle other)
-        {
-            if (Equals(other))
-                return 0;
-            
-            var hash = other.GetHashCode();
-
-            return CompareTo(hash);
-        }
-
-        public override int GetHashCode()
-        {
-            return (Handle | (UID << 16));
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is MaterialHandle)
-                return Equals((MaterialHandle)obj);
-            if (obj is int)
-                return Equals((int)obj);
-
-            return base.Equals(obj);
-        }
-
-        public static bool operator ==(MaterialHandle lhs, MaterialHandle rhs)
-        {
-            return lhs.Equals(rhs);
-        }
-
-        public static bool operator !=(MaterialHandle lhs, MaterialHandle rhs)
-        {
-            return !lhs.Equals(rhs);
-        }
-
-        public static bool operator ==(MaterialHandle lhs, int rhs)
-        {
-            return lhs.Equals(rhs);
-        }
-
-        public static bool operator !=(MaterialHandle lhs, int rhs)
-        {
-            return !lhs.Equals(rhs);
-        }
-
-        public override string ToString()
-        {
-            return $"{Handle:X4}:{UID:X4}";
-        }
-
-        public MaterialHandle(int material)
-        {
-            Handle = (ushort)(material & 0xFFFF);
-            UID = (ushort)((material >> 16) & 0xFFFF);
-        }
-
-        public MaterialHandle(ushort handle, ushort uid)
-        {
-            Handle = handle;
-            UID = uid;
-        }
-    }
-
     public struct IndexedPrimitive
     {
         public PrimitiveType Type;
@@ -125,13 +30,8 @@ namespace DSCript.Models
         /// <summary>
         /// The <see cref="ModelPackage"/> this mesh belongs to.
         /// </summary>
-        public ModelPackageResource ModelPackage { get; set; }
-
-        public ModelFile ModelFile
-        {
-            get { return ModelPackage.ModelFile; }
-        }
-
+        public ModelPackage ModelPackage { get; set; }
+        
         public VertexBuffer VertexBuffer
         {
             get
@@ -157,21 +57,6 @@ namespace DSCript.Models
         public int IndexCount { get; set; }
 
         public MaterialHandle Material;
-        
-        protected List<int> GetIndices()
-        {
-            var indexBuffer = ModelPackage.IndexBuffer.Indices;
-            var indices = new List<int>();
-
-            for (int n = 0; n < IndexCount; n++)
-            {
-                var idx = indexBuffer[IndexOffset + n];
-
-                indices.Add(idx - VertexOffset);
-            }
-
-            return indices;
-        }
         
         public List<int> CollectVertices(out List<int> tris)
         {
@@ -550,7 +435,7 @@ namespace DSCript.Models
         }
 
         public SubModel() { }
-        public SubModel(ModelPackageResource modelPackage)
+        public SubModel(ModelPackage modelPackage)
         {
             ModelPackage = modelPackage;
         }

@@ -8,9 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Media3D;
 
 namespace DSCript.Models
 {
@@ -50,6 +47,11 @@ namespace DSCript.Models
         
         public override string ToString()
         {
+            return ToString(":");
+        }
+
+        public string ToString(string separator)
+        {
             //var bin = (Low >> 24) & 0xFF;
             //var grp = (Low >> 16) & 0xFF;
 
@@ -73,7 +75,7 @@ namespace DSCript.Models
             var id1 = (Low >> 16) & 0xFFFF;
             var id2 = (Low & 0xFFFF);
 
-            return $"{High:X8}:{id1:X4}:{id2:X4}";
+            return $"{High:X8}{separator}{id1:X4}{separator}{id2:X4}";
         }
 
         public UID(int low, int high)
