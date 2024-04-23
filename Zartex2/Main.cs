@@ -15,6 +15,8 @@ using System.Text;
 using System.Windows.Forms;
 
 using DSCript;
+using DSCript.Models;
+using DSCript.Spooling;
 
 using MoonSharp;
 using MoonSharp.Interpreter;
@@ -3378,6 +3380,90 @@ namespace Zartex
                 MissionPackage.MissionSummary.CityType = MissionSummary.GetCityTypeByName(luaMission.missionSummary.Level);
                 MissionPackage.MissionSummary.MissionId = luaMission.missionSummary.MoodId;
 
+                if (luaMission.SpoolVehicles.Count != 0)
+                {
+                    if (MessageBox.Show("Would you like to make your own .vvv file for this mission? :)", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        string cityname = "miami";
+                        switch (MissionPackage.MissionSummary.CityType)
+                        {
+                            case MissionCityType.Nice_Day:
+                            case MissionCityType.Nice_Night:
+                                cityname = "nice";
+                                break;
+                            case MissionCityType.Istanbul_Day:
+                            case MissionCityType.Istanbul_Night:
+                                cityname = "istanbul";
+                                break;
+                        }
+
+                        ModelFile mdF = null;
+                        try
+                        {
+                            mdF = new ModelFile($"{Driv3r.RootDirectory}\\Vehicles\\{cityname}.vvs");
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"ERROR:\nOpen file error, exception message:\n{ex.Message}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        if (!mdF.HasModels)
+                        {
+                            MessageBox.Show("ERROR:\nNo models in the file..\n\nWhat the heck even happened to your .vvs files?!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        VehicleVariation vehvar = new VehicleVariation();
+                        vehvar.LoadModelsFromVVVFile($"{Driv3r.RootDirectory}\\Vehicles\\{cityname}.vvv");
+                        vehvar.LoadHierachiesFromVVVFile($"{Driv3r.RootDirectory}\\Vehicles\\{cityname}.vvv");
+                        int startModelId = 0;
+                        for (int id = 0; id < mdF.Content.Children.Count; id++)
+                        {
+                            if (mdF.Content.Children[id].Context == (int)ChunkType.ModelPackagePC)
+                            {
+                                startModelId = id;
+                                break;
+                            }
+                        }
+                        foreach (int spoolVehicle in luaMission.SpoolVehicles)
+                        {
+                            SpoolablePackage vehContainer = mdF.Content.GetFirstChild<SpoolablePackage>(spoolVehicle);
+
+                            int thefuckingID = 0;
+                            for (int id = 0; id < mdF.Content.Children.Count; id++)
+                            {
+                                try
+                                {
+                                    if ((mdF.Content.Children[id] as SpoolablePackage) == vehContainer)
+                                        thefuckingID = id;
+                                }
+                                catch (Exception ex)
+                                {
+                                }
+                            }
+
+                            if (vehContainer == null)
+                                continue;
+
+                            SpoolableBuffer vehHierachy = vehContainer.GetFirstChild<SpoolableBuffer>(ChunkType.VehicleHierarchy);
+                            vehvar.Add(vehHierachy);
+
+                            SpoolableBuffer vehmodelSpool = mdF.Content.Children[startModelId + thefuckingID] as SpoolableBuffer;
+                            if (vehmodelSpool == null || vehmodelSpool.Context != (int)ChunkType.ModelPackagePC)
+                                break;
+
+                            ModelPackage vehmodel = vehmodelSpool.AsResource<ModelPackage>(true);
+                            vehvar.Add(vehmodel);
+                        }
+                        Debug.WriteLine($"[VVV] {vehvar.VehicleModels.Count} vehicle models added");
+                        // save the .vvv
+                        string outputPath = $"{luaMission.WorkingDirectory}\\{Path.GetFileNameWithoutExtension(luaMission.SourceScriptFilePath)}.vvv";
+                        vehvar.Save(outputPath);
+                        MessageBox.Show($"VVV file exported to '{outputPath}'!", "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        mdF.Dispose(); // dispose the model file (.vvs)
+                    }
+                }
+
                 MessageBox.Show("Success loading Lua mission script file!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -3420,84 +3506,6 @@ namespace Zartex
                     return;
                 }
 
-                // copy data from lua mission to current mission
-
-                // HARDCODED S***!!!
-                //MissionPackage.Children = luaMission.Children;
-                /*
-                MissionPackage.MissionData = luaMission.InitMission.missionData;
-                MissionPackage.MissionData.LogicData = luaMission.InitMission.missionData.LogicData;
-                MissionPackage.MissionData.LogicData.Spooler = new DSCript.Spooling.SpoolablePackage()
-                {
-                    Context = (int)ChunkType.LogicExportData,
-                    Description = "Logic Export Data"
-                };
-                MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.LogicData.Spooler);
-
-                MissionPackage.MissionData.LogicData.WireCollection = luaMission.InitMission.missionData.LogicData.WireCollection;
-                MissionPackage.MissionData.LogicData.WireCollection.Spooler = new DSCript.Spooling.SpoolableBuffer()
-                {
-                    Context = (int)ChunkType.LogicExportWireCollections,
-                    Description = "Exported Wire Collections"
-                };
-                MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.LogicData.WireCollection.Spooler);
-
-                MissionPackage.MissionData.LogicData.StringCollection.Spooler = new DSCript.Spooling.SpoolableBuffer()
-                {
-                    Context = (int)ChunkType.LogicExportStringCollection,
-                    Description = "String collection"
-                };
-                MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.LogicData.StringCollection.Spooler);
-
-                MissionPackage.MissionData.LogicData.SoundBankTable.Spooler = new DSCript.Spooling.SpoolableBuffer()
-                {
-                    Context = (int)ChunkType.LogicExportSoundBank,
-                    Description = "Sound bank table"
-                };
-                MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.LogicData.SoundBankTable.Spooler);
-
-                MissionPackage.MissionData.LogicData.Actors = luaMission.InitMission.missionData.LogicData.Actors;
-                MissionPackage.MissionData.LogicData.Actors.Spooler = new DSCript.Spooling.SpoolablePackage()
-                {
-                    Context = (int)ChunkType.LogicExportActorsChunk,
-                    Description = "Actors Definitions table"
-                };
-                MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.LogicData.Actors.Spooler);
-
-                MissionPackage.MissionData.LogicData.Nodes = luaMission.InitMission.missionData.LogicData.Nodes;
-                MissionPackage.MissionData.LogicData.Nodes.Spooler = new DSCript.Spooling.SpoolablePackage()
-                {
-                    Context = (int)ChunkType.LogicExportNodesChunk,
-                    Description = "Logic Definitions table"
-                };
-                MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.LogicData.Nodes.Spooler);
-
-                MissionPackage.MissionData.Objects = luaMission.InitMission.missionData.Objects;
-
-                MissionPackage.MissionData.Objects.Spooler = new DSCript.Spooling.SpoolableBuffer()
-                {
-                    Context = (int)ChunkType.ExportedMissionObjects,
-                    Description = "Exported mission objects"
-                };
-                MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.Objects.Spooler);
-                
-                MissionPackage.MissionIndex = 0;
-                MissionPackage.Missions = new List<ExportedMission>();
-
-                // of course add the init mission
-                MissionPackage.Missions.Add(luaMission.InitMission.missionData);
-                // converting list of missions to list of exported missions
-                int id = 0;
-                foreach (LuaMissionScriptDPL mission in luaMission.Missions)
-                {
-                    MissionPackage.Missions.Add(mission.missionData);
-                    Debug.WriteLine($"Add -> {mission.Spooler.Description} ({id})");
-                    id++;
-                }
-                */
-
-                //MissionPackage.Missions[0] = luaMission.InitMission.missionData;
-
                 SaveFileDialog saveFileDialog = new SaveFileDialog()
                 {
                     Title = "Save compiled Lua mission script (DPL) to",
@@ -3510,6 +3518,7 @@ namespace Zartex
                     luaMission.Save(saveFileDialog.FileName);
 
                     luaMission.Dispose();
+                    isDriverPLMission = true;
                     LoadScriptFile(saveFileDialog.FileName, true, 0);
 
                     MessageBox.Show("Success loading Lua mission script file!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -81,6 +81,7 @@
       <DependentUpon>DataGridWidget.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\SpoolableBufferExtensions.cs" />
+    <Compile Include="Extensions\VehicleVariation.cs" />
     <Compile Include="FlowgraphWidget.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -216,6 +217,11 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\DSCript\DSCript.csproj">
+      <Project>{09c8aa4a-afb8-4bdb-866b-b8c88d48d9eb}</Project>
+      <Name>DSCript</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

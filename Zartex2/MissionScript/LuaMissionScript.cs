@@ -475,6 +475,8 @@ namespace Zartex
     [MoonSharpUserData]
     public class LuaMissionScript
     {
+        public string SourceScriptFilePath { get; set; }
+
         public static int toflag(byte arg1, byte arg2, byte arg3, byte arg4)
         {
             byte[] f = new byte[4] { arg1, arg2, arg3, arg4 };
@@ -642,6 +644,7 @@ namespace Zartex
             //script.DoString("local logicStart = MISSION.logicStart()"); // logic start global variable
 
             DynValue res = script.DoFile(filepath);
+            LMS.SourceScriptFilePath = filepath;
 
             //script.DoString("LogicStart()"); // calls the logic start
             return LMS;
@@ -656,6 +659,8 @@ namespace Zartex
 
         public List<WireCollection> wireCollection = new List<WireCollection>();
         //public Table wireCollection;
+
+        public List<int> SpoolVehicles { get; protected set; }
 
         // table must contain Actor in each
         public ActorSetting CreateActorSetting(Table set)
@@ -673,6 +678,8 @@ namespace Zartex
 
         public LuaMissionScript(string workingDirectory = "")
         {
+            SpoolVehicles = new List<int>();
+            SourceScriptFilePath = "";
             WorkingDirectory = workingDirectory;
 
             // create the logic data
@@ -3849,6 +3856,13 @@ namespace Zartex
                 },
                 Position = new DSCript.Vector4((float)x, (float)y, (float)z, angle)
             });
+
+            // tell the mission script the vehicle ID to spool up
+            if (SpoolVehicles.IndexOf(vehicleId) == -1)
+            {
+                SpoolVehicles.Add(vehicleId);
+            }
+
             int idx = missionData.LogicData.Actors.Definitions.Count - 1;
             return new Actor(missionData.LogicData.Actors.Definitions[idx], idx); // returns the actor
         }

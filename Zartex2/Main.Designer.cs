@@ -295,22 +295,22 @@
             this.importLuaScript.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.driv3rLuaToolStripMenuItem,
             this.driverPLLuaToolStripMenuItem});
-            this.importLuaScript.Enabled = false;
             this.importLuaScript.Name = "importLuaScript";
             this.importLuaScript.Size = new System.Drawing.Size(180, 22);
             this.importLuaScript.Text = "Import Lua Script";
             // 
             // driv3rLuaToolStripMenuItem
             // 
+            this.driv3rLuaToolStripMenuItem.Enabled = false;
             this.driv3rLuaToolStripMenuItem.Name = "driv3rLuaToolStripMenuItem";
-            this.driv3rLuaToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.driv3rLuaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.driv3rLuaToolStripMenuItem.Text = "Driv3r Lua";
             this.driv3rLuaToolStripMenuItem.Click += new System.EventHandler(this.importLuaScript_Click);
             // 
             // driverPLLuaToolStripMenuItem
             // 
             this.driverPLLuaToolStripMenuItem.Name = "driverPLLuaToolStripMenuItem";
-            this.driverPLLuaToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.driverPLLuaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.driverPLLuaToolStripMenuItem.Text = "Driver: PL Lua";
             this.driverPLLuaToolStripMenuItem.Click += new System.EventHandler(this.importLuaScriptDPL_Click);
             // 
@@ -360,27 +360,27 @@
             this.driToolStripMenuItem,
             this.driv3rToolStripMenuItem});
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(97, 22);
             this.addToolStripMenuItem.Text = "Add";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(179, 22);
             this.toolStripMenuItem2.Text = "Wire Node";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.wireNodeToolStripMenuItem_Click);
             // 
             // stringToolStripMenuItem
             // 
             this.stringToolStripMenuItem.Name = "stringToolStripMenuItem";
-            this.stringToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.stringToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.stringToolStripMenuItem.Text = "String";
             this.stringToolStripMenuItem.Click += new System.EventHandler(this.stringToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(176, 6);
             // 
             // driToolStripMenuItem
             // 
@@ -391,7 +391,7 @@
             this.toolStripSeparator18,
             this.toolStripMenuItem3});
             this.driToolStripMenuItem.Name = "driToolStripMenuItem";
-            this.driToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.driToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.driToolStripMenuItem.Text = "Driver: Parallel Lines";
             // 
             // actorToolStripMenuItem
@@ -545,7 +545,7 @@
             this.toolStripSeparator14,
             this.appendBankTableToolStripMenuItem});
             this.driv3rToolStripMenuItem.Name = "driv3rToolStripMenuItem";
-            this.driv3rToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.driv3rToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.driv3rToolStripMenuItem.Text = "Driv3r";
             // 
             // objectToolStripMenuItem
@@ -912,12 +912,12 @@
             // toolStripSeparator13
             // 
             this.toolStripSeparator13.Name = "toolStripSeparator13";
-            this.toolStripSeparator13.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator13.Size = new System.Drawing.Size(94, 6);
             // 
             // findToolStripMenuItem
             // 
             this.findToolStripMenuItem.Name = "findToolStripMenuItem";
-            this.findToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.findToolStripMenuItem.Size = new System.Drawing.Size(97, 22);
             this.findToolStripMenuItem.Text = "Find";
             this.findToolStripMenuItem.Click += new System.EventHandler(this.findToolStripMenuItem_Click);
             // 
@@ -971,7 +971,7 @@
             // getPlayerPositionToolStripMenuItem
             // 
             this.getPlayerPositionToolStripMenuItem.Name = "getPlayerPositionToolStripMenuItem";
-            this.getPlayerPositionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.getPlayerPositionToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.getPlayerPositionToolStripMenuItem.Text = "Get Player Position";
             this.getPlayerPositionToolStripMenuItem.ToolTipText = "Shortcut: Ctrl+E";
             this.getPlayerPositionToolStripMenuItem.Click += new System.EventHandler(this.getPlayerPositionToolStripMenuItem_Click);
