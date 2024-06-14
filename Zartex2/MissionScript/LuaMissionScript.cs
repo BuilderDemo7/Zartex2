@@ -141,32 +141,32 @@ namespace Zartex
             TheActor.Color = new NodeColor(r, g, b, a);
         }
 
-        public void SetPropertyValue(int id, float value)
+        public void SetFloatPropertyValue(int id, float value)
         {
             FloatProperty p = (FloatProperty)(TheActor.Properties[id]);
             p.Value = (float)value;
         }
-        public void SetPropertyValue(int id, double value)
+        public void SetFloatPropertyValue(int id, double value)
         {
             FloatProperty p = (FloatProperty)(TheActor.Properties[id]);
             p.Value = (float)value;
         }
-        public void SetPropertyValue(int id, int value)
+        public void SetIntPropertyValue(int id, int value)
         {
             IntegerProperty p = (IntegerProperty)(TheActor.Properties[id]);
             p.Value = (int)value;
         }
-        public void SetPropertyValue(int id, float x, float y, float z)
+        public void SetFloat3PropertyValue(int id, float x, float y, float z)
         {
             Float3Property p = (Float3Property)(TheActor.Properties[id]);
             p.Value = new Vector3(x, y, z);
         }
-        public void SetPropertyValue(int id, float x, float y, float z, float w)
+        public void SetFloat4PropertyValue(int id, float x, float y, float z, float w)
         {
             Float4Property p = (Float4Property)(TheActor.Properties[id]);
             p.Value = new Vector4(x, y, z, w);
         }
-        public void SetPropertyValue(int id, short index, short value)
+        public void SetTextPropertyValue(int id, short index, short value)
         {
             var prop = (TextFileItemProperty)TheActor.Properties[id];
             prop.Index = index;
@@ -177,7 +177,7 @@ namespace Zartex
             var prop = (AudioProperty)TheActor.Properties[id];
             prop.Value = new AudioInfo(bank, sample);
         }
-        public void SetPropertyValue(int id, Actor actor)
+        public void SetActorPropertyValue(int id, Actor actor)
         {
             ActorProperty p = (ActorProperty)(TheActor.Properties[id]);
             p.Value = actor == null ? -1 : actor.index;
@@ -249,32 +249,32 @@ namespace Zartex
             TheNode.Color = new NodeColor(r, g, b, a);
         }
 
-        public void SetPropertyValue(int id, float value)
+        public void SetFloatPropertyValue(int id, float value)
         {
             FloatProperty p = (FloatProperty)(TheNode.Properties[id]);
             p.Value = (float)value;
         }
-        public void SetPropertyValue(int id, double value)
+        public void SetFloatPropertyValue(int id, double value)
         {
             FloatProperty p = (FloatProperty)(TheNode.Properties[id]);
             p.Value = (float)value;
         }
-        public void SetPropertyValue(int id, int value)
+        public void SetIntPropertyValue(int id, int value)
         {
             IntegerProperty p = (IntegerProperty)(TheNode.Properties[id]);
             p.Value = (int)value;
         }
-        public void SetPropertyValue(int id, float x, float y, float z)
+        public void SetFloat3PropertyValue(int id, float x, float y, float z)
         {
             Float3Property p = (Float3Property)(TheNode.Properties[id]);
             p.Value = new Vector3(x, y, z);
         }
-        public void SetPropertyValue(int id, float x, float y, float z, float w)
+        public void SetFloat4PropertyValue(int id, float x, float y, float z, float w)
         {
             Float4Property p = (Float4Property)(TheNode.Properties[id]);
             p.Value = new Vector4(x, y, z, w);
         }
-        public void SetPropertyValue(int id, short index, short value)
+        public void SetTextPropertyValue(int id, short index, short value)
         {
             var prop = (TextFileItemProperty)TheNode.Properties[id];
             prop.Index = index;
@@ -285,7 +285,7 @@ namespace Zartex
             var prop = (AudioProperty)TheNode.Properties[id];
             prop.Value = new AudioInfo(bank, sample);
         }
-        public void SetPropertyValue(int id, Actor actor)
+        public void SetActorPropertyValue(int id, Actor actor)
         {
             ActorProperty p = (ActorProperty)(TheNode.Properties[id]);
             p.Value = actor == null ? -1 : actor.index;
@@ -3771,7 +3771,8 @@ namespace Zartex
         {
             var a = (Math.PI / 180) * (angle); // convert degrees to radians
             // convert player/character angle to vehicle angle
-            a = (a / 2) + 45; // TODO: subtract this with 25
+            a = (a / 2) + 45; // TODO: subtract this with 26
+            a -= 26;
             Vector3 fwd = new Vector3(
                 (float)(Math.Cos(0) * Math.Cos(a)), // x
 
@@ -4136,6 +4137,11 @@ namespace Zartex
             Context = (int)ChunkType.SpoolSystemLookup,
             Description = "Chunk containing missions sub IDs and chunk IDs"
         } };
+
+        public void LoadFromFile(string filepath)
+        {
+
+        }
 
         public LuaMissionScriptDPL CreateMission(string packageName = null, short id = 5, float x = 0, float y = 0, int flags = 0x01010000, bool defineRoot = true)
         {
