@@ -4140,7 +4140,7 @@ namespace Zartex
 
         public void LoadFromFile(string filepath)
         {
-
+            throw new NotImplementedException("Loading from file is not supported yet!");
         }
 
         public LuaMissionScriptDPL CreateMission(string packageName = null, short id = 5, float x = 0, float y = 0, int flags = 0x01010000, bool defineRoot = true)
