@@ -41,6 +41,8 @@ namespace Zartex
             if (!File.Exists(filepath))
                 return;
 
+            //ModelFile mf = new ModelFile(filepath);
+            //Models = mf.Packages[0];
             FileChunker fc = new FileChunker(filepath);
             SpoolablePackage upck = fc.Content.GetFirstChild<SpoolablePackage>(ChunkType.UnifiedPackage);
             SpoolableBuffer mdpc = upck.GetFirstChild<SpoolableBuffer>(ChunkType.ModelPackagePC);
@@ -63,7 +65,7 @@ namespace Zartex
                     {
                         Description = "Vehicle Hierachy",
                         Context = (int)ChunkType.VehicleHierarchy,
-                        Alignment = SpoolerAlignment.Align16
+                        Alignment = sp.Alignment
                     };
                     spoolableBuffer.SetBuffer((sp as SpoolableBuffer).GetBuffer());
                     VehicleHierachies.Add(spoolableBuffer as SpoolableBuffer);
@@ -81,7 +83,7 @@ namespace Zartex
                 {
                     Description = "Vehicle Hierachy",
                     Context = (int)ChunkType.VehicleHierarchy,
-                    Alignment = SpoolerAlignment.Align16
+                    Alignment = sb.Alignment
                 };
                 spoolableBuffer.SetBuffer(sb.GetBuffer());
                 unidentifiedPackage.Children.Add(spoolableBuffer);
@@ -112,20 +114,12 @@ namespace Zartex
             var mdpackres = (ISpoolableResource)Models; // recast this as a spoolable resource
             foreach (ModelPackage vehMDPC in VehicleModels)
             {
-                Models.Models.Add(vehMDPC.Models[0]);
-                    foreach (SubModel sm in vehMDPC.SubModels)
-                    {
-                        if (sm.Model == vehMDPC.Models[0])
-                        {
-                            sm.ModelPackage = Models;
-                        Models.SubModels.Add(sm);
-                        Models.VertexBuffers.Add(sm.VertexBuffer);
-                        Models.LodInstances.Add(sm.LodInstance);
-                        }
-                    }
+                Models.Models.AddRange(vehMDPC.Models);
+                Models.SubModels.AddRange(vehMDPC.SubModels);
                 Models.Textures.AddRange(vehMDPC.Textures);
                 Models.Materials.AddRange(vehMDPC.Materials);
                 Models.Substances.AddRange(vehMDPC.Substances);
+                Models.LodInstances.AddRange(vehMDPC.LodInstances);
             }
 
             mdpackres.Spooler = mpbuf; // append the spooler
@@ -134,7 +128,7 @@ namespace Zartex
 
         public VehicleVariation()
         {
-            unidentifiedPackage = new SpoolablePackage() { Context = 0x0, Alignment = SpoolerAlignment.Align2048, Description = "Vehicle Variation Package" };
+            unidentifiedPackage = new SpoolablePackage() { Context = 0x0, Alignment = SpoolerAlignment.Align4096, Description = "Vehicle Variation Package" };
             Children.Add(unidentifiedPackage);
 
             VehicleModels = new List<ModelPackage>();
