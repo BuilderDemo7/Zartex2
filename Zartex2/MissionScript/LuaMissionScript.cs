@@ -963,6 +963,49 @@ namespace Zartex
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
+        public Node CraneControl(Actor cameraMarker, float movSpeed = 3.25f, float grabSpeed = 0.005f, string note = "", int r = 250, int g = 250, int b = 122)
+        {
+            if (cameraMarker == null)
+                throw new ScriptRuntimeException("Bad argument #1 - Camera marker is nil");
+            short stringId = 0;
+            if (note == "" | note == null) { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("Unknown"); }
+            else { stringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew(note); }
+
+            int pWireCollection = wireCollection.Count;
+            CollectionOfWires cow = new CollectionOfWires(0, pWireCollection);
+            wireCollection.Add(cow);
+
+            missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
+            {
+                Color = new NodeColor(r, g, b, 255),
+                TypeId = 113,
+                StringId = stringId,
+                Properties = new List<NodeProperty>
+                    {
+                        new WireCollectionProperty(pWireCollection) {
+                            StringId =  (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pWireCollection")
+                        },
+
+                        new FloatProperty(movSpeed)
+                        {
+                            StringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pMovementSpeed")
+                        },
+
+                        new FloatProperty(grabSpeed)
+                        {
+                            StringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pGrabSpeed")
+                        },
+
+                        new ActorProperty(cameraMarker)
+                        {
+                            StringId = (short)missionData.LogicData.StringCollection.findStringIdByValueOrCreateNew("pCameraMarker")
+                        }
+                    }
+            });
+            int idx = missionData.LogicData.Nodes.Definitions.Count - 1;
+            return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
+        }
+
         public Node TruckDeliveryControl(Actor truck, Actor car1, Actor car2, Actor car3, Actor compound, int wrongCarTextId = -1, int distanceText = -1, int kilometerText = -1, int mileText = -1, string note = "", int r = 0, int g = 200, int b = 122)
         {
             if (truck.TheActor.TypeId != 3)
@@ -2979,7 +3022,7 @@ namespace Zartex
             return new Actor(missionData.LogicData.Actors.Definitions[idx], idx);
         }
 
-        public Actor CreateSwitch(float x, float y, float z, float angle, int type = 10, string note = "", int r = 200, int g = 128, int b = 128)
+        public Actor CreateSwitch(float x, float y, float z, float angle, int type = 10, uint uid = 0xC02A75F8, string note = "", int r = 200, int g = 128, int b = 128)
         {
             var a = (Math.PI / 180) * angle; // convert degrees to radians
             Vector4 fwd = new Vector4(
@@ -3010,7 +3053,7 @@ namespace Zartex
                         }           // pType
                     }
             });
-            missionData.Objects.Objects.Add(new SwitchObject() { Position = new Vector3((float)x, (float)y, (float)z), Direction = fwd });
+            missionData.Objects.Objects.Add(new SwitchObject() { Position = new Vector3((float)x, (float)y, (float)z), Direction = fwd, UID = (int)uid });
 
             int idx = missionData.LogicData.Actors.Definitions.Count - 1;
             return new Actor(missionData.LogicData.Actors.Definitions[idx], idx);
@@ -4132,11 +4175,13 @@ namespace Zartex
             Flags = -2147483643, // 05 00 00 80
             SpoolFlags = 1,
             Unk3 = 2,
+            /*
             Spooler =  new SpoolableBuffer()
         {
             Context = (int)ChunkType.SpoolSystemLookup,
-            Description = "Chunk containing missions sub IDs and chunk IDs"
-        } };
+            Description = "Chunk containing missions sub IDs and chunk IDs",
+            Alignment = SpoolerAlignment.Align16
+            } */};
 
         public void LoadFromFile(string filepath)
         {
@@ -4431,6 +4476,7 @@ namespace Zartex
         public LuaMissionPackage() : base() {
             InitMission = CreateMission(null, 5, 0, 0, 0, false);
 
+            // SSIC
             InitSpooler = new SpoolablePackage()
             {
                 Context = (int)ChunkType.SpoolSystemInitChunker,
@@ -4439,6 +4485,7 @@ namespace Zartex
             };
             Children.Add(InitSpooler);
 
+            // SSLP
             MissionsLookup.Spooler = new SpoolableBuffer()
             {
                 Context = (int)ChunkType.SpoolSystemLookup,
@@ -4447,6 +4494,7 @@ namespace Zartex
             };
             InitSpooler.Children.Add(MissionsLookup.Spooler);
 
+            // MRRD
             SpoolableBuffer MRRD = new SpoolableBuffer()
             {
                 Context = 0x4452524D,
