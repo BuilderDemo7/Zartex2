@@ -52,7 +52,7 @@ namespace DSCript.Spooling
         }
 
         public static void Load<T>(T resource)
-            where T : ISpoolableResource
+    where T : ISpoolableResource
         {
             resource.Load();
         }

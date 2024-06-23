@@ -272,8 +272,6 @@ namespace DSCript.Spooling
             if (version != Chunk.Version)
                 throw new Exception("Unsupported version - cannot load chunk file!");
 
-            parent.SetSizeInternal(size);
-            
             DSC.Update($"Processing {count} chunks...");
             
             for (int i = 0, idx = 1; i < count; i++, idx++)
@@ -496,10 +494,6 @@ namespace DSCript.Spooling
         /// <returns>True if the chunker saved the file; otherwise, false.</returns>
         public bool Save(string filename, bool updateStream = true)
         {
-            // user requested an overwrite?
-            if (filename == FileName)
-                return Save();
-
             if (CanSave)
             {
                 OnFileSaveBegin();

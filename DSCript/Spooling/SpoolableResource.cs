@@ -36,16 +36,11 @@ namespace DSCript.Spooling
             this.VerifyAccess();
             this.Save();
         }
-        
+
         protected T Spooler { get; set; }
 
         protected abstract void Load();
         protected abstract void Save();
-
-        public static explicit operator T(SpoolableResource<T> resource)
-        {
-            return resource.Spooler;
-        }
 
         internal void VerifyAccess()
         {
