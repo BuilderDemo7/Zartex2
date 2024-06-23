@@ -16,12 +16,17 @@ using System.Windows.Media.Media3D;
 using HelixToolkit;
 using HelixToolkit.Wpf;
 
+// texture
+using System.Windows.Media.Imaging;
+
 using DSCript;
 
 namespace Zartex._3D
 {
     public partial class viewport : UserControl
     {
+        public MissionCityType City { get; set; }
+
         public List<ActorDefinition> sceneActors = new List<ActorDefinition>();
         public List<MissionObject> sceneObjects = new List<MissionObject>();
         public List<MissionInstance> sceneInstances = new List<MissionInstance>();
@@ -49,10 +54,15 @@ namespace Zartex._3D
 
         float deg = (180 / (float)Math.PI);
 
-        public static string modelsFolderName = "Models";
+        public static readonly string modelsFolderName = "Models";
+        public static readonly string mapsFolderName = "Maps";
+        public static double mapSize = 3750;
 
         public static Model3D characterModel = getModel($"{modelsFolderName}/character.3ds");
         public static Model3D vehicleModel = getModel($"{modelsFolderName}/vehicle.3ds");
+
+        // forget it
+        //public static Model3D mapBaseModel = getModel($"{mapsFolderName}/maps.3ds");
 
         public static SolidColorBrush Green = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 0, 255, 0));
         public static SolidColorBrush Red = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 0, 255, 0));
@@ -134,6 +144,10 @@ namespace Zartex._3D
                         case 6:
                             var pathObject = (PathObject)missionObject;
                             return new Vector3D(pathObject.Path[0].X, pathObject.Path[0].Z, pathObject.Path[0].Y);
+                        // switch
+                        case 101:
+                            var switc = (SwitchObject)missionObject;
+                            return new Vector3D(switc.Position.X, switc.Position.Z, switc.Position.Y);
                         // camera
                         case 9:
                             var cameraObject = (CameraObject)missionObject;
@@ -149,6 +163,7 @@ namespace Zartex._3D
                         case 104:
                             var animPropObject = (AnimPropObject)missionObject;
                             return new Vector3D(animPropObject.Position.X, animPropObject.Position.Z, animPropObject.Position.Y);
+                        // marker
                         case 105:
                             var markerObject = (MarkerObject)missionObject;
                             return new Vector3D(markerObject.Position.X, markerObject.Position.Z, markerObject.Position.Y);
@@ -478,7 +493,88 @@ namespace Zartex._3D
 
             }
 
+            // add the map
+            ModelVisual3D mapmodel = new ModelVisual3D();
+
+            MeshBuilder meshb = new MeshBuilder();
+            meshb.AddTriangle(
+                new Point3D(-mapSize, mapSize, 0),
+                new Point3D(-mapSize, -mapSize, 0),
+                new Point3D(mapSize, -mapSize, 0),
+                // uv
+                new System.Windows.Point(0, 1),
+                new System.Windows.Point(0, 0),
+                new System.Windows.Point(1, 0)
+                );
+            meshb.AddTriangle(
+                new Point3D(mapSize, -mapSize, 0),
+                new Point3D(mapSize, mapSize, 0),
+                new Point3D(-mapSize, mapSize, 0),
+                // uv
+                new System.Windows.Point(1, 0),
+                new System.Windows.Point(1, 1),
+                new System.Windows.Point(0, 1)
+                );
+
+
+            DiffuseMaterial defaultmaterial = new DiffuseMaterial(new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 255, 255)));
+            Material material = null;
+            string mapTexName = "layout.png";
+
+            switch(City)
+            {
+                case MissionCityType.Miami_Day:
+                case MissionCityType.Miami_Night:
+                    mapTexName = "miami.png";
+                    break;
+                case MissionCityType.Nice_Day:
+                case MissionCityType.Nice_Night:
+                    mapTexName = "nice.png";
+                    break;
+                case MissionCityType.Istanbul_Day:
+                case MissionCityType.Istanbul_Night:
+                    mapTexName = "istanbul.png";
+                    break;
+            }
+
+            if (File.Exists($"{mapsFolderName}/{mapTexName}"))
+            {
+                FileStream buffer = new FileStream($"{mapsFolderName}/{mapTexName}", FileMode.Open, FileAccess.Read);
+
+                BitmapImage bitmap = new BitmapImage();
+
+                bitmap.BeginInit();
+                bitmap.StreamSource = buffer;
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.EndInit();
+                bitmap.Freeze();
+
+                ImageBrush tex = new ImageBrush(bitmap);
+                material = new DiffuseMaterial(tex);
+            }
+
+            if (material == null)
+                material = defaultmaterial;
+
+            GeometryModel3D map = new GeometryModel3D(meshb.ToMesh(true), material);
+
+            mapmodel.Content = map;
+
+            vp.Children.Add(mapmodel);
+
             // stuff the scene to the viewport
+            /*
+            if (mapBaseModel != null)
+            {
+                vp.Children.Add(getMapModel());
+            }
+            else
+            {
+                Console.WriteLine("WARNING: The map base model wasn't present (WTF?)");
+                Console.WriteLine("WARNING: Attempting to reload the map base model...");
+                mapBaseModel = getModel($"{mapsFolderName}/map.3ds");
+            }
+            */
             vp.Children.Add(sceneDevice);
             Debug.WriteLine($"[ZARTEX] 3D Scene done updating (Children Count: {sceneDevice.Children.Count})");
         }
@@ -499,9 +595,10 @@ namespace Zartex._3D
             {
                 ModelImporter import = new ModelImporter();
                 device = import.Load(path);
+                Console.WriteLine($"Model \"{path}\" has been loaded");
             }
             catch (Exception e)
-            { }
+            { Console.WriteLine($"ERROR: Model \"{path}\" failed to load!"); }
             return device;
         }
 
@@ -546,6 +643,36 @@ namespace Zartex._3D
             return device;
         }
         
+        /*
+        public ModelVisual3D getMapModel()
+        {
+            ModelVisual3D device = new ModelVisual3D();
+            Model3D model = mapBaseModel;
+            string imageName = "layout.png"; // default
+
+            FileStream buffer = new FileStream($"{mapsFolderName}/{imageName}", FileMode.Open, FileAccess.Read);
+
+            BitmapImage bitmap = new BitmapImage();
+
+            bitmap.BeginInit();
+            bitmap.StreamSource = buffer;
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.EndInit();
+            bitmap.Freeze();
+
+            ImageBrush tex = new ImageBrush(bitmap);
+
+            //GeometryModel3D geo = model as GeometryModel3D;
+            //geo.Material = new DiffuseMaterial(tex);
+            //geo.BackMaterial = new DiffuseMaterial(tex);
+
+            model.Transform = new TranslateTransform3D(0, 0, 0);
+
+            device.Content = model;
+            return device;
+        }
+        */
+
         // clicked on a node then put the camera on it
         public void NodesOnClick(object sender, TreeViewEventArgs e)
         {

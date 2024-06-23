@@ -826,6 +826,7 @@ namespace Zartex
         {
             // Build 3D viewport
             _3D.viewport _3dviewport = new _3D.viewport();
+            _3dviewport.City = MissionPackage.MissionSummary.CityType;
             if (definitions is List<ActorDefinition>)
                _3dviewport.sceneActors = definitions as List<ActorDefinition>;
             if (objects!=null & objects.Count!=0)
