@@ -50,45 +50,156 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Zartex2\MissionScript\ActorSetTableData.cs">
+      <Link>MissionScript\ActorSetTableData.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\D3M_MissionScript.cs">
+      <Link>MissionScript\D3M_MissionScript.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\ExportedMission.cs">
+      <Link>MissionScript\ExportedMission.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\ExportedMissionObjects.cs">
+      <Link>MissionScript\ExportedMissionObjects.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\LogicExportData.cs">
+      <Link>MissionScript\LogicExportData.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Logic\ActorDefinition.cs">
+      <Link>MissionScript\Logic\ActorDefinition.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Logic\LogicDataCollection.cs">
+      <Link>MissionScript\Logic\LogicDataCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Logic\NodeColor.cs">
+      <Link>MissionScript\Logic\NodeColor.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Logic\NodeDefinition.cs">
+      <Link>MissionScript\Logic\NodeDefinition.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Logic\NodeProperty.cs">
+      <Link>MissionScript\Logic\NodeProperty.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Logic\NodeTypes.cs">
+      <Link>MissionScript\Logic\NodeTypes.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Logic\ScriptCountersData.cs">
+      <Link>MissionScript\Logic\ScriptCountersData.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Logic\SoundBankTableData.cs">
+      <Link>MissionScript\Logic\SoundBankTableData.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Logic\StringCollectionData.cs">
+      <Link>MissionScript\Logic\StringCollectionData.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Logic\WireCollection.cs">
+      <Link>MissionScript\Logic\WireCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Logic\WireCollectionData.cs">
+      <Link>MissionScript\Logic\WireCollectionData.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Logic\WireNode.cs">
+      <Link>MissionScript\Logic\WireNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Logic\WireNodeType.cs">
+      <Link>MissionScript\Logic\WireNodeType.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\LuaMissionScript.cs">
+      <Link>MissionScript\LuaMissionScript.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\MissionInstanceData.cs">
+      <Link>MissionScript\MissionInstanceData.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\MissionScriptFile.cs">
+      <Link>MissionScript\MissionScriptFile.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\MissionSummaryData.cs">
+      <Link>MissionScript\MissionSummaryData.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Objects\MissionObject.cs">
+      <Link>MissionScript\Objects\MissionObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Objects\Types\AnimProp.cs">
+      <Link>MissionScript\Objects\Types\AnimProp.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Objects\Types\Area.cs">
+      <Link>MissionScript\Objects\Types\Area.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Objects\Types\Camera.cs">
+      <Link>MissionScript\Objects\Types\Camera.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Objects\Types\Character.cs">
+      <Link>MissionScript\Objects\Types\Character.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Objects\Types\Collectable.cs">
+      <Link>MissionScript\Objects\Types\Collectable.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Objects\Types\Marker.cs">
+      <Link>MissionScript\Objects\Types\Marker.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Objects\Types\ObjectiveIcon.cs">
+      <Link>MissionScript\Objects\Types\ObjectiveIcon.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Objects\Types\Path.cs">
+      <Link>MissionScript\Objects\Types\Path.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Objects\Types\Prop.cs">
+      <Link>MissionScript\Objects\Types\Prop.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Objects\Types\Switch.cs">
+      <Link>MissionScript\Objects\Types\Switch.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Objects\Types\Vehicle.cs">
+      <Link>MissionScript\Objects\Types\Vehicle.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Objects\Types\Volume.cs">
+      <Link>MissionScript\Objects\Types\Volume.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\Objects\Types\Weapon.cs">
+      <Link>MissionScript\Objects\Types\Weapon.cs</Link>
+    </Compile>
+    <Compile Include="..\Zartex2\MissionScript\SpoolSystemLookup.cs">
+      <Link>MissionScript\SpoolSystemLookup.cs</Link>
+    </Compile>
     <Compile Include="Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Extensions\SpoolableBufferExtensions.cs" />
-    <Compile Include="MissionScript\ActorSetTableData.cs" />
-    <Compile Include="MissionScript\D3M_MissionScript.cs" />
-    <Compile Include="MissionScript\ExportedMission.cs" />
-    <Compile Include="MissionScript\ExportedMissionObjects.cs" />
-    <Compile Include="MissionScript\LogicExportData.cs" />
-    <Compile Include="MissionScript\Logic\ActorDefinition.cs" />
-    <Compile Include="MissionScript\Logic\LogicDataCollection.cs" />
-    <Compile Include="MissionScript\Logic\ScriptCountersData.cs" />
-    <Compile Include="MissionScript\Logic\NodeColor.cs" />
-    <Compile Include="MissionScript\Logic\NodeDefinition.cs" />
-    <Compile Include="MissionScript\Logic\NodeProperty.cs" />
-    <Compile Include="MissionScript\Logic\NodeTypes.cs" />
-    <Compile Include="MissionScript\Logic\SoundBankTableData.cs" />
-    <Compile Include="MissionScript\Logic\StringCollectionData.cs" />
-    <Compile Include="MissionScript\Logic\WireCollection.cs" />
-    <Compile Include="MissionScript\Logic\WireCollectionData.cs" />
-    <Compile Include="MissionScript\Logic\WireNode.cs" />
-    <Compile Include="MissionScript\Logic\WireNodeType.cs" />
-    <Compile Include="MissionScript\LuaMissionScript.cs" />
-    <Compile Include="MissionScript\MissionInstanceData.cs" />
-    <Compile Include="MissionScript\MissionScriptFile.cs" />
-    <Compile Include="MissionScript\MissionSummaryData.cs" />
-    <Compile Include="MissionScript\Objects\MissionObject.cs" />
-    <Compile Include="MissionScript\Objects\Types\AnimProp.cs" />
-    <Compile Include="MissionScript\Objects\Types\Area.cs" />
-    <Compile Include="MissionScript\Objects\Types\Camera.cs" />
-    <Compile Include="MissionScript\Objects\Types\Character.cs" />
-    <Compile Include="MissionScript\Objects\Types\Collectable.cs" />
-    <Compile Include="MissionScript\Objects\Types\Marker.cs" />
-    <Compile Include="MissionScript\Objects\Types\ObjectiveIcon.cs" />
-    <Compile Include="MissionScript\Objects\Types\Path.cs" />
-    <Compile Include="MissionScript\Objects\Types\Prop.cs" />
-    <Compile Include="MissionScript\Objects\Types\Switch.cs" />
-    <Compile Include="MissionScript\Objects\Types\Vehicle.cs" />
-    <Compile Include="MissionScript\Objects\Types\Volume.cs" />
-    <Compile Include="MissionScript\Objects\Types\Weapon.cs" />
-    <Compile Include="MissionScript\SpoolSystemLookup.cs" />
+    <Compile Include="MissionScript_old\ActorSetTableData.cs" />
+    <Compile Include="MissionScript_old\D3M_MissionScript.cs" />
+    <Compile Include="MissionScript_old\ExportedMission.cs" />
+    <Compile Include="MissionScript_old\ExportedMissionObjects.cs" />
+    <Compile Include="MissionScript_old\LogicExportData.cs" />
+    <Compile Include="MissionScript_old\Logic\ActorDefinition.cs" />
+    <Compile Include="MissionScript_old\Logic\LogicDataCollection.cs" />
+    <Compile Include="MissionScript_old\Logic\ScriptCountersData.cs" />
+    <Compile Include="MissionScript_old\Logic\NodeColor.cs" />
+    <Compile Include="MissionScript_old\Logic\NodeDefinition.cs" />
+    <Compile Include="MissionScript_old\Logic\NodeProperty.cs" />
+    <Compile Include="MissionScript_old\Logic\NodeTypes.cs" />
+    <Compile Include="MissionScript_old\Logic\SoundBankTableData.cs" />
+    <Compile Include="MissionScript_old\Logic\StringCollectionData.cs" />
+    <Compile Include="MissionScript_old\Logic\WireCollection.cs" />
+    <Compile Include="MissionScript_old\Logic\WireCollectionData.cs" />
+    <Compile Include="MissionScript_old\Logic\WireNode.cs" />
+    <Compile Include="MissionScript_old\Logic\WireNodeType.cs" />
+    <Compile Include="MissionScript_old\LuaMissionScript.cs" />
+    <Compile Include="MissionScript_old\MissionInstanceData.cs" />
+    <Compile Include="MissionScript_old\MissionScriptFile.cs" />
+    <Compile Include="MissionScript_old\MissionSummaryData.cs" />
+    <Compile Include="MissionScript_old\Objects\MissionObject.cs" />
+    <Compile Include="MissionScript_old\Objects\Types\AnimProp.cs" />
+    <Compile Include="MissionScript_old\Objects\Types\Area.cs" />
+    <Compile Include="MissionScript_old\Objects\Types\Camera.cs" />
+    <Compile Include="MissionScript_old\Objects\Types\Character.cs" />
+    <Compile Include="MissionScript_old\Objects\Types\Collectable.cs" />
+    <Compile Include="MissionScript_old\Objects\Types\Marker.cs" />
+    <Compile Include="MissionScript_old\Objects\Types\ObjectiveIcon.cs" />
+    <Compile Include="MissionScript_old\Objects\Types\Path.cs" />
+    <Compile Include="MissionScript_old\Objects\Types\Prop.cs" />
+    <Compile Include="MissionScript_old\Objects\Types\Switch.cs" />
+    <Compile Include="MissionScript_old\Objects\Types\Vehicle.cs" />
+    <Compile Include="MissionScript_old\Objects\Types\Volume.cs" />
+    <Compile Include="MissionScript_old\Objects\Types\Weapon.cs" />
+    <Compile Include="MissionScript_old\SpoolSystemLookup.cs" />
     <Compile Include="MPC.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
