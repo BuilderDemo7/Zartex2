@@ -3415,8 +3415,11 @@ namespace Zartex
                         }
 
                         VehicleVariation vehvar = new VehicleVariation();
-                        vehvar.LoadModelsFromVVVFile($"{Driv3r.RootDirectory}\\Vehicles\\{cityname}.vvv");
-                        vehvar.LoadHierachiesFromVVVFile($"{Driv3r.RootDirectory}\\Vehicles\\{cityname}.vvv");
+                        if (MessageBox.Show("Make it based from a .vvv file from your Driv3r installation folder? (BETA)", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        {
+                            vehvar.LoadModelsFromVVVFile($"{Driv3r.RootDirectory}\\Vehicles\\{cityname}.vvv");
+                            vehvar.LoadHierachiesFromVVVFile($"{Driv3r.RootDirectory}\\Vehicles\\{cityname}.vvv");
+                        }
                         int startModelId = 0;
                         for (int id = 0; id < mdF.Content.Children.Count; id++)
                         {

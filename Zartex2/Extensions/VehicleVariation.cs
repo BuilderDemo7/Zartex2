@@ -93,6 +93,23 @@ namespace Zartex
 
             if (Models == null)
             {
+                Models = new ModelPackage();
+
+                // version and misc info
+                Models.Platform = PlatformType.PC;
+                Models.UID = 0x2D;
+                Models.Version = 6;
+                Models.IndexBuffer = new IndexBuffer(VehicleModels.Count);
+                /*
+                Models.IndexBuffer.Indices = new short[VehicleModels[0].IndexBuffer.Length];
+                for (int id = 0; id < VehicleModels[0].IndexBuffer.Length; id++)
+                {
+                    Models.IndexBuffer.Indices[id] = VehicleModels[0].IndexBuffer.Indices[id];
+                }
+
+                Models.Flags = VehicleModels[0].Flags;
+                */
+
                 // materials stuff
                 Models.Materials = new List<MaterialDataPC>();
 
@@ -104,11 +121,6 @@ namespace Zartex
                 Models.Substances = new List<SubstanceDataPC>();
                 Models.Models = new List<Model>();
                 //mdpack.PackageType = PackageType.VehiclePackage;
-
-                // version and misc info
-                Models.Platform = PlatformType.PC;
-                Models.UID = 0x2D;
-                Models.Version = 6;
             }
 
             var mdpackres = (ISpoolableResource)Models; // recast this as a spoolable resource
@@ -116,10 +128,14 @@ namespace Zartex
             {
                 Models.Models.AddRange(vehMDPC.Models);
                 Models.SubModels.AddRange(vehMDPC.SubModels);
+
                 Models.Textures.AddRange(vehMDPC.Textures);
                 Models.Materials.AddRange(vehMDPC.Materials);
                 Models.Substances.AddRange(vehMDPC.Substances);
+
                 Models.LodInstances.AddRange(vehMDPC.LodInstances);
+
+                Models.VertexBuffers.AddRange(vehMDPC.VertexBuffers);
             }
 
             mdpackres.Spooler = mpbuf; // append the spooler
@@ -128,7 +144,7 @@ namespace Zartex
 
         public VehicleVariation()
         {
-            unidentifiedPackage = new SpoolablePackage() { Context = 0x0, Alignment = SpoolerAlignment.Align4096, Description = "Vehicle Variation Package" };
+            unidentifiedPackage = new SpoolablePackage() { Context = 0x0, Alignment = SpoolerAlignment.Align2048, Description = "Vehicle Variation Package" };
             Children.Add(unidentifiedPackage);
 
             VehicleModels = new List<ModelPackage>();

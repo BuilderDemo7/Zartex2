@@ -3769,10 +3769,10 @@ namespace Zartex
 
         public Actor CreateVehicle(float x, float y, float z, float angle, int vehicleId, int colorId, string note = "", int flags = 302186497, float damage = 0, float softness = 1, float weight = 1f, float fragility = 1, int r = 0, int g = 200, int b = 122)
         {
+            angle -= 25.5f;
             var a = (Math.PI / 180) * (angle); // convert degrees to radians
             // convert player/character angle to vehicle angle
-            a = (a / 2) + 45; // TODO: subtract this with 26
-            a -= 26;
+            a = (a / 2) + 45;
             Vector3 fwd = new Vector3(
                 (float)(Math.Cos(0) * Math.Cos(a)), // x
 
@@ -3836,7 +3836,8 @@ namespace Zartex
                         0x0,0x0,0x0,0x0,0x0, // zeros......
                         0x01,0x1C,0,0, // part 2 magic
                         // direction of which the vehicle is facing to (i guess)
-                        0,0,0x80,0x3F,   0,0,0,0,   0,0,0,0,   0,0,0x80,0x3F,
+                        //0,0,0x80,0x3F,   0,0,0,0,   0,0,0,0,   0,0,0x80,0x3F,
+                        0,0,0x0,0x0,   0,0,0,0,   0,0,0,0,   0,0,0x0,0x0, // could be the height of the wheels
                         // pack of zeros (I don't know what they mean)
                         0,0,0,0,0,0,0,0,
                         1, 0x24, 0,0,

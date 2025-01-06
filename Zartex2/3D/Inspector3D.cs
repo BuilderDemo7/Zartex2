@@ -128,16 +128,17 @@ namespace Zartex._3D
                             else if (missionObject is AreaObject)
                             {
                                 var areaObject = (AreaObject)missionObject;
-                                float x, y, z;
-                                MemoryStream str = new MemoryStream(areaObject.CreationData);
-                                using (var f = new BinaryReader(str, Encoding.UTF8))
-                                {
-                                    str.Position = 0x20;
-                                    x = f.ReadSingle();
-                                    y = f.ReadSingle();
-                                    z = f.ReadSingle();
-                                }
-                                return new Vector3D(x, z, y);
+                                //float x, y, z;
+                                //MemoryStream str = new MemoryStream(areaObject.CreationData);
+                                //using (var f = new BinaryReader(str, Encoding.UTF8))
+                                //{
+                                //    str.Position = 0x20;
+                                //    x = f.ReadSingle();
+                                //    y = f.ReadSingle();
+                                //    z = f.ReadSingle();
+                                //}
+                                //return new Vector3D(x, z, y);
+                                return new Vector3D(areaObject.AreaPosition.X, areaObject.AreaPosition.Z, areaObject.AreaPosition.Y);
                             }
                             break;
                         // path
@@ -265,13 +266,15 @@ namespace Zartex._3D
 
                             Transform3D tnf = new TranslateTransform3D(pos);
 
-                            vp.Children.Add(new BillboardTextVisual3D()
+                            // again, should it be "vp" or "sceneDevice"?
+                            sceneDevice.Children.Add(new BillboardTextVisual3D()
                             {
                                 // {ExportedMissionObjects.GetObjectNameById(mb.TypeId)}
                                 Text = $"({objectId}) Instance (Object)",
                                 Position = new Point3D(pos.X, pos.Y, pos.Z + textInfoHeight),
                                 Material = new SpecularMaterial(White, 5.0),
                                 Foreground = White,
+                                Background = new SolidColorBrush(System.Windows.Media.Colors.Transparent)
                             });
                             vp.Children.Add(new CubeVisual3D()
                             {
@@ -291,7 +294,18 @@ namespace Zartex._3D
                 //    missionObject = sceneObjects[actor.ObjectId];
                 //if (missionObject != null)
                 //{
-                Vector3D pos = FindActorPosition(actor);
+                Vector3D pos = new Vector3D(deadVector, deadVector, -1);
+                if (!Debugger.IsAttached)
+                {
+                    try
+                    {
+                        pos = FindActorPosition(actor);
+                    }
+                    catch (Exception ex){}
+                }
+                else
+                    pos = FindActorPosition(actor);
+
                 MissionObject actorObject = GetActorMissionObject(actor);
                 // make sure the position isn't null or smth (I made this to identify it because it can't just be null)
                 actorId++;
@@ -330,14 +344,17 @@ namespace Zartex._3D
                     if (actor.TypeId == 2)
                         tnf.Value.Scale(new Vector3D(0, 0, 1));
                     // base representation
-                    vp.Children.Add(new BillboardTextVisual3D()
+                    // should it be "sceneDevice" or "vp"?
+                    sceneDevice.Children.Add(new BillboardTextVisual3D()
                     {
                         Text = $"({actorId-1}) {NodeTypes.GetActorType(actor.TypeId)}",
                         Position = new Point3D(pos.X, pos.Y, pos.Z + textInfoHeight),
                         Material = new SpecularMaterial(White,5.0),
-                        Foreground = White
+                        Foreground = White,
+                        Background = new SolidColorBrush(System.Windows.Media.Colors.Transparent)
                     });
                     // test volume representation (if the object is a area)
+                    // NOTE from the future: whoops! I forgot this existed, but it doesn't matter as I made a new code about this
                     /*
                     if (actor.TypeId == 4)
                     {
@@ -464,6 +481,36 @@ namespace Zartex._3D
                         vp.Children.Add(lines);
                         continue; // cancel the others representations
                     }
+                    if (actor.TypeId == 4)
+                    {
+                        MissionObject missionObject = null;
+                        //Vector3D last = new Vector3D(0,0,0);
+                        if (actor.ObjectId != -1 & actor.ObjectId < sceneObjects.Count)
+                            missionObject = sceneObjects[actor.ObjectId];
+
+                        AreaObject areaObj = missionObject as AreaObject;
+                        if (areaObj != null)
+                        {
+                            pureColor.A = 128; // make it semi-transparent so that we don't have trouble seeing what's inside from outside
+                            var rep = getRepresentationModelForActorType(actor.TypeId, pureColor);
+
+
+                            ScaleTransform3D scale = new ScaleTransform3D(areaObj.AreaScale.X, areaObj.AreaScale.Z, areaObj.AreaScale.Y);
+                            Matrix3D mat = scale.Value; // copy the scaled matrix to another matrix
+
+                            // set position of the scaled matrix
+                            mat.OffsetX = areaObj.AreaPosition.X;
+                            mat.OffsetY = areaObj.AreaPosition.Z;
+                            mat.OffsetZ = areaObj.AreaPosition.Y;
+
+                            // apply it
+                            rep.Transform = new MatrixTransform3D(mat);
+
+                            // add the representation 
+                            sceneDevice.Children.Add(rep);
+                            continue; // AAAND... go!
+                        }
+                    }
 
                     // common representation
                     var representation1 = getRepresentationModelForActorType(actor.TypeId,pureColor); /*new CubeVisual3D()
@@ -471,8 +518,8 @@ namespace Zartex._3D
                         Transform = tnf,
                         Fill = actorColor,
                     };*/
-                    // forward representation
-                    representation1.Transform = tnf;
+                                                                                                           // forward representation
+                        representation1.Transform = tnf;
                     // set color
 
                     sceneDevice.Children.Add(representation1);

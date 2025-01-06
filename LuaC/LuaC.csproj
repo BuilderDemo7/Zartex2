@@ -53,6 +53,7 @@
     <Compile Include="Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Extensions\SpoolableBufferExtensions.cs" />
     <Compile Include="MissionScript\ActorSetTableData.cs" />
+    <Compile Include="MissionScript\D3M_MissionScript.cs" />
     <Compile Include="MissionScript\ExportedMission.cs" />
     <Compile Include="MissionScript\ExportedMissionObjects.cs" />
     <Compile Include="MissionScript\LogicExportData.cs" />

@@ -99,6 +99,7 @@
     </Compile>
     <Compile Include="Memory.cs" />
     <Compile Include="MissionScript\ActorSetTableData.cs" />
+    <Compile Include="MissionScript\D3M_MissionScript.cs" />
     <Compile Include="MissionScript\ExportedMissionObjects.cs" />
     <Compile Include="MissionScript\Logic\ScriptCountersData.cs" />
     <Compile Include="MissionScript\Logic\NodeTypes.cs" />
@@ -194,6 +195,9 @@
     <None Include="deprecated\Nodes.cs">
       <SubType>Code</SubType>
     </None>
+    <None Include="Maps\maps.3ds">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Models\character.3ds">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -222,6 +226,20 @@
       <Project>{09c8aa4a-afb8-4bdb-866b-b8c88d48d9eb}</Project>
       <Name>DSCript</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Maps\istanbul.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Maps\layout.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Maps\miami.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Maps\nice.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
