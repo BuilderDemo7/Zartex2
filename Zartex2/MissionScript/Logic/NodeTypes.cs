@@ -132,6 +132,8 @@ namespace Zartex
 
             { 30, "ProximityCheck" },
 
+            { 31, "Iterator" },
+
             { 100, "TrafficControl" },
             { 101, "ActorCreation" },
             { 102, "CopControl" },

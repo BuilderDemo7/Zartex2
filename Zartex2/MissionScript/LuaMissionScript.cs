@@ -547,7 +547,7 @@ namespace Zartex
 
             // for CountdownIntro node
             script.Globals["CLOCKCOMMAND_START_TIMER"] = 1;
-            script.Globals["CLOCKCOMMAND_EQUALS"] = 1;
+            script.Globals["CLOCKCOMMAND_EQUALS"] = 2;
             script.Globals["CLOCKCOMMAND_START_COUNTDOWN"] = 4;
             script.Globals["CLOCKCOMMAND_STOP"] = 5;
             script.Globals["CLOCKCOMMAND_HIDE"] = 6;
@@ -557,6 +557,7 @@ namespace Zartex
             script.Globals["COUNTERACTION_SOMATE"] = 2;
             script.Globals["COUNTERACTION_SUBTRACT"] = 3;
 
+            script.Globals["COUNTERCONDITION_EQUALTO"] = 6;
             script.Globals["COUNTERCONDITION_SMALLERTHAN"] = 5;
             script.Globals["COUNTERCONDITION_BIGGERTHAN"] = 4;
 
@@ -1947,6 +1948,8 @@ namespace Zartex
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
+        // flags: 
+        //   1st digit = repeat on success enable / enable event
         public Node Random(int flags = 33, string note = "", int r = 0, int g = 200, int b = 122)
         {
             short stringId = 0;
@@ -1989,7 +1992,7 @@ namespace Zartex
             missionData.LogicData.Nodes.Definitions.Add(new NodeDefinition()
             {
                 Color = new NodeColor(r, g, b, 255),
-                TypeId = 1,
+                TypeId = 25,
                 StringId = stringId,
                 Properties = new List<NodeProperty>
                     {
@@ -3087,7 +3090,7 @@ namespace Zartex
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
-        public Node AreaWatch(Actor actor, Actor area, int flags = 1, string note = "ActorHasReachedPoint", int r = 100, int g = 128, int b = 255)
+        public Node AreaWatch(Actor actor, Actor area, int flags = 0, string note = "ActorHasReachedPoint", int r = 100, int g = 128, int b = 255)
         {
             if (actor == null)
                 throw new ScriptRuntimeException("Bad argument #1 - Attempt to watch a nil value");
@@ -3127,6 +3130,8 @@ namespace Zartex
             return new Node(missionData.LogicData.Nodes.Definitions[idx], idx) { WireCollection = cow };
         }
 
+        // flags: 
+        //   1st digit = repeat on success enable / enable event
         public Node Timer(float interval, int flags = 1, string note = "", int r = 155, int g = 55, int b = 0)
         {
             short stringId = 0;
