@@ -21,7 +21,7 @@ MISSION.missionSummary.X = X; MISSION.missionSummary.Y = Y
 MISSION.missionSummary.MoodId = 9 -- sky_trapped.d3s (Miami at Day - Dry)
 
 -- Creates the player
-local Player = MISSION.CreateCharacter(X,Y,Z,W, 1, "Player", -1, -1, 1.0, 0.0, 0, 1.5)
+local Player = MISSION.CreateCharacter(X,Y,Z,W, SKIN_TANNER, 1, "Player", -1, -1, 1.0, 0.0, 0, 1.5)
 
 -- Time for some logic scripting here
 -- Let's make the basic stuff like when the player is dead, arrested or being chased!
@@ -58,7 +58,7 @@ local BaddieInstances = {}
 
 for i=1,#Baddies do
    local baddie = Baddies[i]
-   BaddieInstances[i] = MISSION.CreateCharacter(baddie[1],baddie[2],baddie[3],baddie[4], baddie[7] == nil and 3 or baddie[7], baddie[6] == nil and "Baddie" or baddie[6], 2, 2, 1.0, 0.0, baddie[5], 1.0)
+   BaddieInstances[i] = MISSION.CreateCharacter(baddie[1],baddie[2],baddie[3],baddie[4], SKIN_TANNER, baddie[7] == nil and 3 or baddie[7], baddie[6] == nil and "Baddie" or baddie[6], 2, 2, 1.0, 0.0, baddie[5], 1.0)
 end
 
 for i=1,#collectables do
