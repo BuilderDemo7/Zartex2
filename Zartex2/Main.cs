@@ -23,6 +23,7 @@ using MoonSharp.Interpreter;
 
 using Zartex.Converters;
 using Zartex.Settings;
+using Zartex.ScriptEditor;
 
 using MemoryEdit;
 
@@ -35,9 +36,11 @@ namespace Zartex
 {
     public partial class Main : Form
     {
-        public string info_Version = "1.0.49"; // version of the tool
+        public string info_Version = "1.0.55"; // version of the tool
         //public int LuaContext = 1396790604; // "LUAS"
         public InspectorWidget Widget;
+        public object ScriptEditor;
+        public bool OnScriptEditorWidget = false;
 
         public Process gameProcess;
         public Vector3 lastPosition = new Vector3(0,0,0);
@@ -60,7 +63,7 @@ namespace Zartex
 
         string title;
 
-        MissionScriptFile MissionPackage;
+        public static MissionScriptFile MissionPackage;
 
         OpenFileDialog ScriptFile = new OpenFileDialog() {
             Title = "Select a mission script",
@@ -146,7 +149,8 @@ namespace Zartex
             if (MissionPackage.IsLoaded)
             {
                 Text = String.Format("{0} - {1}", title, Filename);
-                GenerateLogicNodes();
+                if (!OnScriptEditorWidget)
+                     GenerateLogicNodes();
             }
 
             mnFile_Save.Enabled = MissionPackage.IsLoaded;
@@ -154,6 +158,7 @@ namespace Zartex
 
 
             importMPCBTN.Enabled = true;
+            importD3MScriptToolStripMenuItem.Enabled = true;
             driv3rLuaToolStripMenuItem.Enabled = true;
 
             exportAsBTN.Enabled = true;
@@ -1242,7 +1247,7 @@ namespace Zartex
 
         private bool useFlowgraph = false;
 
-        private void GenerateLogicNodes(int select=-1)
+        public void GenerateLogicNodes(int select=-1)
         {
             //if (useFlowgraph)
             if (useFlowgraphBTN.Checked)
@@ -1271,7 +1276,7 @@ namespace Zartex
             // }
         }
 
-        private void GenerateActors(int selected = -1)
+        public void GenerateActors(int selected = -1)
         {
             List<MissionInstance> GEBI = null;
             if (MissionPackage.MissionData.MissionInstances != null)
@@ -1509,7 +1514,22 @@ namespace Zartex
 
                 var inFlowgraph = useFlowgraph;
 
+                // set not to use flow graph nodes
                 useFlowgraph = false;
+
+                if (OnScriptEditorWidget)
+                {
+                    if (MessageBox.Show("Are you sure you want to continue?\nAny unsaved progress on the script editor will be lost!", "Zartex", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                        return;
+                }
+
+                if (ScriptEditor != null)
+                {
+                    D3M_ScriptEditor scEditor = ScriptEditor as D3M_ScriptEditor;
+                    scEditor.Shutdown();
+                }
+
+                OnScriptEditorWidget = false;
 
                 switch (cType)
                 {
@@ -1677,11 +1697,6 @@ namespace Zartex
             Panel1.Controls.Add(flowgraph);
 
             SafeAddControl(Widget);
-        }
-
-        private void btnEMMS_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void fixNullProperitiesInActors()
@@ -4450,6 +4465,77 @@ namespace Zartex
                     }
                     break;
             }
+        }
+
+        private void importD3MScriptToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MissionPackage == null)
+            {
+                MessageBox.Show("No mission loaded!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            D3M_MissionScript d3m = null;
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                Title = "Select the Driver 3 Mission Script file",
+                Filter = "Driver 3 Mission Script File (*.d3m)|*.d3m|Text files (*.txt)|*.txt",
+                Multiselect = false
+            };
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                d3m = new D3M_MissionScript(openFileDialog.FileName);
+                // NOTE: gives spooler error
+                //MissionPackage.MissionData = d3m.ExportedMission;
+                //MissionPackage.MissionSummary = d3m.MissionSummary;
+
+                // copy data from lua mission to current mission
+                MissionPackage.MissionData.LogicData.Actors.Definitions = d3m.ExportedMission.LogicData.Actors.Definitions;
+                MissionPackage.MissionData.LogicData.Nodes.Definitions = d3m.ExportedMission.LogicData.Nodes.Definitions;
+                MissionPackage.MissionData.LogicData.WireCollection.WireCollections = d3m.ExportedMission.LogicData.WireCollection.WireCollections;
+
+                MissionPackage.MissionData.LogicData.ActorSetTable.Table = d3m.ExportedMission.LogicData.ActorSetTable.Table;
+
+                // mission instance data
+                if (MissionPackage.MissionData.MissionInstances == null && d3m.ExportedMission.MissionInstances.Instances.Count != 0)
+                {
+                    MissionPackage.MissionData.MissionInstances = new MissionInstanceData();
+
+                    MissionPackage.MissionData.MissionInstances.Spooler = new DSCript.Spooling.SpoolableBuffer()
+                    {
+                        Context = (int)ChunkType.BuildingInstanceData,
+                        Description = "Custom Mission Instances data",
+                    };
+                    // add the spooler to mission data
+                    MissionPackage.MissionData.Spooler.Children.Add(MissionPackage.MissionData.MissionInstances.Spooler);
+                }
+                if (d3m.ExportedMission.MissionInstances.Instances.Count != 0)
+                {
+                    MissionPackage.MissionData.MissionInstances.Instances = d3m.ExportedMission.MissionInstances.Instances;
+                }
+
+                MissionPackage.MissionData.Objects.Objects = d3m.ExportedMission.Objects.Objects;
+
+                MissionPackage.MissionData.LogicData.StringCollection.Strings = d3m.ExportedMission.LogicData.StringCollection.Strings;
+
+                MissionPackage.MissionData.LogicData.SoundBankTable.Table = d3m.ExportedMission.LogicData.SoundBankTable.Table;
+
+                if (MissionPackage.MissionSummary == null)
+                    MissionPackage.MissionSummary = new MissionSummaryData();
+                MissionPackage.MissionSummary.StartPosition = d3m.MissionSummary.StartPosition;
+                MissionPackage.MissionSummary.CityType = MissionSummary.GetCityTypeByName(d3m.MissionSummary.Level);
+                MissionPackage.MissionSummary.MissionId = d3m.MissionSummary.MoodId;
+
+                MessageBox.Show("Successfully imported D3M mission script file!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void D3M_Editor_Click(object sender, EventArgs e)
+        {
+            D3M_ScriptEditor editor = new D3M_ScriptEditor();
+            ScriptEditor = editor;
+
+            OnScriptEditorWidget = true;
+            SafeAddControl(editor);
         }
     }
 }

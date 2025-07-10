@@ -47,6 +47,7 @@
             this.importLuaScript = new System.Windows.Forms.ToolStripMenuItem();
             this.driv3rLuaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.driverPLLuaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importD3MScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importMPCBTN = new System.Windows.Forms.ToolStripMenuItem();
             this.exportAsBTN = new System.Windows.Forms.ToolStripMenuItem();
             this.mnSep1 = new System.Windows.Forms.ToolStripSeparator();
@@ -140,6 +141,8 @@
             this.getPlayerPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Content = new System.Windows.Forms.Panel();
             this.LeftMenu = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.D3M_Editor = new System.Windows.Forms.Button();
             this.toolSelectMission = new System.Windows.Forms.Button();
             this.lbl__EM = new System.Windows.Forms.Label();
             this.lblLELD = new System.Windows.Forms.Label();
@@ -193,6 +196,7 @@
             this.mnFile_SaveAs,
             this.toolStripSeparator15,
             this.importLuaScript,
+            this.importD3MScriptToolStripMenuItem,
             this.importMPCBTN,
             this.exportAsBTN,
             this.mnSep1,
@@ -204,14 +208,14 @@
             // mnFile_New
             // 
             this.mnFile_New.Name = "mnFile_New";
-            this.mnFile_New.Size = new System.Drawing.Size(180, 22);
+            this.mnFile_New.Size = new System.Drawing.Size(230, 22);
             this.mnFile_New.Text = "New";
             this.mnFile_New.Click += new System.EventHandler(this.mnFile_New_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(227, 6);
             // 
             // mnFile_Open
             // 
@@ -224,7 +228,7 @@
             this.toolStripSeparator12,
             this.driverParallelLinesToolStripMenuItem});
             this.mnFile_Open.Name = "mnFile_Open";
-            this.mnFile_Open.Size = new System.Drawing.Size(180, 22);
+            this.mnFile_Open.Size = new System.Drawing.Size(230, 22);
             this.mnFile_Open.Text = "Open";
             // 
             // mnLoadFile
@@ -273,7 +277,7 @@
             // 
             this.mnFile_Save.Enabled = false;
             this.mnFile_Save.Name = "mnFile_Save";
-            this.mnFile_Save.Size = new System.Drawing.Size(180, 22);
+            this.mnFile_Save.Size = new System.Drawing.Size(230, 22);
             this.mnFile_Save.Text = "Save";
             this.mnFile_Save.Click += new System.EventHandler(this.MenuSaveFile);
             // 
@@ -281,14 +285,14 @@
             // 
             this.mnFile_SaveAs.Enabled = false;
             this.mnFile_SaveAs.Name = "mnFile_SaveAs";
-            this.mnFile_SaveAs.Size = new System.Drawing.Size(180, 22);
+            this.mnFile_SaveAs.Size = new System.Drawing.Size(230, 22);
             this.mnFile_SaveAs.Text = "Save As";
             this.mnFile_SaveAs.Click += new System.EventHandler(this.MenuSaveFileAs);
             // 
             // toolStripSeparator15
             // 
             this.toolStripSeparator15.Name = "toolStripSeparator15";
-            this.toolStripSeparator15.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator15.Size = new System.Drawing.Size(227, 6);
             // 
             // importLuaScript
             // 
@@ -296,29 +300,37 @@
             this.driv3rLuaToolStripMenuItem,
             this.driverPLLuaToolStripMenuItem});
             this.importLuaScript.Name = "importLuaScript";
-            this.importLuaScript.Size = new System.Drawing.Size(180, 22);
+            this.importLuaScript.Size = new System.Drawing.Size(230, 22);
             this.importLuaScript.Text = "Import Lua Script";
             // 
             // driv3rLuaToolStripMenuItem
             // 
             this.driv3rLuaToolStripMenuItem.Enabled = false;
             this.driv3rLuaToolStripMenuItem.Name = "driv3rLuaToolStripMenuItem";
-            this.driv3rLuaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.driv3rLuaToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.driv3rLuaToolStripMenuItem.Text = "Driv3r Lua";
             this.driv3rLuaToolStripMenuItem.Click += new System.EventHandler(this.importLuaScript_Click);
             // 
             // driverPLLuaToolStripMenuItem
             // 
             this.driverPLLuaToolStripMenuItem.Name = "driverPLLuaToolStripMenuItem";
-            this.driverPLLuaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.driverPLLuaToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.driverPLLuaToolStripMenuItem.Text = "Driver: PL Lua";
             this.driverPLLuaToolStripMenuItem.Click += new System.EventHandler(this.importLuaScriptDPL_Click);
+            // 
+            // importD3MScriptToolStripMenuItem
+            // 
+            this.importD3MScriptToolStripMenuItem.Enabled = false;
+            this.importD3MScriptToolStripMenuItem.Name = "importD3MScriptToolStripMenuItem";
+            this.importD3MScriptToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.importD3MScriptToolStripMenuItem.Text = "Import Driver 3 Mission Script";
+            this.importD3MScriptToolStripMenuItem.Click += new System.EventHandler(this.importD3MScriptToolStripMenuItem_Click);
             // 
             // importMPCBTN
             // 
             this.importMPCBTN.Enabled = false;
             this.importMPCBTN.Name = "importMPCBTN";
-            this.importMPCBTN.Size = new System.Drawing.Size(180, 22);
+            this.importMPCBTN.Size = new System.Drawing.Size(230, 22);
             this.importMPCBTN.Text = "Import MPC File";
             this.importMPCBTN.Click += new System.EventHandler(this.importMPCBTN_Click);
             // 
@@ -326,19 +338,19 @@
             // 
             this.exportAsBTN.Enabled = false;
             this.exportAsBTN.Name = "exportAsBTN";
-            this.exportAsBTN.Size = new System.Drawing.Size(180, 22);
+            this.exportAsBTN.Size = new System.Drawing.Size(230, 22);
             this.exportAsBTN.Text = "Export as MPC file";
             this.exportAsBTN.Click += new System.EventHandler(this.exportAsBTN_Click);
             // 
             // mnSep1
             // 
             this.mnSep1.Name = "mnSep1";
-            this.mnSep1.Size = new System.Drawing.Size(177, 6);
+            this.mnSep1.Size = new System.Drawing.Size(227, 6);
             // 
             // mnFile_Exit
             // 
             this.mnFile_Exit.Name = "mnFile_Exit";
-            this.mnFile_Exit.Size = new System.Drawing.Size(180, 22);
+            this.mnFile_Exit.Size = new System.Drawing.Size(230, 22);
             this.mnFile_Exit.Text = "Exit";
             // 
             // editToolStripMenuItem
@@ -992,6 +1004,8 @@
             // LeftMenu
             // 
             this.LeftMenu.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.LeftMenu.Controls.Add(this.label1);
+            this.LeftMenu.Controls.Add(this.D3M_Editor);
             this.LeftMenu.Controls.Add(this.toolSelectMission);
             this.LeftMenu.Controls.Add(this.lbl__EM);
             this.LeftMenu.Controls.Add(this.lblLELD);
@@ -1011,6 +1025,33 @@
             this.LeftMenu.Name = "LeftMenu";
             this.LeftMenu.Size = new System.Drawing.Size(156, 688);
             this.LeftMenu.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
+            this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label1.Location = new System.Drawing.Point(3, 306);
+            this.label1.Margin = new System.Windows.Forms.Padding(3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(150, 20);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "Script Editor";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // D3M_Editor
+            // 
+            this.D3M_Editor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.D3M_Editor.Location = new System.Drawing.Point(4, 330);
+            this.D3M_Editor.Name = "D3M_Editor";
+            this.D3M_Editor.Size = new System.Drawing.Size(150, 40);
+            this.D3M_Editor.TabIndex = 15;
+            this.D3M_Editor.Text = "Driver 3 Mission Script Editor";
+            this.D3M_Editor.UseVisualStyleBackColor = true;
+            this.D3M_Editor.Click += new System.EventHandler(this.D3M_Editor_Click);
             // 
             // toolSelectMission
             // 
@@ -1137,7 +1178,6 @@
             this.btnEMMS.TabIndex = 4;
             this.btnEMMS.Text = "Mission Summary";
             this.btnEMMS.UseVisualStyleBackColor = true;
-            this.btnEMMS.Click += new System.EventHandler(this.btnEMMS_Click);
             // 
             // btnLESC
             // 
@@ -1187,7 +1227,7 @@
             this.Controls.Add(this.MenuPanel);
             this.DoubleBuffered = true;
             this.MainMenuStrip = this.MenuBar;
-            this.MinimumSize = new System.Drawing.Size(600, 405);
+            this.MinimumSize = new System.Drawing.Size(600, 475);
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Zartex 2.0 Mission Editor";
@@ -1329,6 +1369,9 @@
         private System.Windows.Forms.ToolStripMenuItem importMPCBTN;
         private System.Windows.Forms.ToolStripMenuItem exportAsBTN;
         public System.Windows.Forms.Button toolSelectMission;
+        private System.Windows.Forms.ToolStripMenuItem importD3MScriptToolStripMenuItem;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button D3M_Editor;
     }
 }
 
