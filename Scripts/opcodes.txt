@@ -1,0 +1,16 @@
+0000: no_operation
+0001: print_debug_text "Hello, World!"
+0002: mission_complete no_delay true
+0003: fail_mission delay 5 localised_message 0
+0004: create_vehicle $Tanner_Car model 22 colorID 0 at -1893.6520 1.0625 -453.1732 facing_angle 0.0 damage 0.0 softness 1.0 weight 1.0 fragility 1.0
+0005: create_character $Tanner role 1 skinUID 0xBA125961 at -1894.6520 1.0625 -453.1732 facing_angle 0.0 health 1.0 felony 0.0 weapon 0 vulnerability 1.0
+0006: set_music_type 2 // action music
+0007: instantiate_actor $Tanner_Car
+0008: frame_delay 1
+0009: watch_area $Area_1
+0010: watch_action_button $Switch_1
+0011: select_camera $Camera_1
+0012: accumulator
+0013: play_cutscene_movie "CREDITS.FMV"
+0014: play_audio bank 10 sample 0
+0015: display_message localised_message 0 for_time 1000
