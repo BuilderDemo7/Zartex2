@@ -1,0 +1,27 @@
+DEFINE_SPOOLPOSITION -1894.6520 -453.1732
+DEFINE_CITY Miami_Day
+DEFINE_MOODID 33
+
+DEFINE_CONSTANT PlayerRole 1 // player's role constant
+
+:MAIN
+0005: create_character $Tanner role PlayerRole skinUID 0xBA125961 at -1894.6520 1.0625 -453.1732 facing_angle 0.0 health 1.0 felony 0.0 weapon 0 vulnerability 1.0
+0006: set_music_type 1 // set normal music by default
+
+on_event $Tanner IsChased
+	onsuccess_enable @CHASED_BY_COPS // triggers when the player got the cops attention
+	onfailure_enable @LOSE_COPS // triggers when the player lost the cops
+end
+
+on_event $Tanner Death
+	onsuccess_enable @PLAYER_DIED // triggers when the player (Tanner) dies
+end
+
+:CHASED_BY_COPS
+0006: set_music_type 2 // action music
+
+:LOSE_COPS
+0006: set_music_type 1 // normal music
+
+:PLAYER_DIED
+0003: fail_mission delay 5 localised_message 0
